@@ -132,6 +132,7 @@ public class MainActivity extends AppCompatActivity {
                 .positiveColor(R.color.green_700)
                 .positiveDelayed(5000, 1000, "OK")
                 .cancelable(false)
+                .dim(99)
                 .canceledOnTouchOutside(false)
                 .buttonCallback(new MaterialDialog.ButtonCallback() {
                     @Override

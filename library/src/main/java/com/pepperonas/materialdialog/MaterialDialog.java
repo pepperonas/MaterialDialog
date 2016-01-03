@@ -44,6 +44,16 @@ public class MaterialDialog extends AlertDialog {
     public MaterialDialog(final Builder builder) {
         super(builder.context);
 
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.ICE_CREAM_SANDWICH) {
+            if (builder.dimPercent != -1) {
+                float value = (float) builder.dimPercent / 100f;
+                if (value < 0f) value = 0f;
+                if (value > 1f) value = 1f;
+                getWindow().setDimAmount(value);
+                Log.d(TAG, "MaterialDialog dimvalue: " + value);
+            }
+        }
+
         if (builder.customView != null) {
             getWindow().requestFeature(Window.FEATURE_NO_TITLE);
             this.setView(
@@ -250,6 +260,7 @@ public class MaterialDialog extends AlertDialog {
         private final Context context;
         private CharSequence title;
         private CharSequence message;
+        private int dimPercent = -1;
         private CharSequence positiveText;
         private CharSequence neutralText;
         private CharSequence negativeText;
@@ -299,6 +310,12 @@ public class MaterialDialog extends AlertDialog {
 
         public Builder message(CharSequence message) {
             this.message = message;
+            return this;
+        }
+
+
+        public Builder dim(int percent) {
+            this.dimPercent = percent;
             return this;
         }
 
