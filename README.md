@@ -69,7 +69,8 @@ new MaterialDialog.Builder(this)
 
 
 ##Showcase
-Coming soon...
+Try the sample application. It's on Google Play :)
+https://play.google.com/store/apps/details?id=com.pepperonas.materialdialog.showcase
 
 ##Developed By
 
