@@ -1,0 +1,29 @@
+<!--
+  ~ Copyright (c) 2016 Martin Pfeffer
+  ~
+  ~ Licensed under the Apache License, Version 2.0 (the "License");
+  ~ you may not use this file except in compliance with the License.
+  ~ You may obtain a copy of the License at
+  ~
+  ~      http://www.apache.org/licenses/LICENSE-2.0
+  ~
+  ~ Unless required by applicable law or agreed to in writing, software
+  ~ distributed under the License is distributed on an "AS IS" BASIS,
+  ~ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  ~ See the License for the specific language governing permissions and
+  ~ limitations under the License.
+  -->
+
+<resources>
+    <string name="app_name">MaterialDialog Showcase</string>
+        <string name="web_presentation_info" translatable="false">
+    <![CDATA[
+    Developed by <b>pepperonas</b>.
+    <br><br>
+    <font color="#f50057"><a href="https://www.pepperonas.com">Website</a></font>&nbsp;&nbsp;
+    <font color="#f50057"><a href="https://play.google.com/store/apps/developer?id=pepperonas">Google Play</a></font>&nbsp;&nbsp;
+    <br><br>
+    <font color="#f50057"><a href="https://plus.google.com/communities/100642582416636996643">Google+</a></font>&nbsp;&nbsp;
+    <font color="#f50057"><a href="https://github.com/pepperonas">GitHub</a></font>&nbsp;&nbsp;
+    ]]></string>
+</resources>
