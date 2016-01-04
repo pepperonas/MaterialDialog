@@ -26,6 +26,7 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.SeekBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -139,7 +140,6 @@ public class MainActivity extends AppCompatActivity {
                 .positiveColor(R.color.green_700)
                 .positiveDelayed(5000, 1000, "OK")
                 .cancelable(false)
-                .dim(99)
                 .canceledOnTouchOutside(false)
                 .buttonCallback(new MaterialDialog.ButtonCallback() {
                     @Override
@@ -325,6 +325,18 @@ public class MainActivity extends AppCompatActivity {
     }
 
 
+    private void showDialogDimmed() {
+        SeekBar seekBar = (SeekBar) findViewById(R.id.seekBar);
+        new MaterialDialog.Builder(this)
+                .title("MaterialDialog")
+                .message("This is a simple MaterialDialog.")
+                .positiveText("OK")
+                .positiveColor(R.color.purple_700)
+                .dim(seekBar.getProgress())
+                .show();
+    }
+
+
     public void onDialog(View view) {
         showMaterialDialog();
     }
@@ -420,10 +432,16 @@ public class MainActivity extends AppCompatActivity {
 
     public List<Changelog> getChangelogs() {
         List<Changelog> changelogs = new ArrayList<>();
-        changelogs.add(new Changelog("0.0.5", "2015-02-01", new ReleaseInfo("Initial release")));
-        changelogs.add(new Changelog("0.0.6", "2015-03-01", new ReleaseInfo("Added dialog delayed clickable")));
-        changelogs.add(new Changelog("0.0.7", "2015-03-01", new ReleaseInfo("Added dim", "Bugfixes")));
-        changelogs.add(new Changelog("0.0.8", "2015-03-01", new ReleaseInfo("Added dialog licenses", "Added dialog changelog", "Bugfixes")));
+        changelogs.add(new Changelog("0.0.9", "2016-05-05", new ReleaseInfo("Bugfixes")));
+        changelogs.add(new Changelog("0.0.8", "2016-01-04", new ReleaseInfo("Added dialog licenses", "Added dialog changelog", "Bugfixes")));
+        changelogs.add(new Changelog("0.0.7", "2016-01-04", new ReleaseInfo("Added dim", "Bugfixes")));
+        changelogs.add(new Changelog("0.0.6", "2016-01-03", new ReleaseInfo("Added dialog delayed clickable")));
+        changelogs.add(new Changelog("0.0.5", "2016-01-02", new ReleaseInfo("Initial release")));
         return changelogs;
+    }
+
+
+    public void onDialogDimmed(View view) {
+        showDialogDimmed();
     }
 }

@@ -19,13 +19,15 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     xmlns:android="http://schemas.android.com/apk/res/android"
-    android:paddingTop="16dp"
+    android:paddingTop="24dp"
+    android:paddingLeft="16dp"
+    android:paddingRight="16dp"
     >
 
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:textAppearance="@style/Base.TextAppearance.AppCompat.Subhead"
+        android:textAppearance="@style/Base.TextAppearance.AppCompat.Title"
         android:text="Large Text"
         android:id="@+id/tv_cl_version"
         android:layout_gravity="center_horizontal"

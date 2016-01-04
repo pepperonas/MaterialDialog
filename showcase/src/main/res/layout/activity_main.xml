@@ -111,6 +111,25 @@
                 android:onClick="onDialogChangelog"
                 />
 
+
+            <Button
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Dimmed Dialog"
+                android:layout_marginTop="@dimen/button_margin_top"
+                android:layout_marginBottom="@dimen/button_margin_bottom"
+                android:onClick="onDialogDimmed"
+                />
+
+            <SeekBar
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/seekBar"
+                android:layout_gravity="center_horizontal"
+                android:progress="30"
+                android:max="100"
+                />
+
         </LinearLayout>
 
     </LinearLayout>
