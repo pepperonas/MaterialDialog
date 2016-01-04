@@ -15,6 +15,7 @@
   -->
 
 <resources>
+
     <string name="app_name">MaterialDialog Showcase</string>
         <string name="web_presentation_info" translatable="false">
     <![CDATA[
@@ -26,4 +27,8 @@
     <font color="#f50057"><a href="https://plus.google.com/communities/100642582416636996643">Google+</a></font>&nbsp;&nbsp;
     <font color="#f50057"><a href="https://github.com/pepperonas">GitHub</a></font>&nbsp;&nbsp;
     ]]></string>
+
+    <string name="dialog_license_title">Licenses</string>
+    <string name="ok">OK</string>
+
 </resources>

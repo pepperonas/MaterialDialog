@@ -18,6 +18,7 @@ package com.pepperonas.showcase;
 
 import android.app.AlertDialog;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.text.Html;
 import android.text.method.LinkMovementMethod;
@@ -28,7 +29,13 @@ import android.view.View;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.pepperonas.materialdialog.Changelog;
+import com.pepperonas.materialdialog.LicenseInfo;
 import com.pepperonas.materialdialog.MaterialDialog;
+import com.pepperonas.materialdialog.ReleaseInfo;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -296,6 +303,28 @@ public class MainActivity extends AppCompatActivity {
     }
 
 
+    private void showMaterialDialogLicenseInfo() {
+        List<LicenseInfo> licenseInfos = getLicenseInfos();
+
+        new MaterialDialog.Builder(this)
+                .title(R.string.dialog_license_title)
+                .licenseDialog(licenseInfos)
+                .positiveText(R.string.ok)
+                .show();
+    }
+
+
+    private void showMaterialDialogChangelog() {
+        List<Changelog> changelogs = getChangelogs();
+
+        new MaterialDialog.Builder(this)
+                .title("Changelog")
+                .changelogDialog(changelogs, getString(R.string.bullet_release_info))
+                .positiveText(R.string.ok)
+                .show();
+    }
+
+
     public void onDialog(View view) {
         showMaterialDialog();
     }
@@ -323,5 +352,78 @@ public class MainActivity extends AppCompatActivity {
 
     public void onDialogListMultiChoice(View view) {
         showMaterialDialogListMultiChoice();
+    }
+
+
+    public void onDialogLicense(View view) {
+        showMaterialDialogLicenseInfo();
+    }
+
+
+    public void onDialogChangelog(View view) {
+        showMaterialDialogChangelog();
+    }
+
+
+    @NonNull
+    private List<LicenseInfo> getLicenseInfos() {
+        List<LicenseInfo> licenseInfos = new ArrayList<>();
+
+        licenseInfos.add(new LicenseInfo(
+                "Standard Library",
+                "Copyright (c) 2016 John Doe",
+                "Licensed under the Apache License, Version 2.0 (the \"License\");\n" +
+                "you may not use this file except in compliance with the License.\n" +
+                "You may obtain a copy of the License at\n" +
+                "\n" +
+                "   http://www.apache.org/licenses/LICENSE-2.0\n" +
+                "\n" +
+                "Unless required by applicable law or agreed to in writing, software\n" +
+                "distributed under the License is distributed on an \"AS IS\" BASIS,\n" +
+                "WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.\n" +
+                "See the License for the specific language governing permissions and\n" +
+                "limitations under the License."));
+
+        licenseInfos.add(new LicenseInfo(
+                "Default Library",
+                "Copyright (c) 2015 Jane Doe",
+                "Licensed under the Apache License, Version 2.0 (the \"License\");\n" +
+                "you may not use this file except in compliance with the License.\n" +
+                "You may obtain a copy of the License at\n" +
+                "\n" +
+                "   http://www.apache.org/licenses/LICENSE-2.0\n" +
+                "\n" +
+                "Unless required by applicable law or agreed to in writing, software\n" +
+                "distributed under the License is distributed on an \"AS IS\" BASIS,\n" +
+                "WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.\n" +
+                "See the License for the specific language governing permissions and\n" +
+                "limitations under the License."));
+
+        licenseInfos.add(new LicenseInfo(
+                "Common Library",
+                "Copyright (c) 2014 James Doe",
+                "Licensed under the Apache License, Version 2.0 (the \"License\");\n" +
+                "you may not use this file except in compliance with the License.\n" +
+                "You may obtain a copy of the License at\n" +
+                "\n" +
+                "   http://www.apache.org/licenses/LICENSE-2.0\n" +
+                "\n" +
+                "Unless required by applicable law or agreed to in writing, software\n" +
+                "distributed under the License is distributed on an \"AS IS\" BASIS,\n" +
+                "WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.\n" +
+                "See the License for the specific language governing permissions and\n" +
+                "limitations under the License."));
+
+        return licenseInfos;
+    }
+
+
+    public List<Changelog> getChangelogs() {
+        List<Changelog> changelogs = new ArrayList<>();
+        changelogs.add(new Changelog("0.0.5", "2015-02-01", new ReleaseInfo("Initial release")));
+        changelogs.add(new Changelog("0.0.6", "2015-03-01", new ReleaseInfo("Added dialog delayed clickable")));
+        changelogs.add(new Changelog("0.0.7", "2015-03-01", new ReleaseInfo("Added dim", "Bugfixes")));
+        changelogs.add(new Changelog("0.0.8", "2015-03-01", new ReleaseInfo("Added dialog licenses", "Added dialog changelog", "Bugfixes")));
+        return changelogs;
     }
 }

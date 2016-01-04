@@ -43,8 +43,8 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="Simple Dialog"
-                android:layout_marginTop="16dp"
-                android:layout_marginBottom="16dp"
+                android:layout_marginTop="@dimen/button_margin_top"
+                android:layout_marginBottom="@dimen/button_margin_bottom"
                 android:onClick="onDialog"
                 />
 
@@ -52,8 +52,8 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="Simple Dialog (Delayed-button)"
-                android:layout_marginTop="16dp"
-                android:layout_marginBottom="16dp"
+                android:layout_marginTop="@dimen/button_margin_top"
+                android:layout_marginBottom="@dimen/button_margin_bottom"
                 android:onClick="onDialogDelayedButton"
                 />
 
@@ -61,8 +61,8 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="Dialog (Custom-view)"
-                android:layout_marginTop="16dp"
-                android:layout_marginBottom="16dp"
+                android:layout_marginTop="@dimen/button_margin_top"
+                android:layout_marginBottom="@dimen/button_margin_bottom"
                 android:onClick="onDialogCustomView"
                 />
 
@@ -70,8 +70,8 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="List Dialog"
-                android:layout_marginTop="16dp"
-                android:layout_marginBottom="16dp"
+                android:layout_marginTop="@dimen/button_margin_top"
+                android:layout_marginBottom="@dimen/button_margin_bottom"
                 android:onClick="onDialogList"
                 />
 
@@ -79,8 +79,8 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="List Dialog (Single-choice)"
-                android:layout_marginTop="16dp"
-                android:layout_marginBottom="16dp"
+                android:layout_marginTop="@dimen/button_margin_top"
+                android:layout_marginBottom="@dimen/button_margin_bottom"
                 android:onClick="onDialogListSingleChoice"
                 />
 
@@ -88,9 +88,27 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="List Dialog (Multi-choice)"
-                android:layout_marginTop="16dp"
-                android:layout_marginBottom="16dp"
+                android:layout_marginTop="@dimen/button_margin_top"
+                android:layout_marginBottom="@dimen/button_margin_bottom"
                 android:onClick="onDialogListMultiChoice"
+                />
+
+            <Button
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="License Dialog"
+                android:layout_marginTop="@dimen/button_margin_top"
+                android:layout_marginBottom="@dimen/button_margin_bottom"
+                android:onClick="onDialogLicense"
+                />
+
+            <Button
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Changelog Dialog"
+                android:layout_marginTop="@dimen/button_margin_top"
+                android:layout_marginBottom="@dimen/button_margin_bottom"
+                android:onClick="onDialogChangelog"
                 />
 
         </LinearLayout>

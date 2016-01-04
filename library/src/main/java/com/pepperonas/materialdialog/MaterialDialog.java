@@ -23,6 +23,9 @@ import android.os.Build;
 import android.support.annotation.ColorRes;
 import android.support.annotation.DrawableRes;
 import android.support.annotation.LayoutRes;
+import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
+import android.support.annotation.StringRes;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -31,7 +34,11 @@ import android.view.Window;
 import android.widget.AbsListView;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.LinearLayout;
 import android.widget.ListView;
+import android.widget.TextView;
+
+import java.util.List;
 
 /**
  * @author Martin Pfeffer (pepperonas)
@@ -62,7 +69,10 @@ public class MaterialDialog extends AlertDialog {
                     builder.viewSpacingRight, builder.viewSpacingBottom);
         }
 
-        // list
+
+        /**
+         * list
+         * */
         if (builder.items != null && builder.items.length > 0) {
             if (builder.customView != null) {
                 Log.w(TAG, "ListView will override the custom view.");
@@ -147,6 +157,7 @@ public class MaterialDialog extends AlertDialog {
             }
 
         } // end list
+
 
         if (builder.title != null) {
             this.setTitle(builder.title);
@@ -235,10 +246,69 @@ public class MaterialDialog extends AlertDialog {
 
                 // dialog height
                 Log.i(TAG, "MaterialDialog " + getWindow().getDecorView().getHeight());
-
             }
 
         });
+
+
+        /**
+         * license dialog
+         * */
+        if (builder.licenseDialog) {
+            if (builder.libNames.length == builder.libDevelopers.length
+                && builder.libDevelopers.length == builder.libLicenses.length
+                && builder.libNames.length != 0) {
+
+                LinearLayout llLibContainer = (LinearLayout) builder.customView.findViewById(R.id.ll_dialog_license_container);
+
+                for (int i = 0; i < builder.libNames.length; i++) {
+                    LayoutInflater inflater = LayoutInflater.from(builder.context);
+                    LinearLayout llLicenseInfo = (LinearLayout) inflater.inflate(R.layout.item_license, null);
+
+                    ((TextView) llLicenseInfo.findViewById(R.id.tv_lib_name)).setText(builder.libNames[i]);
+                    ((TextView) llLicenseInfo.findViewById(R.id.tv_lib_developer)).setText(builder.libDevelopers[i]);
+                    ((TextView) llLicenseInfo.findViewById(R.id.tv_lib_licence)).setText(builder.libLicenses[i]);
+                    llLibContainer.addView(llLicenseInfo);
+                }
+            } else Log.e(TAG, "Invalid license information. Check the size of the arrays.");
+        } // end license dialog
+
+
+        /**
+         * changelog dialog
+         * */
+        if (builder.changelogDialog) {
+            if (builder.clVersionNames.length == builder.clDates.length
+                && builder.clDates.length == builder.clReleaseInfos.length
+                && builder.clVersionNames.length != 0) {
+
+                LinearLayout llClContainer = (LinearLayout) builder.customView.findViewById(R.id.ll_dialog_changelog_container);
+
+                for (int i = 0; i < builder.clVersionNames.length; i++) {
+                    LayoutInflater inflater = LayoutInflater.from(builder.context);
+                    LinearLayout llChangelog = (LinearLayout) inflater.inflate(R.layout.item_changelog, null);
+
+                    ((TextView) llChangelog.findViewById(R.id.tv_cl_version)).setText(builder.clVersionNames[i]);
+                    ((TextView) llChangelog.findViewById(R.id.tv_cl_date)).setText(builder.clDates[i]);
+
+                    ReleaseInfo ri = builder.clReleaseInfos[i];
+                    for (int j = 0; j < ri.getReleaseInfo().size(); j++) {
+                        LayoutInflater _inflater = LayoutInflater.from(builder.context);
+                        LinearLayout llReleaseInfo = (LinearLayout) _inflater.inflate(R.layout.item_changelog_release_info, null);
+                        ((TextView) llReleaseInfo.findViewById(R.id.tv_release_info)).setText(ri.getReleaseInfo().get(j));
+                        if (builder.clBullet != null) {
+                            // ensure to set custom bullet
+                            ((TextView) llReleaseInfo.findViewById(R.id.tv_release_info_bullet)).setText(builder.clBullet);
+                        } else llReleaseInfo.findViewById(R.id.tv_release_info_bullet).setVisibility(View.GONE);
+
+                        ((LinearLayout) llChangelog.findViewById(R.id.ll_dialog_changelog_release_info_container)).addView(llReleaseInfo);
+                    }
+
+                    llClContainer.addView(llChangelog);
+                }
+            } else Log.e(TAG, "Invalid changelog information. Check the size of the arrays.");
+        } // end changelog dialog
+
 
         setOnDismissListener(new OnDismissListener() {
             @Override
@@ -298,6 +368,23 @@ public class MaterialDialog extends AlertDialog {
         private long countDownInterval;
         private String finishedText;
 
+        /**
+         * License
+         */
+        private boolean licenseDialog = false;
+        private String[] libNames;
+        private String[] libDevelopers;
+        private String[] libLicenses;
+
+        /**
+         * Changelog
+         */
+        private boolean changelogDialog = false;
+        private String[] clVersionNames;
+        private String[] clDates;
+        private ReleaseInfo[] clReleaseInfos;
+        private String clBullet;
+
 
         public Builder(Context context) {this.context = context;}
 
@@ -308,8 +395,20 @@ public class MaterialDialog extends AlertDialog {
         }
 
 
+        public Builder title(@StringRes int title) {
+            this.title = context.getString(title);
+            return this;
+        }
+
+
         public Builder message(CharSequence message) {
             this.message = message;
+            return this;
+        }
+
+
+        public Builder message(@StringRes int message) {
+            this.message = context.getString(message);
             return this;
         }
 
@@ -326,14 +425,32 @@ public class MaterialDialog extends AlertDialog {
         }
 
 
+        public Builder positiveText(@StringRes int positiveText) {
+            this.positiveText = context.getString(positiveText);
+            return this;
+        }
+
+
         public Builder neutralText(CharSequence neutralText) {
             this.neutralText = neutralText;
             return this;
         }
 
 
+        public Builder neutralText(@StringRes int neutralText) {
+            this.neutralText = context.getString(neutralText);
+            return this;
+        }
+
+
         public Builder negativeText(CharSequence negativeText) {
             this.negativeText = negativeText;
+            return this;
+        }
+
+
+        public Builder negativeText(@StringRes int negativeText) {
+            this.negativeText = context.getString(negativeText);
             return this;
         }
 
@@ -477,6 +594,89 @@ public class MaterialDialog extends AlertDialog {
             this.millisInFuture = millisInFuture;
             this.countDownInterval = countDownInterval;
             this.finishedText = finishedText;
+            return this;
+        }
+
+
+        public Builder licenseDialog(@NonNull String[] libraryNames, @NonNull String[] libraryDevelopers, @NonNull String[] libraryLicenses) {
+            LayoutInflater inflater = LayoutInflater.from(context);
+            customView = inflater.inflate(R.layout.dialog_license, null);
+            this.licenseDialog = true;
+            this.libNames = libraryNames;
+            this.libDevelopers = libraryDevelopers;
+            this.libLicenses = libraryLicenses;
+            return this;
+        }
+
+
+        public Builder licenseDialog(@NonNull List<LicenseInfo> licenseInfos) {
+            LayoutInflater inflater = LayoutInflater.from(context);
+            customView = inflater.inflate(R.layout.dialog_license, null);
+            this.licenseDialog = true;
+
+            this.libNames = new String[licenseInfos.size()];
+            this.libDevelopers = new String[licenseInfos.size()];
+            this.libLicenses = new String[licenseInfos.size()];
+
+            int i = 0;
+            for (LicenseInfo li : licenseInfos) {
+                libNames[i] = li.getName();
+                libDevelopers[i] = li.getDeveloper();
+                libLicenses[i] = li.getLicenseText();
+                i++;
+            }
+
+            return this;
+        }
+
+
+        public Builder changelogDialog(@NonNull String[] versionNames, @NonNull String[] dates, @NonNull ReleaseInfo[] releaseInfos) {
+            return changelogDialog(versionNames, dates, releaseInfos, "");
+        }
+
+
+        public Builder changelogDialog(@NonNull String[] versionNames, @NonNull String[] dates, @NonNull ReleaseInfo[] releaseInfos, @Nullable String bullet) {
+            LayoutInflater inflater = LayoutInflater.from(context);
+            customView = inflater.inflate(R.layout.dialog_changelog, null);
+            this.changelogDialog = true;
+            this.clVersionNames = versionNames;
+            this.clDates = dates;
+            this.clReleaseInfos = releaseInfos;
+
+            if (bullet != null) {
+                this.clBullet = bullet;
+            }
+
+            return this;
+        }
+
+
+        public Builder changelogDialog(@NonNull List<Changelog> changelogs) {
+            return changelogDialog(changelogs, "");
+        }
+
+
+        public Builder changelogDialog(@NonNull List<Changelog> changelogs, @Nullable String bullet) {
+            LayoutInflater inflater = LayoutInflater.from(context);
+            customView = inflater.inflate(R.layout.dialog_changelog, null);
+            this.changelogDialog = true;
+
+            this.clVersionNames = new String[changelogs.size()];
+            this.clDates = new String[changelogs.size()];
+            this.clReleaseInfos = new ReleaseInfo[changelogs.size()];
+
+            if (bullet != null) {
+                this.clBullet = bullet;
+            }
+
+            int i = 0;
+            for (Changelog cl : changelogs) {
+                clVersionNames[i] = cl.getVersionName();
+                clDates[i] = cl.getDate();
+                clReleaseInfos[i] = cl.getReleaseInfo();
+                i++;
+            }
+
             return this;
         }
 
