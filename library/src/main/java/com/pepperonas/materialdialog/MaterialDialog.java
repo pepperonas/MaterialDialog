@@ -51,6 +51,20 @@ public class MaterialDialog extends AlertDialog {
     public MaterialDialog(final Builder builder) {
         super(builder.context);
 
+        invoke(builder);
+
+    }
+
+
+    public MaterialDialog(final Builder builder, int style) {
+        super(builder.context, style);
+
+        invoke(builder);
+
+    }
+
+
+    private void invoke(final Builder builder) {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.ICE_CREAM_SANDWICH) {
             if (builder.dimPercent != -1) {
                 float value = (float) builder.dimPercent / 100f;
@@ -318,7 +332,6 @@ public class MaterialDialog extends AlertDialog {
                 }
             }
         });
-
     }
 
 
@@ -328,6 +341,7 @@ public class MaterialDialog extends AlertDialog {
          * Base
          */
         private final Context context;
+        private int style = -1;
         private CharSequence title;
         private CharSequence message;
         private int dimPercent = -1;
@@ -387,6 +401,12 @@ public class MaterialDialog extends AlertDialog {
 
 
         public Builder(Context context) {this.context = context;}
+
+
+        public Builder(Context context, int style) {
+            this.context = context;
+            this.style = style;
+        }
 
 
         public Builder title(CharSequence title) {
@@ -682,7 +702,8 @@ public class MaterialDialog extends AlertDialog {
 
 
         public MaterialDialog build() {
-            return new MaterialDialog(this);
+            if (style != -1) return new MaterialDialog(this);
+            else return new MaterialDialog(this, style);
         }
 
 
