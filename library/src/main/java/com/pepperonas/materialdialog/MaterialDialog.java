@@ -71,12 +71,12 @@ public class MaterialDialog extends AlertDialog {
                 if (value < 0f) value = 0f;
                 if (value > 1f) value = 1f;
                 getWindow().setDimAmount(value);
-                Log.d(TAG, "MaterialDialog dimvalue: " + value);
             }
         }
 
         if (builder.customView != null) {
             getWindow().requestFeature(Window.FEATURE_NO_TITLE);
+
             this.setView(
                     builder.customView,
                     builder.viewSpacingLeft, builder.viewSpacingTop,
@@ -702,7 +702,7 @@ public class MaterialDialog extends AlertDialog {
 
 
         public MaterialDialog build() {
-            if (style != -1) return new MaterialDialog(this);
+            if (style == -1) return new MaterialDialog(this);
             else return new MaterialDialog(this, style);
         }
 

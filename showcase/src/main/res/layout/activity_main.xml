@@ -111,6 +111,14 @@
                 android:onClick="onDialogChangelog"
                 />
 
+            <Button
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Themed Dialog"
+                android:layout_marginTop="@dimen/button_margin_top"
+                android:layout_marginBottom="@dimen/button_margin_bottom"
+                android:onClick="onDialogThemed"
+                />
 
             <Button
                 android:layout_width="match_parent"

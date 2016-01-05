@@ -325,6 +325,15 @@ public class MainActivity extends AppCompatActivity {
     }
 
 
+    private void showDialogThemed() {
+        new MaterialDialog.Builder(this, R.style.CustomStyle)
+                .title("Themed dialog")
+                .message("It's customized...")
+                .positiveText(R.string.ok)
+                .show();
+    }
+
+
     private void showDialogDimmed() {
         SeekBar seekBar = (SeekBar) findViewById(R.id.seekBar);
         new MaterialDialog.Builder(this)
@@ -438,6 +447,11 @@ public class MainActivity extends AppCompatActivity {
         changelogs.add(new Changelog("0.0.6", "2016-01-03", new ReleaseInfo("Added dialog delayed clickable")));
         changelogs.add(new Changelog("0.0.5", "2016-01-02", new ReleaseInfo("Initial release")));
         return changelogs;
+    }
+
+
+    public void onDialogThemed(View view) {
+        showDialogThemed();
     }
 
 
