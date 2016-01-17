@@ -158,7 +158,7 @@ public class MainActivity extends AppCompatActivity {
                 .message("Please read our terms of use.")
                 .positiveText("DONE")
                 .positiveColor(R.color.green_700)
-                .positiveDelayed(5000, 1000, "OK")
+                .positiveDelayed(3000, 1000, "OK")
                 .cancelable(false)
                 .canceledOnTouchOutside(false)
                 .buttonCallback(new MaterialDialog.ButtonCallback() {
