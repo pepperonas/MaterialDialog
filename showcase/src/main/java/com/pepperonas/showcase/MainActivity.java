@@ -17,6 +17,8 @@
 package com.pepperonas.showcase;
 
 import android.app.AlertDialog;
+import android.content.Context;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
@@ -44,17 +46,22 @@ public class MainActivity extends AppCompatActivity {
 
     private String[] ITEMS = new String[]{"Car", "Plane", "Bike", "Skateboard", "Rocket", "Paper plane"};
 
+    private SharedPreferences mSharedPreferences;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        mSharedPreferences = getSharedPreferences("shared_prefs", Context.MODE_PRIVATE);
     }
 
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         menu.add("About");
+        menu.add(mSharedPreferences.getBoolean("SHOW_TOASTS", true) ? "Hide Toasts" : "Show Toasts");
         return super.onCreateOptionsMenu(menu);
     }
 
@@ -78,6 +85,12 @@ public class MainActivity extends AppCompatActivity {
                         }
                     })
                     .show();
+        } else if (item.getTitle().equals("Hide Toasts")) {
+            mSharedPreferences.edit().putBoolean("SHOW_TOASTS", false).apply();
+            item.setTitle("Show Toasts");
+        } else if (item.getTitle().equals("Show Toasts")) {
+            mSharedPreferences.edit().putBoolean("SHOW_TOASTS", true).apply();
+            item.setTitle("Hide Toasts");
         }
         return super.onOptionsItemSelected(item);
     }
@@ -97,38 +110,45 @@ public class MainActivity extends AppCompatActivity {
                     @Override
                     public void onShow(AlertDialog d) {
                         super.onShow(d);
-                        Toast.makeText(MainActivity.this, "onShow", Toast.LENGTH_SHORT).show();
+                        String text = "onShow";
+                        showToast(text);
                     }
                 })
                 .dismissListener(new MaterialDialog.DismissListener() {
                     @Override
                     public void onDismiss() {
                         super.onDismiss();
-                        Toast.makeText(MainActivity.this, "onDismiss", Toast.LENGTH_SHORT).show();
+                        showToast("onDismiss");
                     }
                 })
                 .buttonCallback(new MaterialDialog.ButtonCallback() {
                     @Override
                     public void onPositive(MaterialDialog dialog) {
                         super.onPositive(dialog);
-                        Toast.makeText(MainActivity.this, "OK", Toast.LENGTH_SHORT).show();
+                        showToast("OK");
                     }
 
 
                     @Override
                     public void onNeutral(MaterialDialog dialog) {
                         super.onNeutral(dialog);
-                        Toast.makeText(MainActivity.this, "Not now", Toast.LENGTH_SHORT).show();
+                        showToast("Not now");
                     }
 
 
                     @Override
                     public void onNegative(MaterialDialog dialog) {
                         super.onNegative(dialog);
-                        Toast.makeText(MainActivity.this, "Cancel", Toast.LENGTH_SHORT).show();
+                        showToast("Cancel");
                     }
                 })
                 .show();
+    }
+
+
+    private void showToast(String text) {
+        if (!mSharedPreferences.getBoolean("SHOW_TOASTS", true)) return;
+        Toast.makeText(MainActivity.this, text, Toast.LENGTH_SHORT).show();
     }
 
 
@@ -145,7 +165,7 @@ public class MainActivity extends AppCompatActivity {
                     @Override
                     public void onPositive(MaterialDialog dialog) {
                         super.onPositive(dialog);
-                        Toast.makeText(MainActivity.this, "OK", Toast.LENGTH_SHORT).show();
+                        showToast("OK");
                     }
                 })
                 .dismissListener(new MaterialDialog.DismissListener() {
@@ -173,14 +193,14 @@ public class MainActivity extends AppCompatActivity {
                     @Override
                     public void onPositive(MaterialDialog dialog) {
                         super.onPositive(dialog);
-                        Toast.makeText(MainActivity.this, "Agree", Toast.LENGTH_SHORT).show();
+                        showToast("Agree");
                     }
 
 
                     @Override
                     public void onNegative(MaterialDialog dialog) {
                         super.onNegative(dialog);
-                        Toast.makeText(MainActivity.this, "Disagree", Toast.LENGTH_SHORT).show();
+                        showToast("Disagree");
                     }
                 })
                 .show();
@@ -197,14 +217,14 @@ public class MainActivity extends AppCompatActivity {
                     @Override
                     public void onClick(View v, int position, long id) {
                         super.onClick(v, position, id);
-                        Toast.makeText(MainActivity.this, "onClick (" + ITEMS[position] + ")", Toast.LENGTH_SHORT).show();
+                        showToast("onClick (" + ITEMS[position] + ")");
                     }
                 })
                 .buttonCallback(new MaterialDialog.ButtonCallback() {
                     @Override
                     public void onNegative(MaterialDialog dialog) {
                         super.onNegative(dialog);
-                        Toast.makeText(MainActivity.this, "Cancel", Toast.LENGTH_SHORT).show();
+                        showToast("Cancel");
                     }
                 })
                 .show();
@@ -225,14 +245,14 @@ public class MainActivity extends AppCompatActivity {
                     @Override
                     public void onClick(View v, int position, long id) {
                         super.onClick(v, position, id);
-                        Toast.makeText(MainActivity.this, "onClick (" + ITEMS[position] + ")", Toast.LENGTH_SHORT).show();
+                        showToast("onClick (" + ITEMS[position] + ")");
                     }
                 })
                 .itemLongClickListener(new MaterialDialog.ItemLongClickListener() {
                     @Override
                     public void onLongClick(View view, int position, long id) {
                         super.onLongClick(view, position, id);
-                        Toast.makeText(MainActivity.this, "onLongClick (" + ITEMS[position] + ")", Toast.LENGTH_SHORT).show();
+                        showToast("onLongClick (" + ITEMS[position] + ")");
                     }
                 })
                 .showListener(new MaterialDialog.ShowListener() {
@@ -240,21 +260,21 @@ public class MainActivity extends AppCompatActivity {
                     public void onShow(AlertDialog dialog) {
                         super.onShow(dialog);
                         Log.d(TAG, "onShow " + "");
-                        Toast.makeText(MainActivity.this, "onShow", Toast.LENGTH_SHORT).show();
+                        showToast("onShow");
                     }
                 })
                 .buttonCallback(new MaterialDialog.ButtonCallback() {
                     @Override
                     public void onPositive(MaterialDialog dialog) {
                         super.onPositive(dialog);
-                        Toast.makeText(MainActivity.this, "OK", Toast.LENGTH_SHORT).show();
+                        showToast("OK");
                     }
 
 
                     @Override
                     public void onNegative(MaterialDialog dialog) {
                         super.onNegative(dialog);
-                        Toast.makeText(MainActivity.this, "Cancel", Toast.LENGTH_SHORT).show();
+                        showToast("Cancel");
                     }
                 })
                 .show();
@@ -275,28 +295,28 @@ public class MainActivity extends AppCompatActivity {
                     @Override
                     public void onClick(View v, int position, long id) {
                         super.onClick(v, position, id);
-                        Toast.makeText(MainActivity.this, "onClick (" + ITEMS[position] + ")", Toast.LENGTH_SHORT).show();
+                        showToast("onClick (" + ITEMS[position] + ")");
                     }
                 })
                 .showListener(new MaterialDialog.ShowListener() {
                     @Override
                     public void onShow(AlertDialog dialog) {
                         super.onShow(dialog);
-                        Toast.makeText(MainActivity.this, "onShow", Toast.LENGTH_SHORT).show();
+                        showToast("onShow");
                     }
                 })
                 .buttonCallback(new MaterialDialog.ButtonCallback() {
                     @Override
                     public void onPositive(MaterialDialog dialog) {
                         super.onPositive(dialog);
-                        Toast.makeText(MainActivity.this, "OK", Toast.LENGTH_SHORT).show();
+                        showToast("OK");
                     }
 
 
                     @Override
                     public void onNegative(MaterialDialog dialog) {
                         super.onNegative(dialog);
-                        Toast.makeText(MainActivity.this, "Cancel", Toast.LENGTH_SHORT).show();
+                        showToast("Cancel");
                     }
                 }).build().show();
 
