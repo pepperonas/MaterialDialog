@@ -94,19 +94,35 @@ public class MaterialDialog extends AlertDialog {
             final ListView lv = new ListView(builder.context);
             lv.setLayoutParams(new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
 
-            final ArrayAdapter<String> aa;
+           /* if (!builder.multiChoice && !builder.blankListing) {
+                final SingleChoiceArrayAdapter scaa = new SingleChoiceArrayAdapter(
+                        builder.context, builder.items);
+                lv.setChoiceMode(AbsListView.CHOICE_MODE_SINGLE);
+                lv.setDivider(null);
+                lv.setAdapter(scaa);*/
+
+
             if (!builder.multiChoice && !builder.blankListing) {
-                aa = new ArrayAdapter<>(builder.context, android.R.layout.simple_list_item_single_choice, builder.items);
+                final ArrayAdapter<String> aa = new ArrayAdapter<>(builder.context, android.R.layout.simple_list_item_single_choice, builder.items);
                 lv.setChoiceMode(AbsListView.CHOICE_MODE_SINGLE);
+                lv.setDivider(null);
+                lv.setAdapter(aa);
+
             } else if (!builder.multiChoice) {
-                aa = new ArrayAdapter<>(builder.context, android.R.layout.simple_list_item_1, builder.items);
+                final ArrayAdapter<String> aa = new ArrayAdapter<>(
+                        builder.context, android.R.layout.simple_list_item_1, builder.items);
                 lv.setChoiceMode(AbsListView.CHOICE_MODE_SINGLE);
+                lv.setDivider(null);
+                lv.setAdapter(aa);
+
             } else {
-                aa = new ArrayAdapter<>(builder.context, android.R.layout.simple_list_item_multiple_choice, builder.items);
+                final ArrayAdapter<String> aa = new ArrayAdapter<>(
+                        builder.context, android.R.layout.simple_list_item_multiple_choice, builder.items);
                 lv.setChoiceMode(AbsListView.CHOICE_MODE_MULTIPLE);
+                lv.setDivider(null);
+                lv.setAdapter(aa);
             }
 
-            lv.setAdapter(aa);
 
             this.setView(lv);
 
@@ -366,6 +382,7 @@ public class MaterialDialog extends AlertDialog {
         /**
          * List
          */
+        // false will show RadioButton / CheckBox
         private boolean blankListing;
         private boolean multiChoice;
         private boolean dismissOnSelection = false;
@@ -409,7 +426,7 @@ public class MaterialDialog extends AlertDialog {
         }
 
 
-        public Builder title(CharSequence title) {
+        public Builder title(@NonNull CharSequence title) {
             this.title = title;
             return this;
         }
@@ -421,7 +438,7 @@ public class MaterialDialog extends AlertDialog {
         }
 
 
-        public Builder message(CharSequence message) {
+        public Builder message(@NonNull CharSequence message) {
             this.message = message;
             return this;
         }
@@ -439,7 +456,7 @@ public class MaterialDialog extends AlertDialog {
         }
 
 
-        public Builder positiveText(CharSequence positiveText) {
+        public Builder positiveText(@NonNull CharSequence positiveText) {
             this.positiveText = positiveText;
             return this;
         }
@@ -451,7 +468,7 @@ public class MaterialDialog extends AlertDialog {
         }
 
 
-        public Builder neutralText(CharSequence neutralText) {
+        public Builder neutralText(@NonNull CharSequence neutralText) {
             this.neutralText = neutralText;
             return this;
         }
@@ -463,7 +480,7 @@ public class MaterialDialog extends AlertDialog {
         }
 
 
-        public Builder negativeText(CharSequence negativeText) {
+        public Builder negativeText(@NonNull CharSequence negativeText) {
             this.negativeText = negativeText;
             return this;
         }
@@ -499,19 +516,19 @@ public class MaterialDialog extends AlertDialog {
         }
 
 
-        public Builder buttonCallback(ButtonCallback buttonCallback) {
+        public Builder buttonCallback(@NonNull ButtonCallback buttonCallback) {
             this.buttonCallback = buttonCallback;
             return this;
         }
 
 
-        public Builder showListener(ShowListener showListener) {
+        public Builder showListener(@NonNull ShowListener showListener) {
             this.showListener = showListener;
             return this;
         }
 
 
-        public Builder dismissListener(DismissListener dismissListener) {
+        public Builder dismissListener(@NonNull DismissListener dismissListener) {
             this.dismissListener = dismissListener;
             return this;
         }
@@ -529,7 +546,7 @@ public class MaterialDialog extends AlertDialog {
         }
 
 
-        public Builder customView(View customView) {
+        public Builder customView(@NonNull View customView) {
             this.customView = customView;
             return this;
         }
@@ -552,7 +569,7 @@ public class MaterialDialog extends AlertDialog {
 
 
         // list
-        public Builder listItems(String... items) {
+        public Builder listItems(@NonNull String... items) {
             this.blankListing = true;
             this.multiChoice = false;
             this.dismissOnSelection = true;
@@ -561,7 +578,7 @@ public class MaterialDialog extends AlertDialog {
         }
 
 
-        public Builder listItemsSingleChoice(boolean dismissOnSelection, String... items) {
+        public Builder listItemsSingleChoice(boolean dismissOnSelection, @NonNull String... items) {
             this.blankListing = false;
             this.multiChoice = false;
             this.dismissOnSelection = dismissOnSelection;
@@ -570,7 +587,7 @@ public class MaterialDialog extends AlertDialog {
         }
 
 
-        public Builder listItemsMultiChoice(String... items) {
+        public Builder listItemsMultiChoice(@NonNull String... items) {
             this.blankListing = false;
             this.multiChoice = true;
             this.items = items;
@@ -590,26 +607,26 @@ public class MaterialDialog extends AlertDialog {
         }
 
 
-        public Builder itemClickListener(ItemClickListener itemClickListener) {
+        public Builder itemClickListener(@NonNull ItemClickListener itemClickListener) {
             this.itemClickListener = itemClickListener;
             return this;
         }
 
 
-        public Builder itemLongClickListener(ItemLongClickListener itemLongClickListener) {
+        public Builder itemLongClickListener(@NonNull ItemLongClickListener itemLongClickListener) {
             this.itemLongClickable = true;
             this.itemLongClickListener = itemLongClickListener;
             return this;
         }
 
 
-        public Builder ItemSelectedListener(ItemSelectedListener itemSelectedListener) {
+        public Builder itemSelectedListener(@NonNull ItemSelectedListener itemSelectedListener) {
             this.itemSelectedListener = itemSelectedListener;
             return this;
         }
 
 
-        public Builder positiveDelayed(long millisInFuture, long countDownInterval, String finishedText) {
+        public Builder positiveDelayed(long millisInFuture, long countDownInterval, @NonNull String finishedText) {
             this.positiveDelayed = true;
             this.millisInFuture = millisInFuture;
             this.countDownInterval = countDownInterval;
