@@ -83,7 +83,6 @@ public class MaterialDialog extends AlertDialog {
                     builder.viewSpacingRight, builder.viewSpacingBottom);
         }
 
-
         /**
          * list
          * */
@@ -93,14 +92,6 @@ public class MaterialDialog extends AlertDialog {
             }
             final ListView lv = new ListView(builder.context);
             lv.setLayoutParams(new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
-
-           /* if (!builder.multiChoice && !builder.blankListing) {
-                final SingleChoiceArrayAdapter scaa = new SingleChoiceArrayAdapter(
-                        builder.context, builder.items);
-                lv.setChoiceMode(AbsListView.CHOICE_MODE_SINGLE);
-                lv.setDivider(null);
-                lv.setAdapter(scaa);*/
-
 
             if (!builder.multiChoice && !builder.blankListing) {
                 final ArrayAdapter<String> aa = new ArrayAdapter<>(builder.context, android.R.layout.simple_list_item_single_choice, builder.items);
@@ -139,6 +130,7 @@ public class MaterialDialog extends AlertDialog {
                         }
                     }
                 } else Log.w(TAG, "More items to check than exists. Will nothing select.");
+
             }
 
             if (builder.itemClickListener != null) {
@@ -153,7 +145,7 @@ public class MaterialDialog extends AlertDialog {
                     }
                 });
             }
-            if (builder.itemLongClickListener != null)
+            if (builder.itemLongClickListener != null && builder.itemLongClickable)
                 lv.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
                     @Override
                     public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {

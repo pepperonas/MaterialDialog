@@ -28,7 +28,7 @@ android {
 
     defaultConfig {
         applicationId "com.pepperonas.materialdialog.showcase"
-        minSdkVersion 11
+        minSdkVersion 14
         targetSdkVersion 23
         versionCode 4
         versionName "0.0.4"

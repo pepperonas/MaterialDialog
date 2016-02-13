@@ -234,7 +234,7 @@ public class MainActivity extends AppCompatActivity {
     private void showMaterialDialogListSingleChoice() {
         new MaterialDialog.Builder(this)
                 .title("MaterialDialog")
-                .message("This is a simple MaterialDialog")
+                .message("Single choice list")
                 .positiveText("OK")
                 .negativeText("CANCEL")
                 .positiveColor(R.color.green_700)
@@ -248,13 +248,13 @@ public class MainActivity extends AppCompatActivity {
                         showToast("onClick (" + ITEMS[position] + ")");
                     }
                 })
-                .itemLongClickListener(new MaterialDialog.ItemLongClickListener() {
-                    @Override
-                    public void onLongClick(View view, int position, long id) {
-                        super.onLongClick(view, position, id);
-                        showToast("onLongClick (" + ITEMS[position] + ")");
-                    }
-                })
+                //                .itemLongClickListener(new MaterialDialog.ItemLongClickListener() {
+                //                    @Override
+                //                    public void onLongClick(View view, int position, long id) {
+                //                        super.onLongClick(view, position, id);
+                //                        showToast("onLongClick (" + ITEMS[position] + ")");
+                //                    }
+                //                })
                 .showListener(new MaterialDialog.ShowListener() {
                     @Override
                     public void onShow(AlertDialog dialog) {
@@ -284,7 +284,7 @@ public class MainActivity extends AppCompatActivity {
     private void showMaterialDialogListMultiChoice() {
         new MaterialDialog.Builder(this)
                 .title("MaterialDialog")
-                .message("This is a simple MaterialDialog")
+                .message("Multi-choice list")
                 .positiveText("OK")
                 .negativeText("CANCEL")
                 .positiveColor(R.color.green_700)
@@ -358,7 +358,7 @@ public class MainActivity extends AppCompatActivity {
         SeekBar seekBar = (SeekBar) findViewById(R.id.seekBar);
         new MaterialDialog.Builder(this)
                 .title("MaterialDialog")
-                .message("This is a simple MaterialDialog.")
+                .message("Dimmed MaterialDialog.")
                 .positiveText("OK")
                 .positiveColor(R.color.purple_700)
                 .dim(seekBar.getProgress())
