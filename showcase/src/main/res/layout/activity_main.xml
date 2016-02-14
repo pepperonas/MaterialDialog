@@ -69,6 +69,15 @@
             <Button
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:text="List Dialog (No title)"
+                android:layout_marginTop="@dimen/button_margin_top"
+                android:layout_marginBottom="@dimen/button_margin_bottom"
+                android:onClick="onDialogListNoTitle"
+                />
+
+            <Button
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
                 android:text="List Dialog"
                 android:layout_marginTop="@dimen/button_margin_top"
                 android:layout_marginBottom="@dimen/button_margin_bottom"

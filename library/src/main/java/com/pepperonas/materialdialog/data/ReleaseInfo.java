@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.pepperonas.materialdialog;
+package com.pepperonas.materialdialog.data;
 
 import android.support.annotation.NonNull;
 

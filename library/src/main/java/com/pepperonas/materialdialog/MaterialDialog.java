@@ -29,14 +29,20 @@ import android.support.annotation.StringRes;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
 import android.view.Window;
 import android.widget.AbsListView;
 import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
+
+import com.pepperonas.materialdialog.adapter.CustomArrayAdapter;
+import com.pepperonas.materialdialog.adapter.CustomMultipleSelectionArrayAdapter;
+import com.pepperonas.materialdialog.adapter.CustomSingleSelectionArrayAdapter;
+import com.pepperonas.materialdialog.data.Changelog;
+import com.pepperonas.materialdialog.data.LicenseInfo;
+import com.pepperonas.materialdialog.data.ReleaseInfo;
+import com.pepperonas.materialdialog.utils.Utils;
 
 import java.util.List;
 
@@ -65,6 +71,8 @@ public class MaterialDialog extends AlertDialog {
 
 
     private void invoke(final Builder builder) {
+        boolean isListDialog = false;
+
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.ICE_CREAM_SANDWICH) {
             if (builder.dimPercent != -1) {
                 float value = (float) builder.dimPercent / 100f;
@@ -77,6 +85,13 @@ public class MaterialDialog extends AlertDialog {
         if (builder.customView != null) {
             getWindow().requestFeature(Window.FEATURE_NO_TITLE);
 
+            if (builder.viewSpacingLeft == -1 && builder.viewSpacingTop == -1 && builder.viewSpacingRight == -1 && builder.viewSpacingBottom == -1) {
+                builder.viewSpacingLeft = Utils.dp2px(builder.context, 8);
+                builder.viewSpacingTop = Utils.dp2px(builder.context, 0);
+                builder.viewSpacingRight = Utils.dp2px(builder.context, 12);
+                builder.viewSpacingBottom = Utils.dp2px(builder.context, 0);
+            }
+
             this.setView(
                     builder.customView,
                     builder.viewSpacingLeft, builder.viewSpacingTop,
@@ -87,96 +102,88 @@ public class MaterialDialog extends AlertDialog {
          * list
          * */
         if (builder.items != null && builder.items.length > 0) {
+            isListDialog = true;
+
             if (builder.customView != null) {
                 Log.w(TAG, "ListView will override the custom view.");
             }
-            final ListView lv = new ListView(builder.context);
-            lv.setLayoutParams(new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
 
-            if (!builder.multiChoice && !builder.blankListing) {
-                final ArrayAdapter<String> aa = new ArrayAdapter<>(builder.context, android.R.layout.simple_list_item_single_choice, builder.items);
-                lv.setChoiceMode(AbsListView.CHOICE_MODE_SINGLE);
-                lv.setDivider(null);
-                lv.setAdapter(aa);
+            LayoutInflater layoutInflater = (LayoutInflater) builder.context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+            LinearLayout llListDialog = (LinearLayout) layoutInflater.inflate(R.layout.dialog_list, null);
+            this.setView(
+                    llListDialog,
+                    builder.viewSpacingLeft, builder.viewSpacingTop,
+                    builder.viewSpacingRight, builder.viewSpacingBottom);
 
-            } else if (!builder.multiChoice) {
-                final ArrayAdapter<String> aa = new ArrayAdapter<>(
-                        builder.context, android.R.layout.simple_list_item_1, builder.items);
-                lv.setChoiceMode(AbsListView.CHOICE_MODE_SINGLE);
-                lv.setDivider(null);
-                lv.setAdapter(aa);
-
+            final ListView lv = (ListView) llListDialog.findViewById(R.id.list_dialog_listview);
+            final TextView tv = (TextView) llListDialog.findViewById(R.id.list_dialog_tv_message);
+            if (builder.message != null) {
+                // ensure to set message
+                tv.setText(builder.message);
             } else {
-                final ArrayAdapter<String> aa = new ArrayAdapter<>(
-                        builder.context, android.R.layout.simple_list_item_multiple_choice, builder.items);
-                lv.setChoiceMode(AbsListView.CHOICE_MODE_MULTIPLE);
-                lv.setDivider(null);
-                lv.setAdapter(aa);
+                // remove message and set space on top
+                llListDialog.removeView(tv);
+                lv.setPadding(0, Utils.dp2px(builder.context, 16), 0, 0);
+            }
+            if (builder.title == null) {
+                lv.setPadding(0, Utils.dp2px(builder.context, 8), 0, Utils.dp2px(builder.context, 8));
             }
 
 
-            this.setView(lv);
-
-            if (builder.preSelectedIndices != null) {
-                if (!builder.multiChoice && builder.preSelectedIndices.length > 1) {
+            if (!builder.multiChoice && !builder.blankListing) {
+                // single selection (RadioButton)
+                int preselectedIndex = 0;
+                if (builder.preSelectedIndices.length > 0) {
+                    preselectedIndex = builder.preSelectedIndices[0];
+                    if (preselectedIndex >= builder.items.length) {
+                        Log.w(TAG, "Selected item greater than item count. Will select first item.");
+                        preselectedIndex = 0;
+                    }
+                }
+                if (builder.preSelectedIndices.length != 1) {
                     Log.w(TAG, "Can't select multiple items in single selection. Will only select \"" +
                                builder.items[builder.preSelectedIndices[builder.preSelectedIndices.length - 1]] + "\".");
                 }
 
-                if (builder.preSelectedIndices.length <= builder.items.length) {
-                    if (builder.preSelectedIndices.length > 0) {
-                        for (int i = 0; i < builder.preSelectedIndices.length; i++) {
-                            lv.setItemChecked(builder.preSelectedIndices[i], true);
-                        }
-                    }
-                } else Log.w(TAG, "More items to check than exists. Will nothing select.");
+                final CustomSingleSelectionArrayAdapter cssaa = new CustomSingleSelectionArrayAdapter(
+                        builder.context,
+                        builder.items,
+                        preselectedIndex,
+                        builder.itemClickListener,
+                        builder.itemLongClickListener);
 
-            }
+                lv.setDivider(null);
+                lv.setAdapter(cssaa);
+            } // end single selection (RadioButton)
 
-            if (builder.itemClickListener != null) {
-                lv.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-                    @Override
-                    public void onItemClick(AdapterView<?> parent, View view, final int position, long id) {
-                        builder.itemClickListener.onClick(view, position, id);
-                        lv.setItemChecked(position, true);
-                        if (builder.dismissOnSelection) {
-                            dismiss();
-                        }
-                    }
-                });
-            }
-            if (builder.itemLongClickListener != null && builder.itemLongClickable)
-                lv.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
-                    @Override
-                    public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
-                        builder.itemLongClickListener.onLongClick(view, position, id);
-                        if (builder.itemLongClickable) {
-                            lv.setItemChecked(position, true);
-                        }
-                        if (builder.dismissOnSelection) {
-                            dismiss();
-                        }
-                        return builder.itemLongClickable;
-                    }
-                });
-            if (builder.itemSelectedListener != null) {
-                lv.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-                    @Override
-                    public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                        builder.itemSelectedListener.onSelected(view, position, id);
-                        lv.setItemChecked(position, true);
-                        if (builder.dismissOnSelection) {
-                            dismiss();
-                        }
-                    }
+            else if (!builder.multiChoice) {
+                // single selection (blank)
+                final CustomArrayAdapter caa = new CustomArrayAdapter(
+                        this,
+                        builder.context,
+                        builder.items,
+                        builder.itemClickListener,
+                        builder.itemLongClickListener,
+                        builder.dismissOnSelection);
 
+                lv.setDivider(null);
+                lv.setAdapter(caa);
 
-                    @Override
-                    public void onNothingSelected(AdapterView<?> parent) {
-                        builder.itemSelectedListener.onNothingSelected(parent);
-                    }
-                });
-            }
+            } // end single selection (blank)
+
+            else {
+                // multi-choice (CheckBox)
+                final CustomMultipleSelectionArrayAdapter cmsaa = new CustomMultipleSelectionArrayAdapter(
+                        builder.context,
+                        builder.items,
+                        builder.preSelectedIndices,
+                        builder.itemClickListener,
+                        builder.itemLongClickListener);
+
+                lv.setChoiceMode(AbsListView.CHOICE_MODE_MULTIPLE);
+                lv.setDivider(null);
+                lv.setAdapter(cmsaa);
+            } // end multi-choice (CheckBox)
 
         } // end list
 
@@ -186,7 +193,9 @@ public class MaterialDialog extends AlertDialog {
         }
 
         if (builder.message != null) {
-            this.setMessage(builder.message);
+            if (!isListDialog) {
+                this.setMessage(builder.message);
+            }
         }
 
         if (builder.icon != -1) {
@@ -366,10 +375,10 @@ public class MaterialDialog extends AlertDialog {
         private boolean canceledOnTouchOutside = true;
         private boolean cancelable = true;
         private View customView;
-        int viewSpacingLeft;
-        int viewSpacingTop;
-        int viewSpacingRight;
-        int viewSpacingBottom;
+        int viewSpacingLeft = -1;
+        int viewSpacingTop = -1;
+        int viewSpacingRight = -1;
+        int viewSpacingBottom = -1;
 
         /**
          * List
@@ -379,7 +388,7 @@ public class MaterialDialog extends AlertDialog {
         private boolean multiChoice;
         private boolean dismissOnSelection = false;
         private String[] items;
-        private int[] preSelectedIndices;
+        private Integer[] preSelectedIndices;
         private ItemClickListener itemClickListener;
         private ItemLongClickListener itemLongClickListener;
         private ItemSelectedListener itemSelectedListener;
@@ -430,7 +439,7 @@ public class MaterialDialog extends AlertDialog {
         }
 
 
-        public Builder message(@NonNull CharSequence message) {
+        public Builder message(@Nullable CharSequence message) {
             this.message = message;
             return this;
         }
@@ -551,29 +560,29 @@ public class MaterialDialog extends AlertDialog {
         }
 
 
-        public Builder viewSpacing(int viewSpacingLeft, int viewSpacingTop, int viewSpacingRight, int viewSpacingBottom) {
-            this.viewSpacingLeft = viewSpacingLeft;
-            this.viewSpacingTop = viewSpacingTop;
-            this.viewSpacingRight = viewSpacingRight;
-            this.viewSpacingBottom = viewSpacingBottom;
+        public Builder viewSpacingDp(int viewSpacingLeftDp, int viewSpacingTopDp, int viewSpacingRightDp, int viewSpacingBottomDp) {
+            this.viewSpacingLeft = Utils.dp2px(context, viewSpacingLeftDp);
+            this.viewSpacingTop = Utils.dp2px(context, viewSpacingTopDp);
+            this.viewSpacingRight = Utils.dp2px(context, viewSpacingRightDp);
+            this.viewSpacingBottom = Utils.dp2px(context, viewSpacingBottomDp);
             return this;
         }
 
 
         // list
-        public Builder listItems(@NonNull String... items) {
+        public Builder listItems(boolean dismissOnSelection, @NonNull String... items) {
             this.blankListing = true;
+            this.dismissOnSelection = dismissOnSelection;
             this.multiChoice = false;
-            this.dismissOnSelection = true;
             this.items = items;
             return this;
         }
 
 
-        public Builder listItemsSingleChoice(boolean dismissOnSelection, @NonNull String... items) {
+        public Builder listItemsSingleSelection(boolean dismissOnSelection, @NonNull String... items) {
             this.blankListing = false;
-            this.multiChoice = false;
             this.dismissOnSelection = dismissOnSelection;
+            this.multiChoice = false;
             this.items = items;
             return this;
         }
@@ -587,7 +596,7 @@ public class MaterialDialog extends AlertDialog {
         }
 
 
-        public Builder selection(int... preSelected) {
+        public Builder selection(Integer... preSelected) {
             this.preSelectedIndices = preSelected;
             return this;
         }
@@ -634,6 +643,9 @@ public class MaterialDialog extends AlertDialog {
             this.libNames = libraryNames;
             this.libDevelopers = libraryDevelopers;
             this.libLicenses = libraryLicenses;
+
+            setViewSpacing(0);
+
             return this;
         }
 
@@ -646,6 +658,8 @@ public class MaterialDialog extends AlertDialog {
             this.libNames = new String[licenseInfos.size()];
             this.libDevelopers = new String[licenseInfos.size()];
             this.libLicenses = new String[licenseInfos.size()];
+
+            setViewSpacing(0);
 
             int i = 0;
             for (LicenseInfo li : licenseInfos) {
@@ -672,6 +686,8 @@ public class MaterialDialog extends AlertDialog {
             this.clDates = dates;
             this.clReleaseInfos = releaseInfos;
 
+            setViewSpacing(0);
+
             if (bullet != null) {
                 this.clBullet = bullet;
             }
@@ -693,6 +709,8 @@ public class MaterialDialog extends AlertDialog {
             this.clVersionNames = new String[changelogs.size()];
             this.clDates = new String[changelogs.size()];
             this.clReleaseInfos = new ReleaseInfo[changelogs.size()];
+
+            setViewSpacing(0);
 
             if (bullet != null) {
                 this.clBullet = bullet;
@@ -718,6 +736,14 @@ public class MaterialDialog extends AlertDialog {
 
         public void show() {
             this.build().show();
+        }
+
+
+        private void setViewSpacing(int spacing) {
+            this.viewSpacingLeft = spacing;
+            this.viewSpacingTop = spacing;
+            this.viewSpacingRight = spacing;
+            this.viewSpacingBottom = spacing;
         }
     }
 

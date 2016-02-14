@@ -32,10 +32,11 @@ import android.widget.SeekBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.pepperonas.materialdialog.Changelog;
-import com.pepperonas.materialdialog.LicenseInfo;
 import com.pepperonas.materialdialog.MaterialDialog;
-import com.pepperonas.materialdialog.ReleaseInfo;
+import com.pepperonas.materialdialog.data.Changelog;
+import com.pepperonas.materialdialog.data.LicenseInfo;
+import com.pepperonas.materialdialog.data.ReleaseInfo;
+import com.pepperonas.materialdialog.utils.Const;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -44,7 +45,7 @@ public class MainActivity extends AppCompatActivity {
 
     private static final String TAG = "MainActivity";
 
-    private String[] ITEMS = new String[]{"Car", "Plane", "Bike", "Skateboard", "Rocket", "Paper plane"};
+    private String[] ITEMS = new String[]{"Car", "Plane", "Bike", "Skateboard", "Rocket", "Paper plane", "Boat", "Train", "Hovercraft", "Space shuttle", "Jet", "Truck", "Elephant"};
 
     private SharedPreferences mSharedPreferences;
 
@@ -61,7 +62,7 @@ public class MainActivity extends AppCompatActivity {
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         menu.add("About");
-        menu.add(mSharedPreferences.getBoolean("SHOW_TOASTS", true) ? "Hide Toasts" : "Show Toasts");
+        menu.add(mSharedPreferences.getBoolean("SHOW_TOASTS", true) ? Const.HIDE_TOASTS : Const.SHOW_TOASTS);
         return super.onCreateOptionsMenu(menu);
     }
 
@@ -85,12 +86,12 @@ public class MainActivity extends AppCompatActivity {
                         }
                     })
                     .show();
-        } else if (item.getTitle().equals("Hide Toasts")) {
+        } else if (item.getTitle().equals(Const.HIDE_TOASTS)) {
             mSharedPreferences.edit().putBoolean("SHOW_TOASTS", false).apply();
-            item.setTitle("Show Toasts");
-        } else if (item.getTitle().equals("Show Toasts")) {
+            item.setTitle(Const.SHOW_TOASTS);
+        } else if (item.getTitle().equals(Const.SHOW_TOASTS)) {
             mSharedPreferences.edit().putBoolean("SHOW_TOASTS", true).apply();
-            item.setTitle("Hide Toasts");
+            item.setTitle(Const.HIDE_TOASTS);
         }
         return super.onOptionsItemSelected(item);
     }
@@ -99,7 +100,7 @@ public class MainActivity extends AppCompatActivity {
     private void showMaterialDialog() {
         new MaterialDialog.Builder(this)
                 .title("MaterialDialog")
-                .message("This is a simple MaterialDialog.")
+                .message("A simple dialog.")
                 .positiveText("OK")
                 .neutralText("NOT NOW")
                 .negativeText("CANCEL")
@@ -110,8 +111,6 @@ public class MainActivity extends AppCompatActivity {
                     @Override
                     public void onShow(AlertDialog d) {
                         super.onShow(d);
-                        String text = "onShow";
-                        showToast(text);
                     }
                 })
                 .dismissListener(new MaterialDialog.DismissListener() {
@@ -125,7 +124,7 @@ public class MainActivity extends AppCompatActivity {
                     @Override
                     public void onPositive(MaterialDialog dialog) {
                         super.onPositive(dialog);
-                        showToast("OK");
+                        showToast("Ok");
                     }
 
 
@@ -165,7 +164,7 @@ public class MainActivity extends AppCompatActivity {
                     @Override
                     public void onPositive(MaterialDialog dialog) {
                         super.onPositive(dialog);
-                        showToast("OK");
+                        showToast("Ok");
                     }
                 })
                 .dismissListener(new MaterialDialog.DismissListener() {
@@ -193,14 +192,30 @@ public class MainActivity extends AppCompatActivity {
                     @Override
                     public void onPositive(MaterialDialog dialog) {
                         super.onPositive(dialog);
-                        showToast("Agree");
+                        showToast("Agreed");
                     }
 
 
                     @Override
                     public void onNegative(MaterialDialog dialog) {
                         super.onNegative(dialog);
-                        showToast("Disagree");
+                        showToast("Disagreed");
+                    }
+                })
+                .show();
+    }
+
+
+    private void showMaterialDialogListNoTitle() {
+        new MaterialDialog.Builder(this)
+                .title(null)
+                .listItems(true, "HTC", "Samsung", "LG", "Huawei")
+                .itemClickListener(new MaterialDialog.ItemClickListener() {
+                    @Override
+                    public void onClick(View v, int position, long id) {
+                        super.onClick(v, position, id);
+                        showToast("onClick (" + ITEMS[position] + ")");
+                        Log.d(TAG, "onClick (" + ITEMS[position] + ")");
                     }
                 })
                 .show();
@@ -212,7 +227,13 @@ public class MainActivity extends AppCompatActivity {
                 .title("MaterialDialog")
                 .negativeText("CANCEL")
                 .negativeColor(R.color.pink_500)
-                .listItems(ITEMS)
+                .listItems(false, ITEMS)
+                .itemSelectedListener(new MaterialDialog.ItemSelectedListener() {
+                    @Override
+                    public void onSelected(View view, int position, long id) {
+                        super.onSelected(view, position, id);
+                    }
+                })
                 .itemClickListener(new MaterialDialog.ItemClickListener() {
                     @Override
                     public void onClick(View v, int position, long id) {
@@ -233,14 +254,14 @@ public class MainActivity extends AppCompatActivity {
 
     private void showMaterialDialogListSingleChoice() {
         new MaterialDialog.Builder(this)
-                .title("MaterialDialog")
-                .message("Single choice list")
+                .title("List dialog")
+                .message(null)
                 .positiveText("OK")
                 .negativeText("CANCEL")
                 .positiveColor(R.color.green_700)
                 .negativeColor(R.color.pink_700)
-                .listItemsSingleChoice(false, ITEMS)
-                .selection(1)
+                .listItemsSingleSelection(false, ITEMS)
+                .selection(2)
                 .itemClickListener(new MaterialDialog.ItemClickListener() {
                     @Override
                     public void onClick(View v, int position, long id) {
@@ -248,19 +269,17 @@ public class MainActivity extends AppCompatActivity {
                         showToast("onClick (" + ITEMS[position] + ")");
                     }
                 })
-                //                .itemLongClickListener(new MaterialDialog.ItemLongClickListener() {
-                //                    @Override
-                //                    public void onLongClick(View view, int position, long id) {
-                //                        super.onLongClick(view, position, id);
-                //                        showToast("onLongClick (" + ITEMS[position] + ")");
-                //                    }
-                //                })
+                .itemLongClickListener(new MaterialDialog.ItemLongClickListener() {
+                    @Override
+                    public void onLongClick(View view, int position, long id) {
+                        super.onLongClick(view, position, id);
+                        showToast("onLongClick (" + ITEMS[position] + ")");
+                    }
+                })
                 .showListener(new MaterialDialog.ShowListener() {
                     @Override
                     public void onShow(AlertDialog dialog) {
                         super.onShow(dialog);
-                        Log.d(TAG, "onShow " + "");
-                        showToast("onShow");
                     }
                 })
                 .buttonCallback(new MaterialDialog.ButtonCallback() {
@@ -284,13 +303,13 @@ public class MainActivity extends AppCompatActivity {
     private void showMaterialDialogListMultiChoice() {
         new MaterialDialog.Builder(this)
                 .title("MaterialDialog")
-                .message("Multi-choice list")
+                .message(null)
                 .positiveText("OK")
                 .negativeText("CANCEL")
                 .positiveColor(R.color.green_700)
                 .negativeColor(R.color.pink_700)
                 .listItemsMultiChoice(ITEMS)
-                .selection(3, 5)
+                .selection(0, 2)
                 .itemClickListener(new MaterialDialog.ItemClickListener() {
                     @Override
                     public void onClick(View v, int position, long id) {
@@ -298,25 +317,18 @@ public class MainActivity extends AppCompatActivity {
                         showToast("onClick (" + ITEMS[position] + ")");
                     }
                 })
-                .showListener(new MaterialDialog.ShowListener() {
-                    @Override
-                    public void onShow(AlertDialog dialog) {
-                        super.onShow(dialog);
-                        showToast("onShow");
-                    }
-                })
                 .buttonCallback(new MaterialDialog.ButtonCallback() {
                     @Override
                     public void onPositive(MaterialDialog dialog) {
                         super.onPositive(dialog);
-                        showToast("OK");
+                        showToast("Ok");
                     }
 
 
                     @Override
                     public void onNegative(MaterialDialog dialog) {
                         super.onNegative(dialog);
-                        showToast("Cancel");
+                        showToast("Canceled");
                     }
                 }).build().show();
 
@@ -378,6 +390,11 @@ public class MainActivity extends AppCompatActivity {
 
     public void onDialogCustomView(View view) {
         showMaterialDialogCustomView();
+    }
+
+
+    public void onDialogListNoTitle(View view) {
+        showMaterialDialogListNoTitle();
     }
 
 
@@ -461,11 +478,19 @@ public class MainActivity extends AppCompatActivity {
 
     public List<Changelog> getChangelogs() {
         List<Changelog> changelogs = new ArrayList<>();
-        changelogs.add(new Changelog("0.0.9", "2016-05-05", new ReleaseInfo("Bugfixes")));
-        changelogs.add(new Changelog("0.0.8", "2016-01-04", new ReleaseInfo("Added dialog licenses", "Added dialog changelog", "Bugfixes")));
-        changelogs.add(new Changelog("0.0.7", "2016-01-04", new ReleaseInfo("Added dim", "Bugfixes")));
-        changelogs.add(new Changelog("0.0.6", "2016-01-03", new ReleaseInfo("Added dialog delayed clickable")));
-        changelogs.add(new Changelog("0.0.5", "2016-01-02", new ReleaseInfo("Initial release")));
+        changelogs.add(new Changelog("0.1.3", "2016-02-13", new ReleaseInfo("Revised list-dialogs", "Added default view spacing")));
+        changelogs.add(new Changelog("0.1.2", "2016-02-07", new ReleaseInfo("Added styles", "Layout alignment", "Bugfixes")));
+        changelogs.add(new Changelog("0.1.1", "2016-02-06", new ReleaseInfo("Removed unused resources")));
+        changelogs.add(new Changelog("0.1.0", "2016-01-26", new ReleaseInfo("Fixed scroll")));
+        changelogs.add(new Changelog("0.0.9", "2016-01-24", new ReleaseInfo("Added themed dialog", "Bugfixes")));
+        changelogs.add(new Changelog("0.0.8", "2016-01-23", new ReleaseInfo("Bugfixes")));
+        changelogs.add(new Changelog("0.0.7", "2016-01-14", new ReleaseInfo("Added licenses dialog", "Added changelog dialog")));
+        changelogs.add(new Changelog("0.0.6", "2016-01-10", new ReleaseInfo("Added custom-view dialog", "Added dimmed dialog", "Bugfixes")));
+        changelogs.add(new Changelog("0.0.5", "2016-01-08", new ReleaseInfo("Added dialog with delayed button")));
+        changelogs.add(new Changelog("0.0.4", "2016-01-05", new ReleaseInfo("Bugfixes")));
+        changelogs.add(new Changelog("0.0.3", "2016-01-04", new ReleaseInfo("Layout alignment")));
+        changelogs.add(new Changelog("0.0.2", "2016-01-03", new ReleaseInfo("Fixed null-pointer")));
+        changelogs.add(new Changelog("0.0.1", "2016-01-02", new ReleaseInfo("Initial release")));
         return changelogs;
     }
 

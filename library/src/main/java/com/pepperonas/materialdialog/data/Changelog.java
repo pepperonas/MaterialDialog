@@ -14,69 +14,68 @@
  * limitations under the License.
  */
 
-package com.pepperonas.materialdialog;
+package com.pepperonas.materialdialog.data;
 
 import android.support.annotation.NonNull;
 
 /**
  * @author Martin Pfeffer (pepperonas)
  */
-public class LicenseInfo {
+public class Changelog {
 
     @NonNull
-    private String name;
+    private String versionName;
 
     @NonNull
-    private String developer;
+    private String date;
 
     @NonNull
-    private String licenseText;
+    private ReleaseInfo releaseInfo;
 
 
     /**
-     * Instantiates a new License info.
+     * Instantiates a new Changelog.
      *
-     * @param name        the name
-     * @param developer   the developer
-     * @param licenseText the license text
+     * @param versionName the version name
+     * @param date        the date
+     * @param releaseInfo the release info
      */
-    public LicenseInfo(@NonNull String name, @NonNull String developer, @NonNull String licenseText) {
-        this.name = name;
-        this.developer = developer;
-        this.licenseText = licenseText;
+    public Changelog(@NonNull String versionName, @NonNull String date, @NonNull ReleaseInfo releaseInfo) {
+        this.versionName = versionName;
+        this.date = date;
+        this.releaseInfo = releaseInfo;
     }
 
 
     /**
-     * Gets name.
+     * Gets version name.
      *
-     * @return the name
+     * @return the version name
      */
     @NonNull
-    public String getName() {
-        return name;
+    public String getVersionName() {
+        return versionName;
     }
 
 
     /**
-     * Gets developer.
+     * Gets date.
      *
-     * @return the developer
+     * @return the date
      */
     @NonNull
-    public String getDeveloper() {
-        return developer;
+    public String getDate() {
+        return date;
     }
 
 
     /**
-     * Gets license text.
+     * Gets release info.
      *
-     * @return the license text
+     * @return the release info
      */
     @NonNull
-    public String getLicenseText() {
-        return licenseText;
+    public ReleaseInfo getReleaseInfo() {
+        return releaseInfo;
     }
-
 }
