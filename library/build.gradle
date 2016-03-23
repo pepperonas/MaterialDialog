@@ -1,27 +1,17 @@
 apply plugin: 'com.android.library'
 apply plugin: 'com.github.dcendents.android-maven'
 
-ext {
-
-    PUBLISH_GROUP_ID = 'com.pepperonas.materialdialog'
-
-    PUBLISH_ARTIFACT_ID = 'library'
-
-    PUBLISH_VERSION = '0.1.5'
-
-}
-
 group = 'com.pepperonas.materialdialog'
 
 android {
     compileSdkVersion 23
-    buildToolsVersion '23.0.2'
+    buildToolsVersion '23.0.3'
 
     defaultConfig {
         minSdkVersion 14
         targetSdkVersion 23
         versionCode 1
-        versionName "0.1.5"
+        versionName "0.1.9"
     }
     lintOptions {
         abortOnError false
@@ -55,3 +45,4 @@ artifacts {
     archives sourcesJar
     archives javadocJar
 }
+
