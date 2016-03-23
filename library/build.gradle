@@ -1,6 +1,13 @@
 apply plugin: 'com.android.library'
 apply plugin: 'com.github.dcendents.android-maven'
 
+ext {
+    PUBLISH_GROUP_ID = 'com.pepperonas'
+    PUBLISH_ARTIFACT_ID = 'materialdialog'
+    PUBLISH_VERSION = '0.1.4'
+}
+
+
 group = 'com.pepperonas.materialdialog'
 
 android {
@@ -11,7 +18,7 @@ android {
         minSdkVersion 14
         targetSdkVersion 23
         versionCode 1
-        versionName "0.2.1"
+        versionName "0.1.4"
     }
     lintOptions {
         abortOnError false
@@ -46,3 +53,4 @@ artifacts {
     archives javadocJar
 }
 
+apply from: 'https://raw.githubusercontent.com/blundell/release-android-library/master/android-release-aar.gradle'
