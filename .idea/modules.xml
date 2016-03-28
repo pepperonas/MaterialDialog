@@ -3,7 +3,10 @@
   <component name="ProjectModuleManager">
     <modules>
       <module fileurl="file://$PROJECT_DIR$/MaterialDialog.iml" filepath="$PROJECT_DIR$/MaterialDialog.iml" />
+      <module fileurl="file://$PROJECT_DIR$/MaterialDialog.iml" filepath="$PROJECT_DIR$/MaterialDialog.iml" />
       <module fileurl="file://$PROJECT_DIR$/library/library.iml" filepath="$PROJECT_DIR$/library/library.iml" />
+      <module fileurl="file://$PROJECT_DIR$/library/library.iml" filepath="$PROJECT_DIR$/library/library.iml" />
+      <module fileurl="file://$PROJECT_DIR$/showcase/showcase.iml" filepath="$PROJECT_DIR$/showcase/showcase.iml" />
       <module fileurl="file://$PROJECT_DIR$/showcase/showcase.iml" filepath="$PROJECT_DIR$/showcase/showcase.iml" />
     </modules>
   </component>
