@@ -47,6 +47,8 @@ import com.pepperonas.materialdialog.utils.Utils;
 import java.util.List;
 
 /**
+ * The type Material dialog.
+ *
  * @author Martin Pfeffer (pepperonas)
  */
 public class MaterialDialog extends AlertDialog {
@@ -54,6 +56,11 @@ public class MaterialDialog extends AlertDialog {
     private static final String TAG = "MaterialDialog";
 
 
+    /**
+     * Instantiates a new Material dialog.
+     *
+     * @param builder the builder
+     */
     public MaterialDialog(final Builder builder) {
         super(builder.context);
 
@@ -62,6 +69,12 @@ public class MaterialDialog extends AlertDialog {
     }
 
 
+    /**
+     * Instantiates a new Material dialog.
+     *
+     * @param builder the builder
+     * @param style   the style
+     */
     public MaterialDialog(final Builder builder, int style) {
         super(builder.context, style);
 
@@ -356,6 +369,9 @@ public class MaterialDialog extends AlertDialog {
     }
 
 
+    /**
+     * The type Builder.
+     */
     public static class Builder {
 
         /**
@@ -379,9 +395,21 @@ public class MaterialDialog extends AlertDialog {
         private boolean canceledOnTouchOutside = true;
         private boolean cancelable = true;
         private View customView;
+        /**
+         * The View spacing left.
+         */
         int viewSpacingLeft = -1;
+        /**
+         * The View spacing top.
+         */
         int viewSpacingTop = -1;
+        /**
+         * The View spacing right.
+         */
         int viewSpacingRight = -1;
+        /**
+         * The View spacing bottom.
+         */
         int viewSpacingBottom = -1;
 
         /**
@@ -422,143 +450,286 @@ public class MaterialDialog extends AlertDialog {
         private String clBullet;
 
 
+        /**
+         * Instantiates a new Builder.
+         *
+         * @param context the context
+         */
         public Builder(Context context) {
             this.context = context;
         }
 
 
+        /**
+         * Instantiates a new Builder.
+         *
+         * @param context the context
+         * @param style   the style
+         */
         public Builder(Context context, int style) {
             this.context = context;
             this.style = style;
         }
 
 
+        /**
+         * Title builder.
+         *
+         * @param title the title
+         * @return the builder
+         */
         public Builder title(@NonNull CharSequence title) {
             this.title = title;
             return this;
         }
 
 
+        /**
+         * Title builder.
+         *
+         * @param title the title
+         * @return the builder
+         */
         public Builder title(@StringRes int title) {
             this.title = context.getString(title);
             return this;
         }
 
 
+        /**
+         * Message builder.
+         *
+         * @param message the message
+         * @return the builder
+         */
         public Builder message(@Nullable CharSequence message) {
             this.message = message;
             return this;
         }
 
 
+        /**
+         * Message builder.
+         *
+         * @param message the message
+         * @return the builder
+         */
         public Builder message(@StringRes int message) {
             this.message = context.getString(message);
             return this;
         }
 
 
+        /**
+         * Dim builder.
+         *
+         * @param percent the percent
+         * @return the builder
+         */
         public Builder dim(int percent) {
             this.dimPercent = percent;
             return this;
         }
 
 
+        /**
+         * Positive text builder.
+         *
+         * @param positiveText the positive text
+         * @return the builder
+         */
         public Builder positiveText(@NonNull CharSequence positiveText) {
             this.positiveText = positiveText;
             return this;
         }
 
 
+        /**
+         * Positive text builder.
+         *
+         * @param positiveText the positive text
+         * @return the builder
+         */
         public Builder positiveText(@StringRes int positiveText) {
             this.positiveText = context.getString(positiveText);
             return this;
         }
 
 
+        /**
+         * Neutral text builder.
+         *
+         * @param neutralText the neutral text
+         * @return the builder
+         */
         public Builder neutralText(@NonNull CharSequence neutralText) {
             this.neutralText = neutralText;
             return this;
         }
 
 
+        /**
+         * Neutral text builder.
+         *
+         * @param neutralText the neutral text
+         * @return the builder
+         */
         public Builder neutralText(@StringRes int neutralText) {
             this.neutralText = context.getString(neutralText);
             return this;
         }
 
 
+        /**
+         * Negative text builder.
+         *
+         * @param negativeText the negative text
+         * @return the builder
+         */
         public Builder negativeText(@NonNull CharSequence negativeText) {
             this.negativeText = negativeText;
             return this;
         }
 
 
+        /**
+         * Negative text builder.
+         *
+         * @param negativeText the negative text
+         * @return the builder
+         */
         public Builder negativeText(@StringRes int negativeText) {
             this.negativeText = context.getString(negativeText);
             return this;
         }
 
 
+        /**
+         * Positive color builder.
+         *
+         * @param colorId the color id
+         * @return the builder
+         */
         public Builder positiveColor(@ColorRes int colorId) {
             this.positiveColor = colorId;
             return this;
         }
 
 
+        /**
+         * Neutral color builder.
+         *
+         * @param colorId the color id
+         * @return the builder
+         */
         public Builder neutralColor(@ColorRes int colorId) {
             this.neutralColor = colorId;
             return this;
         }
 
 
+        /**
+         * Negative color builder.
+         *
+         * @param colorId the color id
+         * @return the builder
+         */
         public Builder negativeColor(@ColorRes int colorId) {
             this.negativeColor = colorId;
             return this;
         }
 
 
+        /**
+         * Icon builder.
+         *
+         * @param drawableId the drawable id
+         * @return the builder
+         */
         public Builder icon(@DrawableRes int drawableId) {
             this.icon = drawableId;
             return this;
         }
 
 
+        /**
+         * Button callback builder.
+         *
+         * @param buttonCallback the button callback
+         * @return the builder
+         */
         public Builder buttonCallback(@NonNull ButtonCallback buttonCallback) {
             this.buttonCallback = buttonCallback;
             return this;
         }
 
 
+        /**
+         * Show listener builder.
+         *
+         * @param showListener the show listener
+         * @return the builder
+         */
         public Builder showListener(@NonNull ShowListener showListener) {
             this.showListener = showListener;
             return this;
         }
 
 
+        /**
+         * Dismiss listener builder.
+         *
+         * @param dismissListener the dismiss listener
+         * @return the builder
+         */
         public Builder dismissListener(@NonNull DismissListener dismissListener) {
             this.dismissListener = dismissListener;
             return this;
         }
 
 
+        /**
+         * Canceled on touch outside builder.
+         *
+         * @param canceledOnTouchOutside the canceled on touch outside
+         * @return the builder
+         */
         public Builder canceledOnTouchOutside(boolean canceledOnTouchOutside) {
             this.canceledOnTouchOutside = canceledOnTouchOutside;
             return this;
         }
 
 
+        /**
+         * Cancelable builder.
+         *
+         * @param cancelable the cancelable
+         * @return the builder
+         */
         public Builder cancelable(boolean cancelable) {
             this.cancelable = cancelable;
             return this;
         }
 
 
+        /**
+         * Custom view builder.
+         *
+         * @param customView the custom view
+         * @return the builder
+         */
         public Builder customView(@NonNull View customView) {
             this.customView = customView;
             return this;
         }
 
 
+        /**
+         * Custom view builder.
+         *
+         * @param layoutId the layout id
+         * @return the builder
+         */
         public Builder customView(@LayoutRes int layoutId) {
             LayoutInflater inflater = LayoutInflater.from(context);
             customView = inflater.inflate(layoutId, null);
@@ -566,6 +737,15 @@ public class MaterialDialog extends AlertDialog {
         }
 
 
+        /**
+         * View spacing dp builder.
+         *
+         * @param viewSpacingLeftDp   the view spacing left dp
+         * @param viewSpacingTopDp    the view spacing top dp
+         * @param viewSpacingRightDp  the view spacing right dp
+         * @param viewSpacingBottomDp the view spacing bottom dp
+         * @return the builder
+         */
         public Builder viewSpacingDp(int viewSpacingLeftDp, int viewSpacingTopDp, int viewSpacingRightDp, int viewSpacingBottomDp) {
             this.viewSpacingLeft = Utils.dp2px(context, viewSpacingLeftDp);
             this.viewSpacingTop = Utils.dp2px(context, viewSpacingTopDp);
@@ -575,7 +755,14 @@ public class MaterialDialog extends AlertDialog {
         }
 
 
-        // list
+        /**
+         * List items builder.
+         *
+         * @param dismissOnSelection the dismiss on selection
+         * @param items              the items
+         * @return the builder
+         */
+// list
         public Builder listItems(boolean dismissOnSelection, @NonNull String... items) {
             this.blankListing = true;
             this.dismissOnSelection = dismissOnSelection;
@@ -585,6 +772,13 @@ public class MaterialDialog extends AlertDialog {
         }
 
 
+        /**
+         * List items single selection builder.
+         *
+         * @param dismissOnSelection the dismiss on selection
+         * @param items              the items
+         * @return the builder
+         */
         public Builder listItemsSingleSelection(boolean dismissOnSelection, @NonNull String... items) {
             this.blankListing = false;
             this.dismissOnSelection = dismissOnSelection;
@@ -594,6 +788,12 @@ public class MaterialDialog extends AlertDialog {
         }
 
 
+        /**
+         * List items multi choice builder.
+         *
+         * @param items the items
+         * @return the builder
+         */
         public Builder listItemsMultiChoice(@NonNull String... items) {
             this.blankListing = false;
             this.multiChoice = true;
@@ -602,24 +802,48 @@ public class MaterialDialog extends AlertDialog {
         }
 
 
+        /**
+         * Selection builder.
+         *
+         * @param preSelected the pre selected
+         * @return the builder
+         */
         public Builder selection(Integer... preSelected) {
             this.preSelectedIndices = preSelected;
             return this;
         }
 
 
+        /**
+         * Item long clickable builder.
+         *
+         * @param itemLongClickable the item long clickable
+         * @return the builder
+         */
         public Builder itemLongClickable(boolean itemLongClickable) {
             this.itemLongClickable = itemLongClickable;
             return this;
         }
 
 
+        /**
+         * Item click listener builder.
+         *
+         * @param itemClickListener the item click listener
+         * @return the builder
+         */
         public Builder itemClickListener(@NonNull ItemClickListener itemClickListener) {
             this.itemClickListener = itemClickListener;
             return this;
         }
 
 
+        /**
+         * Item long click listener builder.
+         *
+         * @param itemLongClickListener the item long click listener
+         * @return the builder
+         */
         public Builder itemLongClickListener(@NonNull ItemLongClickListener itemLongClickListener) {
             this.itemLongClickable = true;
             this.itemLongClickListener = itemLongClickListener;
@@ -627,12 +851,26 @@ public class MaterialDialog extends AlertDialog {
         }
 
 
+        /**
+         * Item selected listener builder.
+         *
+         * @param itemSelectedListener the item selected listener
+         * @return the builder
+         */
         public Builder itemSelectedListener(@NonNull ItemSelectedListener itemSelectedListener) {
             this.itemSelectedListener = itemSelectedListener;
             return this;
         }
 
 
+        /**
+         * Positive delayed builder.
+         *
+         * @param millisInFuture    the millis in future
+         * @param countDownInterval the count down interval
+         * @param finishedText      the finished text
+         * @return the builder
+         */
         public Builder positiveDelayed(long millisInFuture, long countDownInterval, @NonNull String finishedText) {
             this.positiveDelayed = true;
             this.millisInFuture = millisInFuture;
@@ -642,6 +880,14 @@ public class MaterialDialog extends AlertDialog {
         }
 
 
+        /**
+         * License dialog builder.
+         *
+         * @param libraryNames      the library names
+         * @param libraryDevelopers the library developers
+         * @param libraryLicenses   the library licenses
+         * @return the builder
+         */
         public Builder licenseDialog(@NonNull String[] libraryNames, @NonNull String[] libraryDevelopers, @NonNull String[] libraryLicenses) {
             LayoutInflater inflater = LayoutInflater.from(context);
             customView = inflater.inflate(R.layout.dialog_license, null);
@@ -656,6 +902,12 @@ public class MaterialDialog extends AlertDialog {
         }
 
 
+        /**
+         * License dialog builder.
+         *
+         * @param licenseInfos the license infos
+         * @return the builder
+         */
         public Builder licenseDialog(@NonNull List<LicenseInfo> licenseInfos) {
             LayoutInflater inflater = LayoutInflater.from(context);
             customView = inflater.inflate(R.layout.dialog_license, null);
@@ -679,11 +931,28 @@ public class MaterialDialog extends AlertDialog {
         }
 
 
+        /**
+         * Changelog dialog builder.
+         *
+         * @param versionNames the version names
+         * @param dates        the dates
+         * @param releaseInfos the release infos
+         * @return the builder
+         */
         public Builder changelogDialog(@NonNull String[] versionNames, @NonNull String[] dates, @NonNull ReleaseInfo[] releaseInfos) {
             return changelogDialog(versionNames, dates, releaseInfos, "");
         }
 
 
+        /**
+         * Changelog dialog builder.
+         *
+         * @param versionNames the version names
+         * @param dates        the dates
+         * @param releaseInfos the release infos
+         * @param bullet       the bullet
+         * @return the builder
+         */
         public Builder changelogDialog(@NonNull String[] versionNames, @NonNull String[] dates, @NonNull ReleaseInfo[] releaseInfos, @Nullable String bullet) {
             LayoutInflater inflater = LayoutInflater.from(context);
             customView = inflater.inflate(R.layout.dialog_changelog, null);
@@ -702,11 +971,24 @@ public class MaterialDialog extends AlertDialog {
         }
 
 
+        /**
+         * Changelog dialog builder.
+         *
+         * @param changelogs the changelogs
+         * @return the builder
+         */
         public Builder changelogDialog(@NonNull List<Changelog> changelogs) {
             return changelogDialog(changelogs, "");
         }
 
 
+        /**
+         * Changelog dialog builder.
+         *
+         * @param changelogs the changelogs
+         * @param bullet     the bullet
+         * @return the builder
+         */
         public Builder changelogDialog(@NonNull List<Changelog> changelogs, @Nullable String bullet) {
             LayoutInflater inflater = LayoutInflater.from(context);
             customView = inflater.inflate(R.layout.dialog_changelog, null);
@@ -734,12 +1016,20 @@ public class MaterialDialog extends AlertDialog {
         }
 
 
+        /**
+         * Build material dialog.
+         *
+         * @return the material dialog
+         */
         public MaterialDialog build() {
             if (style == -1) return new MaterialDialog(this);
             else return new MaterialDialog(this, style);
         }
 
 
+        /**
+         * Show.
+         */
         public void show() {
             this.build().show();
         }
@@ -754,28 +1044,54 @@ public class MaterialDialog extends AlertDialog {
     }
 
 
+    /**
+     * The type Button callback.
+     */
     public abstract static class ButtonCallback {
 
+        /**
+         * On any.
+         *
+         * @param dialog the dialog
+         */
         public void onAny(MaterialDialog dialog) {
             Log.d(TAG, "onAny " + "");
         }
 
 
+        /**
+         * On positive.
+         *
+         * @param dialog the dialog
+         */
         public void onPositive(MaterialDialog dialog) {
             Log.d(TAG, "onPositive " + "");
         }
 
 
+        /**
+         * On neutral.
+         *
+         * @param dialog the dialog
+         */
         public void onNeutral(MaterialDialog dialog) {
             Log.d(TAG, "onNeutral " + "");
         }
 
 
+        /**
+         * On negative.
+         *
+         * @param dialog the dialog
+         */
         public void onNegative(MaterialDialog dialog) {
             Log.d(TAG, "onNegative " + "");
         }
 
 
+        /**
+         * Instantiates a new Button callback.
+         */
         public ButtonCallback() {
         }
 
@@ -806,12 +1122,21 @@ public class MaterialDialog extends AlertDialog {
     }
 
 
+    /**
+     * The type Dismiss listener.
+     */
     public abstract static class DismissListener {
 
+        /**
+         * Instantiates a new Dismiss listener.
+         */
         public DismissListener() {
         }
 
 
+        /**
+         * On dismiss.
+         */
         public void onDismiss() {
             Log.d(TAG, "onDismiss " + "");
         }
@@ -843,12 +1168,23 @@ public class MaterialDialog extends AlertDialog {
     }
 
 
+    /**
+     * The type Show listener.
+     */
     public abstract static class ShowListener {
 
+        /**
+         * Instantiates a new Show listener.
+         */
         public ShowListener() {
         }
 
 
+        /**
+         * On show.
+         *
+         * @param dialog the dialog
+         */
         public void onShow(AlertDialog dialog) {
             Log.d(TAG, "onShow " + "");
         }
@@ -880,12 +1216,25 @@ public class MaterialDialog extends AlertDialog {
     }
 
 
+    /**
+     * The type Item click listener.
+     */
     public abstract static class ItemClickListener {
 
+        /**
+         * Instantiates a new Item click listener.
+         */
         public ItemClickListener() {
         }
 
 
+        /**
+         * On click.
+         *
+         * @param v        the v
+         * @param position the position
+         * @param id       the id
+         */
         public void onClick(View v, int position, long id) {
             Log.d(TAG, "onClick " + position);
         }
@@ -917,12 +1266,25 @@ public class MaterialDialog extends AlertDialog {
     }
 
 
+    /**
+     * The type Item long click listener.
+     */
     public abstract static class ItemLongClickListener {
 
+        /**
+         * Instantiates a new Item long click listener.
+         */
         public ItemLongClickListener() {
         }
 
 
+        /**
+         * On long click.
+         *
+         * @param view     the view
+         * @param position the position
+         * @param id       the id
+         */
         public void onLongClick(View view, int position, long id) {
             Log.d(TAG, "onLongClick " + position);
         }
@@ -954,17 +1316,35 @@ public class MaterialDialog extends AlertDialog {
     }
 
 
+    /**
+     * The type Item selected listener.
+     */
     public abstract static class ItemSelectedListener {
 
+        /**
+         * Instantiates a new Item selected listener.
+         */
         public ItemSelectedListener() {
         }
 
 
+        /**
+         * On selected.
+         *
+         * @param view     the view
+         * @param position the position
+         * @param id       the id
+         */
         public void onSelected(View view, int position, long id) {
             Log.d(TAG, "onSelected " + position);
         }
 
 
+        /**
+         * On nothing selected.
+         *
+         * @param parent the parent
+         */
         public void onNothingSelected(AdapterView<?> parent) {
 
         }
@@ -996,6 +1376,9 @@ public class MaterialDialog extends AlertDialog {
     }
 
 
+    /**
+     * The type Version.
+     */
     public static class Version {
 
 
@@ -1020,6 +1403,8 @@ public class MaterialDialog extends AlertDialog {
 
 
         /**
+         * Gets license.
+         *
          * @return The license text.
          */
         public static String getLicense() {
