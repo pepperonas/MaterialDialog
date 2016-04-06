@@ -142,7 +142,7 @@ public class MaterialDialog extends AlertDialog {
                 }
                 if (builder.preSelectedIndices.length != 1) {
                     Log.w(TAG, "Can't select multiple items in single selection. Will only select \"" +
-                               builder.items[builder.preSelectedIndices[builder.preSelectedIndices.length - 1]] + "\".");
+                            builder.items[builder.preSelectedIndices[builder.preSelectedIndices.length - 1]] + "\".");
                 }
 
                 final CustomSingleSelectionArrayAdapter cssaa = new CustomSingleSelectionArrayAdapter(
@@ -257,7 +257,8 @@ public class MaterialDialog extends AlertDialog {
                 if (builder.positiveText != null && builder.positiveColor != -1) {
                     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
                         dialog.getButton(BUTTON_POSITIVE).setTextColor(builder.context.getColor(builder.positiveColor));
-                    } else dialog.getButton(BUTTON_POSITIVE).setTextColor(builder.context.getResources().getColor(builder.positiveColor));
+                    } else
+                        dialog.getButton(BUTTON_POSITIVE).setTextColor(builder.context.getResources().getColor(builder.positiveColor));
 
                     if (builder.positiveDelayed && builder.finishedText != null) {
                         DialogButtonCountDown countDown = new DialogButtonCountDown(builder.millisInFuture, builder.countDownInterval, builder.finishedText, dialog.getButton(BUTTON_POSITIVE));
@@ -267,12 +268,14 @@ public class MaterialDialog extends AlertDialog {
                 if (builder.neutralText != null && builder.neutralColor != -1) {
                     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
                         dialog.getButton(BUTTON_NEUTRAL).setTextColor(builder.context.getColor(builder.neutralColor));
-                    } else dialog.getButton(BUTTON_NEUTRAL).setTextColor(builder.context.getResources().getColor(builder.neutralColor));
+                    } else
+                        dialog.getButton(BUTTON_NEUTRAL).setTextColor(builder.context.getResources().getColor(builder.neutralColor));
                 }
                 if (builder.negativeText != null && builder.negativeColor != -1) {
                     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
                         dialog.getButton(BUTTON_NEGATIVE).setTextColor(builder.context.getColor(builder.negativeColor));
-                    } else dialog.getButton(BUTTON_NEGATIVE).setTextColor(builder.context.getResources().getColor(builder.negativeColor));
+                    } else
+                        dialog.getButton(BUTTON_NEGATIVE).setTextColor(builder.context.getResources().getColor(builder.negativeColor));
                 }
 
                 // dialog height
@@ -287,8 +290,8 @@ public class MaterialDialog extends AlertDialog {
          * */
         if (builder.licenseDialog) {
             if (builder.libNames.length == builder.libDevelopers.length
-                && builder.libDevelopers.length == builder.libLicenses.length
-                && builder.libNames.length != 0) {
+                    && builder.libDevelopers.length == builder.libLicenses.length
+                    && builder.libNames.length != 0) {
 
                 LinearLayout llLibContainer = (LinearLayout) builder.customView.findViewById(R.id.ll_dialog_license_container);
 
@@ -310,8 +313,8 @@ public class MaterialDialog extends AlertDialog {
          * */
         if (builder.changelogDialog) {
             if (builder.clVersionNames.length == builder.clDates.length
-                && builder.clDates.length == builder.clReleaseInfos.length
-                && builder.clVersionNames.length != 0) {
+                    && builder.clDates.length == builder.clReleaseInfos.length
+                    && builder.clVersionNames.length != 0) {
 
                 LinearLayout llClContainer = (LinearLayout) builder.customView.findViewById(R.id.ll_dialog_changelog_container);
 
@@ -330,7 +333,8 @@ public class MaterialDialog extends AlertDialog {
                         if (builder.clBullet != null) {
                             // ensure to set custom bullet
                             ((TextView) llReleaseInfo.findViewById(R.id.tv_release_info_bullet)).setText(builder.clBullet);
-                        } else llReleaseInfo.findViewById(R.id.tv_release_info_bullet).setVisibility(View.GONE);
+                        } else
+                            llReleaseInfo.findViewById(R.id.tv_release_info_bullet).setVisibility(View.GONE);
 
                         ((LinearLayout) llChangelog.findViewById(R.id.ll_dialog_changelog_release_info_container)).addView(llReleaseInfo);
                     }
@@ -418,7 +422,9 @@ public class MaterialDialog extends AlertDialog {
         private String clBullet;
 
 
-        public Builder(Context context) {this.context = context;}
+        public Builder(Context context) {
+            this.context = context;
+        }
 
 
         public Builder(Context context, int style) {
@@ -992,11 +998,22 @@ public class MaterialDialog extends AlertDialog {
 
     public static class Version {
 
+
+        /**
+         * Gets version name.
+         *
+         * @return the version name
+         */
         public static String getVersionName() {
             return BuildConfig.VERSION_NAME;
         }
 
 
+        /**
+         * Gets version info.
+         *
+         * @return the version info
+         */
         public static String getVersionInfo() {
             return "materialdialog-" + BuildConfig.VERSION_NAME;
         }
@@ -1007,18 +1024,18 @@ public class MaterialDialog extends AlertDialog {
          */
         public static String getLicense() {
             return "Copyright (c) 2016 Martin Pfeffer\n" +
-                   " \n" +
-                   "Licensed under the Apache License, Version 2.0 (the \"License\");\n" +
-                   "you may not use this file except in compliance with the License.\n" +
-                   "You may obtain a copy of the License at\n" +
-                   " \n" +
-                   "     http://www.apache.org/licenses/LICENSE-2.0\n" +
-                   " \n" +
-                   "Unless required by applicable law or agreed to in writing, software\n" +
-                   "distributed under the License is distributed on an \"AS IS\" BASIS,\n" +
-                   "WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.\n" +
-                   "See the License for the specific language governing permissions and\n" +
-                   "limitations under the License.";
+                    " \n" +
+                    "Licensed under the Apache License, Version 2.0 (the \"License\");\n" +
+                    "you may not use this file except in compliance with the License.\n" +
+                    "You may obtain a copy of the License at\n" +
+                    " \n" +
+                    "     http://www.apache.org/licenses/LICENSE-2.0\n" +
+                    " \n" +
+                    "Unless required by applicable law or agreed to in writing, software\n" +
+                    "distributed under the License is distributed on an \"AS IS\" BASIS,\n" +
+                    "WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.\n" +
+                    "See the License for the specific language governing permissions and\n" +
+                    "limitations under the License.";
         }
 
     }
