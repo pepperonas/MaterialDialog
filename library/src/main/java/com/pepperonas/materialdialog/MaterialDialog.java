@@ -19,6 +19,7 @@ package com.pepperonas.materialdialog;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.graphics.drawable.Drawable;
 import android.os.Build;
 import android.support.annotation.ColorRes;
 import android.support.annotation.DrawableRes;
@@ -98,7 +99,8 @@ public class MaterialDialog extends AlertDialog {
         if (builder.customView != null) {
             getWindow().requestFeature(Window.FEATURE_NO_TITLE);
 
-            if (builder.viewSpacingLeft == -1 && builder.viewSpacingTop == -1 && builder.viewSpacingRight == -1 && builder.viewSpacingBottom == -1) {
+            if (builder.viewSpacingLeft == -1 && builder.viewSpacingTop == -1 && builder.viewSpacingRight == -1 && builder
+                    .viewSpacingBottom == -1) {
                 builder.viewSpacingLeft = Utils.dp2px(builder.context, 8);
                 builder.viewSpacingTop = Utils.dp2px(builder.context, 0);
                 builder.viewSpacingRight = Utils.dp2px(builder.context, 12);
@@ -216,6 +218,9 @@ public class MaterialDialog extends AlertDialog {
                 this.setIcon(builder.context.getDrawable(builder.icon));
             } else this.setIcon(builder.context.getResources().getDrawable(builder.icon));
         }
+        if (builder.drawable != null) {
+            this.setIcon(builder.drawable);
+        }
 
 
         this.setCancelable(builder.cancelable);
@@ -271,10 +276,12 @@ public class MaterialDialog extends AlertDialog {
                     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
                         dialog.getButton(BUTTON_POSITIVE).setTextColor(builder.context.getColor(builder.positiveColor));
                     } else
-                        dialog.getButton(BUTTON_POSITIVE).setTextColor(builder.context.getResources().getColor(builder.positiveColor));
+                        dialog.getButton(BUTTON_POSITIVE).setTextColor(builder.context.getResources().getColor(builder
+                                .positiveColor));
 
                     if (builder.positiveDelayed && builder.finishedText != null) {
-                        DialogButtonCountDown countDown = new DialogButtonCountDown(builder.millisInFuture, builder.countDownInterval, builder.finishedText, dialog.getButton(BUTTON_POSITIVE));
+                        DialogButtonCountDown countDown = new DialogButtonCountDown(builder.millisInFuture, builder
+                                .countDownInterval, builder.finishedText, dialog.getButton(BUTTON_POSITIVE));
                         countDown.start();
                     }
                 }
@@ -282,13 +289,15 @@ public class MaterialDialog extends AlertDialog {
                     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
                         dialog.getButton(BUTTON_NEUTRAL).setTextColor(builder.context.getColor(builder.neutralColor));
                     } else
-                        dialog.getButton(BUTTON_NEUTRAL).setTextColor(builder.context.getResources().getColor(builder.neutralColor));
+                        dialog.getButton(BUTTON_NEUTRAL).setTextColor(builder.context.getResources().getColor(builder
+                                .neutralColor));
                 }
                 if (builder.negativeText != null && builder.negativeColor != -1) {
                     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
                         dialog.getButton(BUTTON_NEGATIVE).setTextColor(builder.context.getColor(builder.negativeColor));
                     } else
-                        dialog.getButton(BUTTON_NEGATIVE).setTextColor(builder.context.getResources().getColor(builder.negativeColor));
+                        dialog.getButton(BUTTON_NEGATIVE).setTextColor(builder.context.getResources().getColor(builder
+                                .negativeColor));
                 }
 
                 // dialog height
@@ -349,7 +358,8 @@ public class MaterialDialog extends AlertDialog {
                         } else
                             llReleaseInfo.findViewById(R.id.tv_release_info_bullet).setVisibility(View.GONE);
 
-                        ((LinearLayout) llChangelog.findViewById(R.id.ll_dialog_changelog_release_info_container)).addView(llReleaseInfo);
+                        ((LinearLayout) llChangelog.findViewById(R.id.ll_dialog_changelog_release_info_container)).addView
+                                (llReleaseInfo);
                     }
 
                     llClContainer.addView(llChangelog);
@@ -392,6 +402,7 @@ public class MaterialDialog extends AlertDialog {
         private ShowListener showListener;
         private DismissListener dismissListener;
         private int icon = -1;
+        private Drawable drawable;
         private boolean canceledOnTouchOutside = true;
         private boolean cancelable = true;
         private View customView;
@@ -653,6 +664,18 @@ public class MaterialDialog extends AlertDialog {
 
 
         /**
+         * Icon builder.
+         *
+         * @param drawable the drawable id
+         * @return the builder
+         */
+        public Builder icon(Drawable drawable) {
+            this.drawable = drawable;
+            return this;
+        }
+
+
+        /**
          * Button callback builder.
          *
          * @param buttonCallback the button callback
@@ -746,7 +769,8 @@ public class MaterialDialog extends AlertDialog {
          * @param viewSpacingBottomDp the view spacing bottom dp
          * @return the builder
          */
-        public Builder viewSpacingDp(int viewSpacingLeftDp, int viewSpacingTopDp, int viewSpacingRightDp, int viewSpacingBottomDp) {
+        public Builder viewSpacingDp(int viewSpacingLeftDp, int viewSpacingTopDp, int viewSpacingRightDp, int
+                viewSpacingBottomDp) {
             this.viewSpacingLeft = Utils.dp2px(context, viewSpacingLeftDp);
             this.viewSpacingTop = Utils.dp2px(context, viewSpacingTopDp);
             this.viewSpacingRight = Utils.dp2px(context, viewSpacingRightDp);
@@ -762,7 +786,7 @@ public class MaterialDialog extends AlertDialog {
          * @param items              the items
          * @return the builder
          */
-// list
+        // list
         public Builder listItems(boolean dismissOnSelection, @NonNull String... items) {
             this.blankListing = true;
             this.dismissOnSelection = dismissOnSelection;
@@ -888,7 +912,8 @@ public class MaterialDialog extends AlertDialog {
          * @param libraryLicenses   the library licenses
          * @return the builder
          */
-        public Builder licenseDialog(@NonNull String[] libraryNames, @NonNull String[] libraryDevelopers, @NonNull String[] libraryLicenses) {
+        public Builder licenseDialog(@NonNull String[] libraryNames, @NonNull String[] libraryDevelopers, @NonNull String[]
+                libraryLicenses) {
             LayoutInflater inflater = LayoutInflater.from(context);
             customView = inflater.inflate(R.layout.dialog_license, null);
             this.licenseDialog = true;
@@ -939,7 +964,8 @@ public class MaterialDialog extends AlertDialog {
          * @param releaseInfos the release infos
          * @return the builder
          */
-        public Builder changelogDialog(@NonNull String[] versionNames, @NonNull String[] dates, @NonNull ReleaseInfo[] releaseInfos) {
+        public Builder changelogDialog(@NonNull String[] versionNames, @NonNull String[] dates, @NonNull ReleaseInfo[]
+                releaseInfos) {
             return changelogDialog(versionNames, dates, releaseInfos, "");
         }
 
@@ -953,7 +979,8 @@ public class MaterialDialog extends AlertDialog {
          * @param bullet       the bullet
          * @return the builder
          */
-        public Builder changelogDialog(@NonNull String[] versionNames, @NonNull String[] dates, @NonNull ReleaseInfo[] releaseInfos, @Nullable String bullet) {
+        public Builder changelogDialog(@NonNull String[] versionNames, @NonNull String[] dates, @NonNull ReleaseInfo[]
+                releaseInfos, @Nullable String bullet) {
             LayoutInflater inflater = LayoutInflater.from(context);
             customView = inflater.inflate(R.layout.dialog_changelog, null);
             this.changelogDialog = true;
