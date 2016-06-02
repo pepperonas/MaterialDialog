@@ -33,6 +33,7 @@ import android.view.View;
 import android.view.Window;
 import android.widget.AbsListView;
 import android.widget.AdapterView;
+import android.widget.BaseAdapter;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
@@ -185,6 +186,12 @@ public class MaterialDialog extends AlertDialog {
                 lv.setAdapter(caa);
 
             } // end single selection (blank)
+
+            else if (builder.adapter != null) {
+                // set base adapter
+                lv.setDivider(null);
+                lv.setAdapter(builder.adapter);
+            } // base adapter
 
             else {
                 // multi-choice (CheckBox)
@@ -431,6 +438,7 @@ public class MaterialDialog extends AlertDialog {
         private boolean multiChoice;
         private boolean dismissOnSelection = false;
         private String[] items;
+        private BaseAdapter adapter;
         private Integer[] preSelectedIndices;
         private ItemClickListener itemClickListener;
         private ItemLongClickListener itemLongClickListener;
@@ -775,6 +783,22 @@ public class MaterialDialog extends AlertDialog {
             this.viewSpacingTop = Utils.dp2px(context, viewSpacingTopDp);
             this.viewSpacingRight = Utils.dp2px(context, viewSpacingRightDp);
             this.viewSpacingBottom = Utils.dp2px(context, viewSpacingBottomDp);
+            return this;
+        }
+
+
+        /**
+         * List items builder.
+         *
+         * @param dismissOnSelection the dismiss on selection
+         * @param adapter            the adapter
+         * @return the builder
+         */
+        // list
+        public Builder adapter(boolean dismissOnSelection, BaseAdapter adapter) {
+            this.blankListing = true;
+            this.dismissOnSelection = dismissOnSelection;
+            this.adapter = adapter;
             return this;
         }
 
