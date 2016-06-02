@@ -28,14 +28,17 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.AdapterView;
+import android.widget.LinearLayout;
 import android.widget.SeekBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.pepperonas.materialdialog.MaterialDialog;
-import com.pepperonas.materialdialog.data.Changelog;
-import com.pepperonas.materialdialog.data.LicenseInfo;
-import com.pepperonas.materialdialog.data.ReleaseInfo;
+import com.pepperonas.materialdialog.adapter.ShareAdapter;
+import com.pepperonas.materialdialog.model.Changelog;
+import com.pepperonas.materialdialog.model.LicenseInfo;
+import com.pepperonas.materialdialog.model.ReleaseInfo;
 import com.pepperonas.materialdialog.utils.Const;
 
 import java.util.ArrayList;
@@ -45,7 +48,8 @@ public class MainActivity extends AppCompatActivity {
 
     private static final String TAG = "MainActivity";
 
-    private String[] ITEMS = new String[]{"Car", "Plane", "Bike", "Skateboard", "Rocket", "Paper plane", "Boat", "Train", "Hovercraft", "Space shuttle", "Jet", "Truck", "Elephant"};
+    private String[] ITEMS = new String[]{"Car", "Plane", "Bike", "Skateboard", "Rocket", "Paper plane", "Boat", "Train",
+            "Hovercraft", "Space shuttle", "Jet", "Truck", "Elephant"};
 
     private SharedPreferences mSharedPreferences;
 
@@ -145,12 +149,6 @@ public class MainActivity extends AppCompatActivity {
     }
 
 
-    private void showToast(String text) {
-        if (!mSharedPreferences.getBoolean("SHOW_TOASTS", true)) return;
-        Toast.makeText(MainActivity.this, text, Toast.LENGTH_SHORT).show();
-    }
-
-
     private void showMaterialDialogDelayedButton() {
         new MaterialDialog.Builder(this)
                 .title("Important")
@@ -214,8 +212,8 @@ public class MainActivity extends AppCompatActivity {
                     @Override
                     public void onClick(View v, int position, long id) {
                         super.onClick(v, position, id);
-                        showToast("onClick (" + ITEMS[position] + ")");
-                        Log.d(TAG, "onClick (" + ITEMS[position] + ")");
+                        showToast("onClick (" + ((TextView) ((LinearLayout) v).getChildAt(0)).getText() + ")");
+                        Log.d(TAG, "onClick (" + ((TextView) ((LinearLayout) v).getChildAt(0)).getText() + ")");
                     }
                 })
                 .show();
@@ -335,6 +333,33 @@ public class MainActivity extends AppCompatActivity {
     }
 
 
+    private void showMaterialDialogBaseAdapter() {
+        ShareAdapter sa = new ShareAdapter(this);
+
+        new MaterialDialog.Builder(this)
+                .title("Base Adapter")
+                .negativeText("Cancel")
+                .icon(R.drawable.ic_launcher)
+                .adapter(true, sa, new AdapterView.OnItemClickListener() {
+                    @Override
+                    public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                        showToast("onClick (" + ((TextView) ((LinearLayout) view).getChildAt(1)).getText() + ")");
+                    }
+                })
+                .show();
+    }
+
+
+    private void showMaterialDialogShareApp() {
+        new MaterialDialog.Builder(this)
+                .title("Share app")
+                .negativeText("Cancel")
+                .icon(R.drawable.ic_launcher)
+                .shareAppDialog(true, "Hey, check out this app:\n")
+                .show();
+    }
+
+
     private void showMaterialDialogLicenseInfo() {
         List<LicenseInfo> licenseInfos = getLicenseInfos();
 
@@ -413,6 +438,16 @@ public class MainActivity extends AppCompatActivity {
     }
 
 
+    public void onDialogBaseAdapter(View view) {
+        showMaterialDialogBaseAdapter();
+    }
+
+
+    public void onDialogShare(View view) {
+        showMaterialDialogShareApp();
+    }
+
+
     public void onDialogLicense(View view) {
         showMaterialDialogLicenseInfo();
     }
@@ -431,61 +466,63 @@ public class MainActivity extends AppCompatActivity {
                 "Standard Library",
                 "Copyright (c) 2016 John Doe",
                 "Licensed under the Apache License, Version 2.0 (the \"License\");\n" +
-                "you may not use this file except in compliance with the License.\n" +
-                "You may obtain a copy of the License at\n" +
-                "\n" +
-                "   http://www.apache.org/licenses/LICENSE-2.0\n" +
-                "\n" +
-                "Unless required by applicable law or agreed to in writing, software\n" +
-                "distributed under the License is distributed on an \"AS IS\" BASIS,\n" +
-                "WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.\n" +
-                "See the License for the specific language governing permissions and\n" +
-                "limitations under the License."));
+                        "you may not use this file except in compliance with the License.\n" +
+                        "You may obtain a copy of the License at\n" +
+                        "\n" +
+                        "   http://www.apache.org/licenses/LICENSE-2.0\n" +
+                        "\n" +
+                        "Unless required by applicable law or agreed to in writing, software\n" +
+                        "distributed under the License is distributed on an \"AS IS\" BASIS,\n" +
+                        "WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.\n" +
+                        "See the License for the specific language governing permissions and\n" +
+                        "limitations under the License."));
 
         licenseInfos.add(new LicenseInfo(
                 "Default Library",
                 "Copyright (c) 2015 Jane Doe",
                 "Licensed under the Apache License, Version 2.0 (the \"License\");\n" +
-                "you may not use this file except in compliance with the License.\n" +
-                "You may obtain a copy of the License at\n" +
-                "\n" +
-                "   http://www.apache.org/licenses/LICENSE-2.0\n" +
-                "\n" +
-                "Unless required by applicable law or agreed to in writing, software\n" +
-                "distributed under the License is distributed on an \"AS IS\" BASIS,\n" +
-                "WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.\n" +
-                "See the License for the specific language governing permissions and\n" +
-                "limitations under the License."));
+                        "you may not use this file except in compliance with the License.\n" +
+                        "You may obtain a copy of the License at\n" +
+                        "\n" +
+                        "   http://www.apache.org/licenses/LICENSE-2.0\n" +
+                        "\n" +
+                        "Unless required by applicable law or agreed to in writing, software\n" +
+                        "distributed under the License is distributed on an \"AS IS\" BASIS,\n" +
+                        "WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.\n" +
+                        "See the License for the specific language governing permissions and\n" +
+                        "limitations under the License."));
 
         licenseInfos.add(new LicenseInfo(
                 "Common Library",
                 "Copyright (c) 2014 James Doe",
                 "Licensed under the Apache License, Version 2.0 (the \"License\");\n" +
-                "you may not use this file except in compliance with the License.\n" +
-                "You may obtain a copy of the License at\n" +
-                "\n" +
-                "   http://www.apache.org/licenses/LICENSE-2.0\n" +
-                "\n" +
-                "Unless required by applicable law or agreed to in writing, software\n" +
-                "distributed under the License is distributed on an \"AS IS\" BASIS,\n" +
-                "WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.\n" +
-                "See the License for the specific language governing permissions and\n" +
-                "limitations under the License."));
+                        "you may not use this file except in compliance with the License.\n" +
+                        "You may obtain a copy of the License at\n" +
+                        "\n" +
+                        "   http://www.apache.org/licenses/LICENSE-2.0\n" +
+                        "\n" +
+                        "Unless required by applicable law or agreed to in writing, software\n" +
+                        "distributed under the License is distributed on an \"AS IS\" BASIS,\n" +
+                        "WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.\n" +
+                        "See the License for the specific language governing permissions and\n" +
+                        "limitations under the License."));
 
         return licenseInfos;
     }
 
 
-    public List<Changelog> getChangelogs() {
+    private List<Changelog> getChangelogs() {
         List<Changelog> changelogs = new ArrayList<>();
-        changelogs.add(new Changelog("0.1.3", "2016-02-13", new ReleaseInfo("Revised list-dialogs", "Added default view spacing")));
+        changelogs.add(new Changelog("0.1.3", "2016-02-13", new ReleaseInfo("Revised list-dialogs", "Added default view " +
+                "spacing")));
         changelogs.add(new Changelog("0.1.2", "2016-02-07", new ReleaseInfo("Added styles", "Layout alignment", "Bugfixes")));
         changelogs.add(new Changelog("0.1.1", "2016-02-06", new ReleaseInfo("Removed unused resources")));
         changelogs.add(new Changelog("0.1.0", "2016-01-26", new ReleaseInfo("Fixed scroll")));
         changelogs.add(new Changelog("0.0.9", "2016-01-24", new ReleaseInfo("Added themed dialog", "Bugfixes")));
         changelogs.add(new Changelog("0.0.8", "2016-01-23", new ReleaseInfo("Bugfixes")));
         changelogs.add(new Changelog("0.0.7", "2016-01-14", new ReleaseInfo("Added licenses dialog", "Added changelog dialog")));
-        changelogs.add(new Changelog("0.0.6", "2016-01-10", new ReleaseInfo("Added custom-view dialog", "Added dimmed dialog", "Bugfixes")));
+        changelogs.add(new Changelog("0.0.6", "2016-01-10", new ReleaseInfo("Added custom-view dialog", "Added dimmed dialog",
+                "Bugfixes")));
         changelogs.add(new Changelog("0.0.5", "2016-01-08", new ReleaseInfo("Added dialog with delayed button")));
         changelogs.add(new Changelog("0.0.4", "2016-01-05", new ReleaseInfo("Bugfixes")));
         changelogs.add(new Changelog("0.0.3", "2016-01-04", new ReleaseInfo("Layout alignment")));
@@ -502,5 +539,11 @@ public class MainActivity extends AppCompatActivity {
 
     public void onDialogDimmed(View view) {
         showDialogDimmed();
+    }
+
+
+    private void showToast(String text) {
+        if (!mSharedPreferences.getBoolean("SHOW_TOASTS", true)) return;
+        Toast.makeText(MainActivity.this, text, Toast.LENGTH_SHORT).show();
     }
 }

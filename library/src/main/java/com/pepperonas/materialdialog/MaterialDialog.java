@@ -19,6 +19,8 @@ package com.pepperonas.materialdialog;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.Intent;
+import android.content.pm.ResolveInfo;
 import android.graphics.drawable.Drawable;
 import android.os.Build;
 import android.support.annotation.ColorRes;
@@ -27,6 +29,7 @@ import android.support.annotation.LayoutRes;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.annotation.StringRes;
+import android.support.annotation.StyleRes;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -41,9 +44,10 @@ import android.widget.TextView;
 import com.pepperonas.materialdialog.adapter.CustomArrayAdapter;
 import com.pepperonas.materialdialog.adapter.CustomMultipleSelectionArrayAdapter;
 import com.pepperonas.materialdialog.adapter.CustomSingleSelectionArrayAdapter;
-import com.pepperonas.materialdialog.data.Changelog;
-import com.pepperonas.materialdialog.data.LicenseInfo;
-import com.pepperonas.materialdialog.data.ReleaseInfo;
+import com.pepperonas.materialdialog.adapter.ShareAdapter;
+import com.pepperonas.materialdialog.model.Changelog;
+import com.pepperonas.materialdialog.model.LicenseInfo;
+import com.pepperonas.materialdialog.model.ReleaseInfo;
 import com.pepperonas.materialdialog.utils.Utils;
 
 import java.util.List;
@@ -63,7 +67,7 @@ public class MaterialDialog extends AlertDialog {
      *
      * @param builder the builder
      */
-    public MaterialDialog(final Builder builder) {
+    public MaterialDialog(@NonNull final Builder builder) {
         super(builder.context);
 
         invoke(builder);
@@ -77,7 +81,7 @@ public class MaterialDialog extends AlertDialog {
      * @param builder the builder
      * @param style   the style
      */
-    public MaterialDialog(final Builder builder, int style) {
+    public MaterialDialog(@NonNull final Builder builder, @StyleRes int style) {
         super(builder.context, style);
 
         invoke(builder);
@@ -85,7 +89,7 @@ public class MaterialDialog extends AlertDialog {
     }
 
 
-    private void invoke(final Builder builder) {
+    private void invoke(@NonNull final Builder builder) {
         boolean isListDialog = false;
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.ICE_CREAM_SANDWICH) {
@@ -117,7 +121,7 @@ public class MaterialDialog extends AlertDialog {
         /**
          * list
          * */
-        if (builder.items != null && builder.items.length > 0) {
+        if ((builder.items != null && builder.items.length > 0) || builder.shareAppDialog || builder.adapter != null) {
             isListDialog = true;
 
             if (builder.customView != null) {
@@ -146,7 +150,7 @@ public class MaterialDialog extends AlertDialog {
             }
 
 
-            if (!builder.multiChoice && !builder.blankListing) {
+            if (!builder.multiChoice && !builder.blankListing && !builder.shareAppDialog && builder.adapter == null) {
                 // single selection (RadioButton)
                 int preselectedIndex = 0;
                 if (builder.preSelectedIndices.length > 0) {
@@ -172,7 +176,7 @@ public class MaterialDialog extends AlertDialog {
                 lv.setAdapter(cssaa);
             } // end single selection (RadioButton)
 
-            else if (!builder.multiChoice) {
+            else if (!builder.multiChoice && builder.adapter == null && !builder.shareAppDialog) {
                 // single selection (blank)
                 final CustomArrayAdapter caa = new CustomArrayAdapter(
                         this,
@@ -187,7 +191,7 @@ public class MaterialDialog extends AlertDialog {
 
             } // end single selection (blank)
 
-            else {
+            else if (builder.adapter == null && !builder.shareAppDialog) {
                 // multi-choice (CheckBox)
                 final CustomMultipleSelectionArrayAdapter cmsaa = new CustomMultipleSelectionArrayAdapter(
                         builder.context,
@@ -205,7 +209,31 @@ public class MaterialDialog extends AlertDialog {
                 // set base adapter
                 lv.setDivider(null);
                 lv.setAdapter(builder.adapter);
+                if (builder.adapterItemClickListener != null) {
+                    lv.setOnItemClickListener(builder.adapterItemClickListener);
+                }
             } // end base adapter
+
+            if (builder.shareAppDialog) {
+                // share app dialog
+                ShareAdapter sa = new ShareAdapter(builder.context);
+                lv.setDivider(null);
+                lv.setAdapter(sa);
+                lv.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                    @Override
+                    public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                        ResolveInfo info = (ResolveInfo) lv.getAdapter().getItem(position);
+                        Intent intent = new Intent(android.content.Intent.ACTION_SEND);
+                        intent.setClassName(info.activityInfo.packageName, info.activityInfo.name);
+                        intent.setType("text/plain");
+                        intent.putExtra(Intent.EXTRA_SUBJECT, "");
+                        intent.putExtra(Intent.EXTRA_TEXT,
+                                (builder.shareAppMessage != null ? builder.shareAppMessage : "") + "\n" +
+                                        "https://play.google.com/store/apps/details?id=" + builder.context.getPackageName());
+                        builder.context.startActivity(intent);
+                    }
+                });
+            } // end share app dialog
 
         } // end list
 
@@ -396,8 +424,8 @@ public class MaterialDialog extends AlertDialog {
          */
         private final Context context;
         private int style = -1;
-        private CharSequence title;
-        private CharSequence message;
+        private CharSequence title = "";
+        private CharSequence message = "";
         private int dimPercent = -1;
         private CharSequence positiveText;
         private CharSequence neutralText;
@@ -443,6 +471,7 @@ public class MaterialDialog extends AlertDialog {
         private ItemClickListener itemClickListener;
         private ItemLongClickListener itemLongClickListener;
         private ItemSelectedListener itemSelectedListener;
+        private AdapterView.OnItemClickListener adapterItemClickListener;
         private boolean itemLongClickable = false;
 
         // delayed positive
@@ -450,6 +479,12 @@ public class MaterialDialog extends AlertDialog {
         private long millisInFuture;
         private long countDownInterval;
         private String finishedText;
+
+        /**
+         * Share App
+         */
+        private boolean shareAppDialog = false;
+        private String shareAppMessage = "";
 
         /**
          * License
@@ -474,7 +509,7 @@ public class MaterialDialog extends AlertDialog {
          *
          * @param context the context
          */
-        public Builder(Context context) {
+        public Builder(@NonNull Context context) {
             this.context = context;
         }
 
@@ -485,7 +520,7 @@ public class MaterialDialog extends AlertDialog {
          * @param context the context
          * @param style   the style
          */
-        public Builder(Context context, int style) {
+        public Builder(@NonNull Context context, @StyleRes int style) {
             this.context = context;
             this.style = style;
         }
@@ -497,7 +532,7 @@ public class MaterialDialog extends AlertDialog {
          * @param title the title
          * @return the builder
          */
-        public Builder title(@NonNull CharSequence title) {
+        public Builder title(@Nullable CharSequence title) {
             this.title = title;
             return this;
         }
@@ -677,7 +712,7 @@ public class MaterialDialog extends AlertDialog {
          * @param drawable the drawable id
          * @return the builder
          */
-        public Builder icon(Drawable drawable) {
+        public Builder icon(@NonNull Drawable drawable) {
             this.drawable = drawable;
             return this;
         }
@@ -795,10 +830,12 @@ public class MaterialDialog extends AlertDialog {
          * @return the builder
          */
         // list
-        public Builder adapter(boolean dismissOnSelection, BaseAdapter adapter) {
+        public Builder adapter(boolean dismissOnSelection, @NonNull BaseAdapter adapter, @Nullable AdapterView.OnItemClickListener
+                adapterItemClickListener) {
             this.blankListing = true;
             this.dismissOnSelection = dismissOnSelection;
             this.adapter = adapter;
+            this.adapterItemClickListener = adapterItemClickListener;
             return this;
         }
 
@@ -924,6 +961,19 @@ public class MaterialDialog extends AlertDialog {
             this.millisInFuture = millisInFuture;
             this.countDownInterval = countDownInterval;
             this.finishedText = finishedText;
+            return this;
+        }
+
+
+        /**
+         * Share app dialog builder.
+         *
+         * @param shareAppDialog the share app dialog
+         * @return the builder
+         */
+        public Builder shareAppDialog(boolean shareAppDialog, @Nullable String shareAppMessage) {
+            this.shareAppDialog = shareAppDialog;
+            this.shareAppMessage = shareAppMessage;
             return this;
         }
 

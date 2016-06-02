@@ -34,8 +34,6 @@ import com.pepperonas.materialdialog.R;
  */
 public class CustomArrayAdapter extends ArrayAdapter<String> {
 
-    private static final String TAG = "SingleSelectionAdapter";
-
     private MaterialDialog mMaterialDialog;
     private boolean mDismissOnSelection = false;
 
@@ -46,7 +44,9 @@ public class CustomArrayAdapter extends ArrayAdapter<String> {
     private MaterialDialog.ItemLongClickListener mItemLongClickListener;
 
 
-    public CustomArrayAdapter(@NonNull MaterialDialog materialDialog, @NonNull Context context, @NonNull String[] strings, @Nullable MaterialDialog.ItemClickListener itemClickListener, @Nullable MaterialDialog.ItemLongClickListener itemLongClickListener, boolean dismissOnSelection) {
+    public CustomArrayAdapter(@NonNull MaterialDialog materialDialog, @NonNull Context context, @NonNull String[] strings,
+                              @Nullable MaterialDialog.ItemClickListener itemClickListener, @Nullable MaterialDialog
+            .ItemLongClickListener itemLongClickListener, boolean dismissOnSelection) {
         super(context, R.layout.custom_list_item, strings);
 
         mMaterialDialog = materialDialog;

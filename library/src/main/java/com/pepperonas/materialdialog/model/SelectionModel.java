@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.pepperonas.materialdialog.data;
+package com.pepperonas.materialdialog.model;
 
 /**
  * @author Martin Pfeffer (pepperonas)

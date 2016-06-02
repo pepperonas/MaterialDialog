@@ -29,7 +29,7 @@ import android.widget.TextView;
 
 import com.pepperonas.materialdialog.MaterialDialog;
 import com.pepperonas.materialdialog.R;
-import com.pepperonas.materialdialog.data.SelectionModel;
+import com.pepperonas.materialdialog.model.SelectionModel;
 
 import java.util.ArrayList;
 import java.util.Arrays;
