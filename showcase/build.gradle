@@ -1,0 +1,62 @@
+buildscript {
+    repositories {
+        jcenter()
+        maven { url "https://jitpack.io" }
+    }
+    dependencies {
+        classpath 'com.android.tools.build:gradle:2.1.0'
+    }
+}
+
+apply plugin: 'com.android.application'
+
+def getDate() {
+    def date = new Date()
+    def formattedDate = date.format('_yyyy-MM-dd-hh-mm-ss')
+    return formattedDate
+}
+
+repositories {
+    jcenter()
+    flatDir { dirs 'libs' }
+    maven { url "https://jitpack.io" }
+}
+
+android {
+    compileSdkVersion 23
+    buildToolsVersion '23.0.3'
+
+    defaultConfig {
+        applicationId "com.pepperonas.materialdialog.showcase"
+        minSdkVersion 14
+        targetSdkVersion 23
+        versionCode 6
+        versionName "0.0.6"
+        project.ext.set("archivesBaseName", "materialdialog-showcase");
+    }
+    buildTypes {
+        release {
+            minifyEnabled true
+            shrinkResources true
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+            applicationVariants.all { variant ->
+                variant.outputs.each { output ->
+                    def outputFile = output.outputFile
+                    if (outputFile != null && outputFile.name.endsWith('.apk')) {
+                        def fileName = outputFile.name.replace(".apk", ".apk");
+                        fileName = fileName.replace("release", "release" + "-" + defaultConfig.versionName + getDate());
+                        output.outputFile = new File(outputFile.parent, fileName)
+                    }
+                }
+            }
+        }
+    }
+}
+
+dependencies {
+    compile fileTree(dir: 'libs', include: ['*.jar'])
+    testCompile 'junit:junit:4.12'
+    compile 'com.android.support:appcompat-v7:23.4.0'
+    compile project(path: ':library')
+}
+
