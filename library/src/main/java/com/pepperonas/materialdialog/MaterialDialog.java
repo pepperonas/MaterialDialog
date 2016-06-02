@@ -187,12 +187,6 @@ public class MaterialDialog extends AlertDialog {
 
             } // end single selection (blank)
 
-            else if (builder.adapter != null) {
-                // set base adapter
-                lv.setDivider(null);
-                lv.setAdapter(builder.adapter);
-            } // base adapter
-
             else {
                 // multi-choice (CheckBox)
                 final CustomMultipleSelectionArrayAdapter cmsaa = new CustomMultipleSelectionArrayAdapter(
@@ -206,6 +200,12 @@ public class MaterialDialog extends AlertDialog {
                 lv.setDivider(null);
                 lv.setAdapter(cmsaa);
             } // end multi-choice (CheckBox)
+
+            if (builder.adapter != null) {
+                // set base adapter
+                lv.setDivider(null);
+                lv.setAdapter(builder.adapter);
+            } // end base adapter
 
         } // end list
 
