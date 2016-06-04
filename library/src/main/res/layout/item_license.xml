@@ -1,5 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
-<!--
+<?xml version="1.0" encoding="utf-8"?><!--
   ~ Copyright (c) 2016 Martin Pfeffer
   ~
   ~ Licensed under the Apache License, Version 2.0 (the "License");
@@ -16,41 +15,37 @@
   -->
 
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-              android:orientation="vertical"
-              android:layout_width="match_parent"
-              android:layout_height="match_parent"
-              android:padding="16dp"
-    >
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:padding="16dp">
 
     <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:textAppearance="@style/Base.TextAppearance.AppCompat.Subhead"
-        android:text="Large Text"
         android:id="@+id/tv_lib_name"
-        android:layout_gravity="center_horizontal"
-        />
-
-    <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:textAppearance="@style/Base.TextAppearance.AppCompat.Caption"
-        android:text="Medium Text"
+        android:layout_gravity="center_horizontal"
+        android:text="Large Text"
+        android:textAppearance="@style/Base.TextAppearance.AppCompat.Subhead" />
+
+    <TextView
         android:id="@+id/tv_lib_developer"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
         android:layout_gravity="center_horizontal"
         android:layout_marginBottom="8dp"
         android:layout_marginTop="2dp"
-        />
+        android:text="Medium Text"
+        android:textAppearance="@style/Base.TextAppearance.AppCompat.Caption" />
 
     <TextView
+        android:id="@+id/tv_lib_licence"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:textAppearance="@style/Base.TextAppearance.AppCompat.Small"
-        android:text="Small Text"
-        android:id="@+id/tv_lib_licence"
         android:layout_gravity="center_horizontal"
-        android:textStyle="italic"
+        android:text="Small Text"
+        android:textAppearance="@style/Base.TextAppearance.AppCompat.Small"
         android:textSize="12sp"
-        />
+        android:textStyle="italic" />
 
 </LinearLayout>

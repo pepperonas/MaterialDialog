@@ -21,6 +21,7 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.ResolveInfo;
+import android.graphics.Rect;
 import android.graphics.drawable.Drawable;
 import android.os.Build;
 import android.support.annotation.ColorRes;
@@ -71,7 +72,6 @@ public class MaterialDialog extends AlertDialog {
         super(builder.context);
 
         invoke(builder);
-
     }
 
 
@@ -85,7 +85,6 @@ public class MaterialDialog extends AlertDialog {
         super(builder.context, style);
 
         invoke(builder);
-
     }
 
 
@@ -238,6 +237,68 @@ public class MaterialDialog extends AlertDialog {
         } // end list
 
 
+        /**
+         * license dialog
+         * */
+        if (builder.licenseDialog) {
+            if (builder.libNames.length == builder.libDevelopers.length
+                    && builder.libDevelopers.length == builder.libLicenses.length
+                    && builder.libNames.length != 0) {
+
+                LinearLayout llLibContainer = (LinearLayout) builder.customView.findViewById(R.id.ll_dialog_license_container);
+
+                for (int i = 0; i < builder.libNames.length; i++) {
+                    LayoutInflater inflater = LayoutInflater.from(builder.context);
+                    LinearLayout llLicenseInfo = (LinearLayout) inflater.inflate(R.layout.item_license, null);
+
+                    ((TextView) llLicenseInfo.findViewById(R.id.tv_lib_name)).setText(builder.libNames[i]);
+                    ((TextView) llLicenseInfo.findViewById(R.id.tv_lib_developer)).setText(builder.libDevelopers[i]);
+                    ((TextView) llLicenseInfo.findViewById(R.id.tv_lib_licence)).setText(builder.libLicenses[i]);
+                    llLibContainer.addView(llLicenseInfo);
+                }
+
+            } else Log.e(TAG, "Invalid license information. Check the size of the arrays.");
+
+        } // end license dialog
+
+
+        /**
+         * changelog dialog
+         * */
+        if (builder.changelogDialog) {
+            if (builder.clVersionNames.length == builder.clDates.length
+                    && builder.clDates.length == builder.clReleaseInfos.length
+                    && builder.clVersionNames.length != 0) {
+
+                LinearLayout llClContainer = (LinearLayout) builder.customView.findViewById(R.id.ll_dialog_changelog_container);
+
+                for (int i = 0; i < builder.clVersionNames.length; i++) {
+                    LayoutInflater inflater = LayoutInflater.from(builder.context);
+                    LinearLayout llChangelog = (LinearLayout) inflater.inflate(R.layout.item_changelog, null);
+
+                    ((TextView) llChangelog.findViewById(R.id.tv_cl_version)).setText(builder.clVersionNames[i]);
+                    ((TextView) llChangelog.findViewById(R.id.tv_cl_date)).setText(builder.clDates[i]);
+
+                    ReleaseInfo ri = builder.clReleaseInfos[i];
+                    for (int j = 0; j < ri.getReleaseInfo().size(); j++) {
+                        LayoutInflater _inflater = LayoutInflater.from(builder.context);
+                        LinearLayout llReleaseInfo = (LinearLayout) _inflater.inflate(R.layout.item_changelog_release_info, null);
+                        ((TextView) llReleaseInfo.findViewById(R.id.tv_release_info)).setText(ri.getReleaseInfo().get(j));
+                        if (builder.clBullet != null) {
+                            // ensure to set custom bullet
+                            ((TextView) llReleaseInfo.findViewById(R.id.tv_release_info_bullet)).setText(builder.clBullet);
+                        } else
+                            llReleaseInfo.findViewById(R.id.tv_release_info_bullet).setVisibility(View.GONE);
+
+                        ((LinearLayout) llChangelog.findViewById(R.id.ll_dialog_changelog_release_info_container)).addView
+                                (llReleaseInfo);
+                    }
+
+                    llClContainer.addView(llChangelog);
+                }
+            } else Log.e(TAG, "Invalid changelog information. Check the size of the arrays.");
+        } // end changelog dialog
+
         if (builder.title != null) {
             this.setTitle(builder.title);
         }
@@ -337,71 +398,20 @@ public class MaterialDialog extends AlertDialog {
 
                 // dialog height
                 Log.i(TAG, "MaterialDialog " + getWindow().getDecorView().getHeight());
+
+                if ((builder.scaleX != -1) || (builder.scaleY != -1)) {
+                    float fScaleX = (builder.scaleX != -1 ? (builder.scaleX / 100f) : 1);
+                    float fScaleY = (builder.scaleY != -1 ? (builder.scaleY / 100f) : 1);
+
+                    Rect displayRectangle = new Rect();
+                    Window window = getWindow();
+                    window.getDecorView().getWindowVisibleDisplayFrame(displayRectangle);
+                    dialog.getWindow().setLayout(
+                            (int) (displayRectangle.width() * fScaleX),
+                            (int) (displayRectangle.height() * fScaleY));
+                }
             }
-
         });
-
-
-        /**
-         * license dialog
-         * */
-        if (builder.licenseDialog) {
-            if (builder.libNames.length == builder.libDevelopers.length
-                    && builder.libDevelopers.length == builder.libLicenses.length
-                    && builder.libNames.length != 0) {
-
-                LinearLayout llLibContainer = (LinearLayout) builder.customView.findViewById(R.id.ll_dialog_license_container);
-
-                for (int i = 0; i < builder.libNames.length; i++) {
-                    LayoutInflater inflater = LayoutInflater.from(builder.context);
-                    LinearLayout llLicenseInfo = (LinearLayout) inflater.inflate(R.layout.item_license, null);
-
-                    ((TextView) llLicenseInfo.findViewById(R.id.tv_lib_name)).setText(builder.libNames[i]);
-                    ((TextView) llLicenseInfo.findViewById(R.id.tv_lib_developer)).setText(builder.libDevelopers[i]);
-                    ((TextView) llLicenseInfo.findViewById(R.id.tv_lib_licence)).setText(builder.libLicenses[i]);
-                    llLibContainer.addView(llLicenseInfo);
-                }
-            } else Log.e(TAG, "Invalid license information. Check the size of the arrays.");
-        } // end license dialog
-
-
-        /**
-         * changelog dialog
-         * */
-        if (builder.changelogDialog) {
-            if (builder.clVersionNames.length == builder.clDates.length
-                    && builder.clDates.length == builder.clReleaseInfos.length
-                    && builder.clVersionNames.length != 0) {
-
-                LinearLayout llClContainer = (LinearLayout) builder.customView.findViewById(R.id.ll_dialog_changelog_container);
-
-                for (int i = 0; i < builder.clVersionNames.length; i++) {
-                    LayoutInflater inflater = LayoutInflater.from(builder.context);
-                    LinearLayout llChangelog = (LinearLayout) inflater.inflate(R.layout.item_changelog, null);
-
-                    ((TextView) llChangelog.findViewById(R.id.tv_cl_version)).setText(builder.clVersionNames[i]);
-                    ((TextView) llChangelog.findViewById(R.id.tv_cl_date)).setText(builder.clDates[i]);
-
-                    ReleaseInfo ri = builder.clReleaseInfos[i];
-                    for (int j = 0; j < ri.getReleaseInfo().size(); j++) {
-                        LayoutInflater _inflater = LayoutInflater.from(builder.context);
-                        LinearLayout llReleaseInfo = (LinearLayout) _inflater.inflate(R.layout.item_changelog_release_info, null);
-                        ((TextView) llReleaseInfo.findViewById(R.id.tv_release_info)).setText(ri.getReleaseInfo().get(j));
-                        if (builder.clBullet != null) {
-                            // ensure to set custom bullet
-                            ((TextView) llReleaseInfo.findViewById(R.id.tv_release_info_bullet)).setText(builder.clBullet);
-                        } else
-                            llReleaseInfo.findViewById(R.id.tv_release_info_bullet).setVisibility(View.GONE);
-
-                        ((LinearLayout) llChangelog.findViewById(R.id.ll_dialog_changelog_release_info_container)).addView
-                                (llReleaseInfo);
-                    }
-
-                    llClContainer.addView(llChangelog);
-                }
-            } else Log.e(TAG, "Invalid changelog information. Check the size of the arrays.");
-        } // end changelog dialog
-
 
         setOnDismissListener(new OnDismissListener() {
             @Override
@@ -424,8 +434,8 @@ public class MaterialDialog extends AlertDialog {
          */
         private final Context context;
         private int style = -1;
-        private CharSequence title = "";
-        private CharSequence message = "";
+        private CharSequence title;
+        private CharSequence message;
         private int dimPercent = -1;
         private CharSequence positiveText;
         private CharSequence neutralText;
@@ -441,22 +451,14 @@ public class MaterialDialog extends AlertDialog {
         private boolean canceledOnTouchOutside = true;
         private boolean cancelable = true;
         private View customView;
-        /**
-         * The View spacing left.
-         */
-        int viewSpacingLeft = -1;
-        /**
-         * The View spacing top.
-         */
-        int viewSpacingTop = -1;
-        /**
-         * The View spacing right.
-         */
-        int viewSpacingRight = -1;
-        /**
-         * The View spacing bottom.
-         */
-        int viewSpacingBottom = -1;
+
+        private int viewSpacingLeft = -1;
+        private int viewSpacingTop = -1;
+        private int viewSpacingRight = -1;
+        private int viewSpacingBottom = -1;
+
+        private int scaleX = -1;
+        private int scaleY = -1;
 
         /**
          * List
@@ -582,6 +584,13 @@ public class MaterialDialog extends AlertDialog {
          */
         public Builder dim(int percent) {
             this.dimPercent = percent;
+            return this;
+        }
+
+
+        public Builder scale(int percentX, int percentY) {
+            this.scaleX = percentX;
+            this.scaleY = percentY;
             return this;
         }
 
@@ -974,6 +983,8 @@ public class MaterialDialog extends AlertDialog {
         public Builder shareAppDialog(boolean shareAppDialog, @Nullable String shareAppMessage) {
             this.shareAppDialog = shareAppDialog;
             this.shareAppMessage = shareAppMessage;
+            this.message = null;
+
             return this;
         }
 
@@ -991,6 +1002,8 @@ public class MaterialDialog extends AlertDialog {
             LayoutInflater inflater = LayoutInflater.from(context);
             customView = inflater.inflate(R.layout.dialog_license, null);
             this.licenseDialog = true;
+            this.message = null;
+
             this.libNames = libraryNames;
             this.libDevelopers = libraryDevelopers;
             this.libLicenses = libraryLicenses;
@@ -1011,6 +1024,7 @@ public class MaterialDialog extends AlertDialog {
             LayoutInflater inflater = LayoutInflater.from(context);
             customView = inflater.inflate(R.layout.dialog_license, null);
             this.licenseDialog = true;
+            this.message = null;
 
             this.libNames = new String[licenseInfos.size()];
             this.libDevelopers = new String[licenseInfos.size()];
@@ -1058,6 +1072,8 @@ public class MaterialDialog extends AlertDialog {
             LayoutInflater inflater = LayoutInflater.from(context);
             customView = inflater.inflate(R.layout.dialog_changelog, null);
             this.changelogDialog = true;
+            this.message = null;
+
             this.clVersionNames = versionNames;
             this.clDates = dates;
             this.clReleaseInfos = releaseInfos;
@@ -1094,6 +1110,7 @@ public class MaterialDialog extends AlertDialog {
             LayoutInflater inflater = LayoutInflater.from(context);
             customView = inflater.inflate(R.layout.dialog_changelog, null);
             this.changelogDialog = true;
+            this.message = null;
 
             this.clVersionNames = new String[changelogs.size()];
             this.clDates = new String[changelogs.size()];

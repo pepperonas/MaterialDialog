@@ -366,6 +366,7 @@ public class MainActivity extends AppCompatActivity {
         new MaterialDialog.Builder(this)
                 .title(R.string.dialog_license_title)
                 .licenseDialog(licenseInfos)
+                .scale(60, 100)
                 .positiveText(R.string.ok)
                 .show();
     }
