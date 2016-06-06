@@ -16,11 +16,14 @@
 
 package com.pepperonas.showcase;
 
+import android.Manifest;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
+import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.text.Html;
 import android.text.method.LinkMovementMethod;
@@ -41,12 +44,18 @@ import com.pepperonas.materialdialog.model.LicenseInfo;
 import com.pepperonas.materialdialog.model.ReleaseInfo;
 import com.pepperonas.materialdialog.utils.Const;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
 
     private static final String TAG = "MainActivity";
+    private static final int REQUEST_EXTERNAL_STORAGE = 1;
+
+    private static String[] PERMISSIONS_STORAGE = {
+            Manifest.permission.READ_EXTERNAL_STORAGE,
+            Manifest.permission.WRITE_EXTERNAL_STORAGE};
 
     private String[] ITEMS = new String[]{"Car", "Plane", "Bike", "Skateboard", "Rocket", "Paper plane", "Boat", "Train",
             "Hovercraft", "Space shuttle", "Jet", "Truck", "Elephant"};
@@ -200,6 +209,23 @@ public class MainActivity extends AppCompatActivity {
                         showToast("Disagreed");
                     }
                 })
+                .show();
+    }
+
+
+    private void showFileChooserDialog() {
+        new MaterialDialog.Builder(this)
+                .fileChooserDialog(true, null, new MaterialDialog.FileChooserListener() {
+                    @Override
+                    public void onChoosen(MaterialDialog dialog, View view, int position, long id, File file) {
+                        super.onChoosen(dialog, view, position, id, file);
+                        showToast("onChoosen (" + file.getPath() + ")");
+                        Log.d(TAG, "onChoosen (" + file.getPath() + ")");
+                        dialog.dismiss();
+                    }
+                })
+                .message("Pick a file")
+                .positiveText("OK")
                 .show();
     }
 
@@ -366,7 +392,6 @@ public class MainActivity extends AppCompatActivity {
         new MaterialDialog.Builder(this)
                 .title(R.string.dialog_license_title)
                 .licenseDialog(licenseInfos)
-                .scale(60, 100)
                 .positiveText(R.string.ok)
                 .show();
     }
@@ -378,6 +403,41 @@ public class MainActivity extends AppCompatActivity {
         new MaterialDialog.Builder(this)
                 .title("Changelog")
                 .changelogDialog(changelogs, getString(R.string.bullet_release_info))
+                .positiveText(R.string.ok)
+                .show();
+    }
+
+
+    private void showDialogScaled() {
+        new MaterialDialog.Builder(this)
+                .title("Scaled dialog")
+                .message("Lorem ipsum dolor sit amet, eu vitae petentium eam. Prima nominavi eloquentiam pri ne, vix eu case " +
+                        "dicant persequeris. Tale natum molestie vel no, civibus appareat nominati no eum. Mediocrem sententiae" +
+                        " usu in, vix dicunt conclusionemque ne, ut mel error insolens. Pro at fugit legendos, per ne fastidii " +
+                        "maiestatis. Eum tale idque ex. Veri autem aliquip nam et, numquam albucius recusabo per cu.\n" +
+                        "\n" +
+                        "Vis id aperiam habemus imperdiet, eu tollit sensibus accommodare vix. Ea decore epicurei eam. Te vitae" +
+                        " saperet appareat eam, modus ullum expetendis mei cu. Omnes viderer vis eu, eam ei ornatus " +
+                        "intellegebat. Vim posse liberavisse an, oratio accumsan euripidis ex duo, eu fabellas platonem " +
+                        "mandamus eum.\n" +
+                        "\n" +
+                        "Ea usu tota tempor comprehensam, ea essent nominavi eam. An apeirian comprehensam vix, oblique dolorum" +
+                        " sed eu, at vis nullam mandamus corrumpit. Ei est nominati urbanitas, appetere complectitur quo eu, " +
+                        "doming erroribus mei id. In nihil tincidunt duo, has illud graeco partiendo te. Mea eu hinc " +
+                        "contentiones, sed no natum salutatus. Per vero essent voluptatibus ut, eu duo laudem singulis, ex erat" +
+                        " zril dolorum mea. Te pri justo tation graecis.\n" +
+                        "\n" +
+                        "Tollit ornatus persequeris ei mea, vix et rebum invenire. No ancillae conclusionemque vis. Nec dico " +
+                        "splendide dissentiunt in, aeque iusto ne has. Illud integre vix ne, mei cu agam maiestatis, ut nec " +
+                        "meliore percipitur.\n" +
+                        "\n" +
+                        "Clita democritum persequeris et duo, ut has nibh iudicabit, id eam volutpat instructior. Vel ea " +
+                        "appareat deseruisse, eu est graeco feugiat, nam eu iusto oratio animal. Ad eum saepe dictas " +
+                        "efficiendi, postea pertinax mei eu, sit ad quod quodsi meliore. Cu cum lobortis platonem erroribus, eu" +
+                        " suas sanctus constituto vis, regione accommodare ei usu. Ut consul melius senserit cum, sit regione " +
+                        "minimum scribentur cu, in hinc delenit habemus eum. Pro in semper torquatos referrentur. Ut mel mazim " +
+                        "fierent, vix no nibh ornatus salutatus.")
+                .scale(60, 100)
                 .positiveText(R.string.ok)
                 .show();
     }
@@ -416,6 +476,12 @@ public class MainActivity extends AppCompatActivity {
 
     public void onDialogCustomView(View view) {
         showMaterialDialogCustomView();
+    }
+
+
+    public void onDialogFileChooser(View view) {
+        if (checkPermission()) return;
+        showFileChooserDialog();
     }
 
 
@@ -533,6 +599,11 @@ public class MainActivity extends AppCompatActivity {
     }
 
 
+    public void onDialogScaled(View view) {
+        showDialogScaled();
+    }
+
+
     public void onDialogThemed(View view) {
         showDialogThemed();
     }
@@ -546,5 +617,28 @@ public class MainActivity extends AppCompatActivity {
     private void showToast(String text) {
         if (!mSharedPreferences.getBoolean("SHOW_TOASTS", true)) return;
         Toast.makeText(MainActivity.this, text, Toast.LENGTH_SHORT).show();
+    }
+
+
+    private boolean checkPermission() {
+        int permission = ActivityCompat.checkSelfPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE);
+        if (permission != PackageManager.PERMISSION_GRANTED) {
+            ActivityCompat.requestPermissions(this, PERMISSIONS_STORAGE, REQUEST_EXTERNAL_STORAGE);
+            return false;
+        } else return true;
+    }
+
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        switch (requestCode) {
+            case REQUEST_EXTERNAL_STORAGE: {
+                if (!(grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED)) {
+                    Toast.makeText(this, "The app was not allowed to write to your storage. Hence, it cannot function" +
+                            " properly. Please consider granting it this permission", Toast.LENGTH_LONG).show();
+                }
+            }
+        }
     }
 }

@@ -63,6 +63,14 @@
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="@dimen/button_margin_bottom"
                 android:layout_marginTop="@dimen/button_margin_top"
+                android:onClick="onDialogFileChooser"
+                android:text="File Chooser Dialog" />
+
+            <Button
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="@dimen/button_margin_bottom"
+                android:layout_marginTop="@dimen/button_margin_top"
                 android:onClick="onDialogListNoTitle"
                 android:text="List Dialog (No title)" />
 
@@ -121,6 +129,14 @@
                 android:layout_marginTop="@dimen/button_margin_top"
                 android:onClick="onDialogChangelog"
                 android:text="Changelog Dialog" />
+
+            <Button
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="@dimen/button_margin_bottom"
+                android:layout_marginTop="@dimen/button_margin_top"
+                android:onClick="onDialogScaled"
+                android:text="Scaled Dialog" />
 
             <Button
                 android:layout_width="match_parent"

@@ -14,7 +14,7 @@ Add JitPack to your repositories:
 
 and add the library to your dependencies:
 ```
-    compile 'com.github.pepperonas:materialdialog:0.2.6'
+    compile 'com.github.pepperonas:materialdialog:0.2.7'
 ```
 
 
