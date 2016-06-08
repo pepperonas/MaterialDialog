@@ -21,6 +21,7 @@ import android.app.AlertDialog;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
+import android.graphics.Typeface;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
@@ -43,6 +44,7 @@ import com.pepperonas.materialdialog.model.Changelog;
 import com.pepperonas.materialdialog.model.LicenseInfo;
 import com.pepperonas.materialdialog.model.ReleaseInfo;
 import com.pepperonas.materialdialog.utils.Const;
+import com.pepperonas.materialdialog.utils.Utils;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -388,11 +390,13 @@ public class MainActivity extends AppCompatActivity {
 
     private void showMaterialDialogLicenseInfo() {
         List<LicenseInfo> licenseInfos = getLicenseInfos();
+        Typeface tf = Utils.resolveTypeface(this, "sys_san_fran.ttf");
 
         new MaterialDialog.Builder(this)
                 .title(R.string.dialog_license_title)
                 .licenseDialog(licenseInfos)
                 .positiveText(R.string.ok)
+                .font(tf)
                 .show();
     }
 
@@ -439,6 +443,18 @@ public class MainActivity extends AppCompatActivity {
                         "fierent, vix no nibh ornatus salutatus.")
                 .scale(60, 100)
                 .positiveText(R.string.ok)
+                .show();
+    }
+
+
+    private void showCustomTypefaceDialog() {
+        Typeface tf = Utils.resolveTypeface(this, "hacked.ttf");
+        new MaterialDialog.Builder(this)
+                .title("Custom font")
+                .message("This font looks nice.")
+                .positiveText("OK")
+                .negativeText("CANCEL")
+                .font(tf)
                 .show();
     }
 
@@ -601,6 +617,11 @@ public class MainActivity extends AppCompatActivity {
 
     public void onDialogScaled(View view) {
         showDialogScaled();
+    }
+
+
+    public void onDialogCustomTypeface(View view) {
+        showCustomTypefaceDialog();
     }
 
 

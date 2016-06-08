@@ -17,6 +17,7 @@
 package com.pepperonas.materialdialog.adapter;
 
 import android.content.Context;
+import android.graphics.Typeface;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -50,25 +51,20 @@ public class CustomMultipleSelectionArrayAdapter extends ArrayAdapter<String> {
     private MaterialDialog.ItemClickListener mItemClickListener;
     private MaterialDialog.ItemLongClickListener mItemLongClickListener;
 
+    private Typeface mTypeface;
 
-    public CustomMultipleSelectionArrayAdapter(Context context, String[] strings, Integer[] selectedPositions, MaterialDialog.ItemClickListener itemClickListener) {
+
+    public CustomMultipleSelectionArrayAdapter(Context context, String[] strings, Integer[] selectedPositions, MaterialDialog
+            .ItemClickListener itemClickListener, MaterialDialog.ItemLongClickListener itemLongClickListener, Typeface typeface) {
         super(context, R.layout.custom_list_item_multiple_selection, strings);
 
-        init(context, strings, selectedPositions, itemClickListener);
+        init(context, strings, selectedPositions, itemClickListener, typeface);
 
     }
 
 
-    public CustomMultipleSelectionArrayAdapter(Context context, String[] strings, Integer[] selectedPositions, MaterialDialog.ItemClickListener itemClickListener, MaterialDialog.ItemLongClickListener itemLongClickListener) {
-        super(context, R.layout.custom_list_item_multiple_selection, strings);
-
-        init(context, strings, selectedPositions, itemClickListener);
-
-        mItemLongClickListener = itemLongClickListener;
-    }
-
-
-    private void init(Context context, String[] strings, Integer[] selectedPositions, MaterialDialog.ItemClickListener itemClickListener) {
+    private void init(Context context, String[] strings, Integer[] selectedPositions, MaterialDialog.ItemClickListener
+            itemClickListener, Typeface typeface) {
         mInflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         mStrings = strings;
         List<Integer> selected = Arrays.asList(selectedPositions);
@@ -80,6 +76,7 @@ public class CustomMultipleSelectionArrayAdapter extends ArrayAdapter<String> {
             Log.i(TAG, "init " + sm.getPosition() + " == " + sm.isChecked());
         }
         mItemClickListener = itemClickListener;
+        mTypeface = typeface;
     }
 
 
@@ -94,6 +91,11 @@ public class CustomMultipleSelectionArrayAdapter extends ArrayAdapter<String> {
             final LinearLayout linearLayout = (LinearLayout) row.findViewById(R.id.ll_simple_list_item_multiple_selection);
             final CheckBox cbx = (CheckBox) row.findViewById(R.id.cbx_simple_list_item_multiple_selection);
             final TextView tv = (TextView) row.findViewById(R.id.tv_simple_list_item_multiple_selection);
+
+            if (mTypeface != null) {
+                cbx.setTypeface(mTypeface);
+                tv.setTypeface(mTypeface);
+            }
 
             viewHolder = new ViewHolder();
             viewHolder.linearLayout = linearLayout;

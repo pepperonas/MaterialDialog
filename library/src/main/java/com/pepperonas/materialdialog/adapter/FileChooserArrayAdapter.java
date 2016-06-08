@@ -17,6 +17,7 @@
 package com.pepperonas.materialdialog.adapter;
 
 import android.content.Context;
+import android.graphics.Typeface;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.view.LayoutInflater;
@@ -46,11 +47,13 @@ public class FileChooserArrayAdapter extends ArrayAdapter<File> {
     private MaterialDialog.ItemClickListener mItemClickListener;
     private MaterialDialog.ItemLongClickListener mItemLongClickListener;
 
+    private Typeface mTypeface;
+
 
     public FileChooserArrayAdapter(@NonNull MaterialDialog materialDialog, @NonNull Context context, @NonNull List<File>
             strings, @NonNull File startPath, @Nullable MaterialDialog.ItemClickListener itemClickListener, @Nullable
                                            MaterialDialog.ItemLongClickListener itemLongClickListener, boolean
-                                           dismissOnSelection) {
+                                           dismissOnSelection, Typeface typeface) {
         super(context, R.layout.custom_list_item, strings);
 
         mMaterialDialog = materialDialog;
@@ -59,6 +62,7 @@ public class FileChooserArrayAdapter extends ArrayAdapter<File> {
         mFiles = strings;
         mItemClickListener = itemClickListener;
         mItemLongClickListener = itemLongClickListener;
+        mTypeface = typeface;
     }
 
 
@@ -72,6 +76,10 @@ public class FileChooserArrayAdapter extends ArrayAdapter<File> {
 
             final LinearLayout linearLayout = (LinearLayout) row.findViewById(R.id.ll_simple_list_item);
             final TextView tv = (TextView) row.findViewById(R.id.tv_simple_list_item);
+
+            if (mTypeface != null) {
+                tv.setTypeface(mTypeface);
+            }
 
             viewHolder = new ViewHolder();
             viewHolder.linearLayout = linearLayout;

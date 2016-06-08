@@ -22,6 +22,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.ResolveInfo;
 import android.graphics.Rect;
+import android.graphics.Typeface;
 import android.graphics.drawable.Drawable;
 import android.os.Build;
 import android.os.Environment;
@@ -33,6 +34,8 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.annotation.StringRes;
 import android.support.annotation.StyleRes;
+import android.text.Spannable;
+import android.text.SpannableString;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -52,6 +55,7 @@ import com.pepperonas.materialdialog.adapter.ShareAdapter;
 import com.pepperonas.materialdialog.model.Changelog;
 import com.pepperonas.materialdialog.model.LicenseInfo;
 import com.pepperonas.materialdialog.model.ReleaseInfo;
+import com.pepperonas.materialdialog.utils.TypefaceSpan;
 import com.pepperonas.materialdialog.utils.Utils;
 
 import java.io.File;
@@ -147,7 +151,7 @@ public class MaterialDialog extends AlertDialog {
             final TextView tv = (TextView) llListDialog.findViewById(R.id.list_dialog_tv_message);
             if (builder.message != null) {
                 // ensure to set message
-                tv.setText(builder.message);
+                tv.setText(getSpannable(builder, builder.message));
             } else {
                 // remove message and set space on top
                 llListDialog.removeView(tv);
@@ -178,7 +182,8 @@ public class MaterialDialog extends AlertDialog {
                         builder.items,
                         preselectedIndex,
                         builder.itemClickListener,
-                        builder.itemLongClickListener);
+                        builder.itemLongClickListener,
+                        builder.typeface);
 
                 lv.setDivider(null);
                 lv.setAdapter(cssaa);
@@ -192,7 +197,8 @@ public class MaterialDialog extends AlertDialog {
                         builder.items,
                         builder.itemClickListener,
                         builder.itemLongClickListener,
-                        builder.dismissOnSelection);
+                        builder.dismissOnSelection,
+                        builder.typeface);
 
                 lv.setDivider(null);
                 lv.setAdapter(caa);
@@ -206,7 +212,8 @@ public class MaterialDialog extends AlertDialog {
                         builder.items,
                         builder.preSelectedIndices,
                         builder.itemClickListener,
-                        builder.itemLongClickListener);
+                        builder.itemLongClickListener,
+                        builder.typeface);
 
                 lv.setChoiceMode(AbsListView.CHOICE_MODE_MULTIPLE);
                 lv.setDivider(null);
@@ -224,7 +231,7 @@ public class MaterialDialog extends AlertDialog {
 
             if (builder.shareAppDialog) {
                 // share app dialog
-                ShareAdapter sa = new ShareAdapter(builder.context);
+                ShareAdapter sa = new ShareAdapter(builder.context, builder.typeface);
                 lv.setDivider(null);
                 lv.setAdapter(sa);
                 lv.setOnItemClickListener(new AdapterView.OnItemClickListener() {
@@ -263,6 +270,12 @@ public class MaterialDialog extends AlertDialog {
                     ((TextView) llLicenseInfo.findViewById(R.id.tv_lib_name)).setText(builder.libNames[i]);
                     ((TextView) llLicenseInfo.findViewById(R.id.tv_lib_developer)).setText(builder.libDevelopers[i]);
                     ((TextView) llLicenseInfo.findViewById(R.id.tv_lib_licence)).setText(builder.libLicenses[i]);
+                    if (builder.typeface != null) {
+                        ((TextView) llLicenseInfo.findViewById(R.id.tv_lib_name)).setTypeface(builder.typeface);
+                        ((TextView) llLicenseInfo.findViewById(R.id.tv_lib_developer)).setTypeface(builder.typeface);
+                        ((TextView) llLicenseInfo.findViewById(R.id.tv_lib_licence)).setTypeface(builder.typeface);
+                    }
+
                     llLibContainer.addView(llLicenseInfo);
                 }
 
@@ -288,11 +301,20 @@ public class MaterialDialog extends AlertDialog {
                     ((TextView) llChangelog.findViewById(R.id.tv_cl_version)).setText(builder.clVersionNames[i]);
                     ((TextView) llChangelog.findViewById(R.id.tv_cl_date)).setText(builder.clDates[i]);
 
+                    if (builder.typeface != null) {
+                        ((TextView) llChangelog.findViewById(R.id.tv_cl_version)).setTypeface(builder.typeface);
+                        ((TextView) llChangelog.findViewById(R.id.tv_cl_date)).setTypeface(builder.typeface);
+                    }
+
                     ReleaseInfo ri = builder.clReleaseInfos[i];
                     for (int j = 0; j < ri.getReleaseInfo().size(); j++) {
                         LayoutInflater _inflater = LayoutInflater.from(builder.context);
                         LinearLayout llReleaseInfo = (LinearLayout) _inflater.inflate(R.layout.item_changelog_release_info, null);
                         ((TextView) llReleaseInfo.findViewById(R.id.tv_release_info)).setText(ri.getReleaseInfo().get(j));
+                        if (builder.typeface != null) {
+                            ((TextView) llReleaseInfo.findViewById(R.id.tv_release_info)).setTypeface(builder.typeface);
+                        }
+
                         if (builder.clBullet != null) {
                             // ensure to set custom bullet
                             ((TextView) llReleaseInfo.findViewById(R.id.tv_release_info_bullet)).setText(builder.clBullet);
@@ -309,12 +331,12 @@ public class MaterialDialog extends AlertDialog {
         } // end changelog dialog
 
         if (builder.title != null) {
-            this.setTitle(builder.title);
+            this.setTitle(getSpannable(builder, builder.title));
         }
 
         if (builder.message != null) {
             if (!isListDialog) {
-                this.setMessage(builder.message);
+                this.setMessage(getSpannable(builder, builder.message));
             }
         }
 
@@ -374,6 +396,16 @@ public class MaterialDialog extends AlertDialog {
 
                 if (builder.showListener != null) {
                     builder.showListener.onShow(dialog);
+                }
+
+                if (builder.typeface != null) {
+                    dialog.getButton(BUTTON_POSITIVE).setTypeface(builder.typeface);
+                }
+                if (builder.typeface != null) {
+                    dialog.getButton(BUTTON_NEUTRAL).setTypeface(builder.typeface);
+                }
+                if (builder.typeface != null) {
+                    dialog.getButton(BUTTON_NEGATIVE).setTypeface(builder.typeface);
                 }
 
                 // button color
@@ -436,10 +468,10 @@ public class MaterialDialog extends AlertDialog {
             builder.dismissOnSelection = false;
 
             if (builder.message != null) {
-                this.setTitle(builder.message);
+                this.setTitle(getSpannable(builder, builder.message));
             }
             if (builder.title != null) {
-                this.setTitle(builder.title);
+                this.setTitle(getSpannable(builder, builder.title));
             }
 
             final ListView lv = (ListView) llFileChooserDialog.findViewById(R.id.file_chooser_dialog_listview);
@@ -512,7 +544,8 @@ public class MaterialDialog extends AlertDialog {
                         }
                     },
                     builder.itemLongClickListener,
-                    builder.dismissOnSelection);
+                    builder.dismissOnSelection,
+                    builder.typeface);
 
             lv.setDivider(null);
             lv.setAdapter(fcaa);
@@ -526,6 +559,17 @@ public class MaterialDialog extends AlertDialog {
                 }
             }
         });
+    }
+
+
+    private SpannableString getSpannable(@NonNull Builder builder, CharSequence charSequence) {
+        if (builder.typeface != null) {
+            SpannableString s = new SpannableString(charSequence);
+            s.setSpan(new TypefaceSpan(builder.typeface), 0, s.length(),
+                    Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+            return s;
+        }
+        return SpannableString.valueOf(charSequence);
     }
 
 
@@ -573,6 +617,7 @@ public class MaterialDialog extends AlertDialog {
         private int style = -1;
         private CharSequence title;
         private CharSequence message;
+        private Typeface typeface;
         private int dimPercent = -1;
         private CharSequence positiveText;
         private CharSequence neutralText;
@@ -718,6 +763,12 @@ public class MaterialDialog extends AlertDialog {
          */
         public Builder message(@StringRes int message) {
             this.message = context.getString(message);
+            return this;
+        }
+
+
+        public Builder font(Typeface typeface) {
+            this.typeface = typeface;
             return this;
         }
 

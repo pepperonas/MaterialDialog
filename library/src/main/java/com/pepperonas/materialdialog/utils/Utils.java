@@ -17,6 +17,7 @@
 package com.pepperonas.materialdialog.utils;
 
 import android.content.Context;
+import android.graphics.Typeface;
 import android.util.TypedValue;
 
 import java.io.File;
@@ -77,6 +78,11 @@ public class Utils {
             }
         });
         return list;
+    }
+
+
+    public static Typeface resolveTypeface(Context context, String fontName) {
+        return Typeface.createFromAsset(context.getAssets(), String.format("fonts/%s", fontName));
     }
 
 }

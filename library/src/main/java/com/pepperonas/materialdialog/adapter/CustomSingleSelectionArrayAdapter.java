@@ -17,6 +17,7 @@
 package com.pepperonas.materialdialog.adapter;
 
 import android.content.Context;
+import android.graphics.Typeface;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -43,29 +44,25 @@ public class CustomSingleSelectionArrayAdapter extends ArrayAdapter<String> {
     private MaterialDialog.ItemClickListener mItemClickListener;
     private MaterialDialog.ItemLongClickListener mItemLongClickListener;
 
+    private Typeface mTypeface;
 
-    public CustomSingleSelectionArrayAdapter(Context context, String[] strings, int selectedPosition, MaterialDialog.ItemClickListener itemClickListener) {
+
+    public CustomSingleSelectionArrayAdapter(Context context, String[] strings, int selectedPosition, MaterialDialog
+            .ItemClickListener itemClickListener, MaterialDialog.ItemLongClickListener itemLongClickListener, Typeface typeface) {
         super(context, R.layout.custom_list_item_single_selection, strings);
 
-        init(context, strings, selectedPosition, itemClickListener);
+        init(context, strings, selectedPosition, itemClickListener, typeface);
 
     }
 
 
-    public CustomSingleSelectionArrayAdapter(Context context, String[] strings, int selectedPosition, MaterialDialog.ItemClickListener itemClickListener, MaterialDialog.ItemLongClickListener itemLongClickListener) {
-        super(context, R.layout.custom_list_item_single_selection, strings);
-
-        init(context, strings, selectedPosition, itemClickListener);
-
-        mItemLongClickListener = itemLongClickListener;
-    }
-
-
-    private void init(Context context, String[] strings, int selectedPosition, MaterialDialog.ItemClickListener itemClickListener) {
+    private void init(Context context, String[] strings, int selectedPosition, MaterialDialog.ItemClickListener
+            itemClickListener, Typeface typeface) {
         mInflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         mStrings = strings;
         mSelectedPosition = selectedPosition;
         mItemClickListener = itemClickListener;
+        mTypeface = typeface;
     }
 
 
@@ -80,6 +77,11 @@ public class CustomSingleSelectionArrayAdapter extends ArrayAdapter<String> {
             final LinearLayout linearLayout = (LinearLayout) row.findViewById(R.id.ll_simple_list_item_single_selection);
             final RadioButton rbtn = (RadioButton) row.findViewById(R.id.rb_simple_list_item_single_selection);
             final TextView tv = (TextView) row.findViewById(R.id.tv_simple_list_item_single_selection);
+
+            if (mTypeface != null) {
+                rbtn.setTypeface(mTypeface);
+                tv.setTypeface(mTypeface);
+            }
 
             viewHolder = new ViewHolder();
             viewHolder.linearLayout = linearLayout;
