@@ -18,9 +18,10 @@ public class Main2Activity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main2);
         MaterialDialogHelper.bind(this,this);
+        MaterialDialogHelper.DefaultValue.message="My spezial Message";
     }
 
-    @OnMaterialDialogClick(clickRes = R.id.ClickYesNoParam,clickType = MaterialDialogClickTyp.positive)
+    @OnMaterialDialogClick(clickRes = R.id.ClickYesNoParam,clickType = MaterialDialogClickTyp.positive, messageRes = R.string.app_name)
     public void onYesClick(){
         Toast.makeText(this,"Yes was Clicked",Toast.LENGTH_SHORT).show();
 
