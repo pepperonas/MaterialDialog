@@ -5,17 +5,19 @@ import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
+import de.fasibio.materialdialog.annotation.interpretation.MaterialDialogClickTyp;
+
 /**
- * Created by simofa on 20.06.2016.
+ * Created by simofa on 21.06.2016.
  */
 @Retention(value= RetentionPolicy.RUNTIME)
 @Target(value = ElementType.METHOD)
-public @interface OnDialogNeutralClick {
+public @interface OnMaterialDialogClick {
     /**
      * the resource this Listener is used for
      */
     int clickRes();
-
+    MaterialDialogClickTyp clickType() default MaterialDialogClickTyp.positive;
     /**
      * The path to the title
      */
@@ -26,4 +28,5 @@ public @interface OnDialogNeutralClick {
     int positivColor() default android.R.color.black;
     int neutralColor() default android.R.color.black;
     int negativColor() default android.R.color.black;
+
 }
