@@ -20,48 +20,21 @@ and add the library to your dependencies:
 
 ###2. Showing a dialog
 ```java
-new MaterialDialog.Builder(this)
-                .title("MaterialDialog")
-                .message("This is a simple MaterialDialog.")
-                .positiveText("OK")
-                .neutralText("NOT NOW")
-                .negativeText("CANCEL")
-                .positiveColor(R.color.green_700)
-                .neutralColor(R.color.yellow_700)
-                .negativeColor(R.color.pink_700)
-                .showListener(new MaterialDialog.ShowListener() {
-                    @Override
-                    public void onShow(AlertDialog d) {
-                        super.onShow(d);
-                        Toast.makeText(MainActivity.this, "onShow", Toast.LENGTH_SHORT).show();
-                    }
-                })
-                .dismissListener(new MaterialDialog.DismissListener() {
-                    @Override
-                    public void onDismiss() {
-                        super.onDismiss();
-                        Toast.makeText(MainActivity.this, "onDismiss", Toast.LENGTH_SHORT).show();
-                    }
-                })
-                .buttonCallback(new MaterialDialog.ButtonCallback() {
-                    @Override
-                    public void onPositive(MaterialDialog dialog) {
-                        super.onPositive(dialog);
-                        Toast.makeText(MainActivity.this, "OK", Toast.LENGTH_SHORT).show();
-                    }
-                    @Override
-                    public void onNeutral(MaterialDialog dialog) {
-                        super.onNeutral(dialog);
-                        Toast.makeText(MainActivity.this, "Not now", Toast.LENGTH_SHORT).show();
-                    }
-                    @Override
-                    public void onNegative(MaterialDialog dialog) {
-                        super.onNegative(dialog);
-                        Toast.makeText(MainActivity.this, "Cancel", Toast.LENGTH_SHORT).show();
-                    }
-                })
-                .show();
+@OnMaterialDialogClick(clickRes = R.id.ClickYesNoParam,clickType = MaterialDialogClickTyp.positive)
+    public void onYesClick(){
+        Toast.makeText(this,"Yes was Clicked",Toast.LENGTH_SHORT).show();
+
+    }
 ```                
+###3. Change Text Color etc.
+for example
+```java
+MaterialDialogHelper.DefaultValue.message="My spezial Message";
+```
+or by annotation 
+```java
+@OnMaterialDialogClick(clickRes = R.id.ClickYesNoParam,clickType = MaterialDialogClickTyp.positive, messageRes = R.string.spezialmsg)
+```
 
 
 ##ProGuard
