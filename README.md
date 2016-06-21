@@ -33,7 +33,7 @@ MaterialDialogHelper.DefaultValue.message="My spezial Message";
 ```
 or by annotation 
 ```java
-@OnMaterialDialogClick(clickRes = R.id.ClickYesNoParam,clickType = MaterialDialogClickTyp.positive, messageRes = R.id.spezialmsg)
+@OnMaterialDialogClick(clickRes = R.id.ClickYesNoParam,clickType = MaterialDialogClickTyp.positive, messageRes = R.string.spezialmsg)
 ```
 
 
