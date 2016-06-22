@@ -18,7 +18,12 @@ and add the library to your dependencies:
 ```
 
 
-###2. Showing a dialog (if you will use OnMaterialDialogShowListener or  OnMaterialDialogDismissListener you have to add a OnMaterialDialogClick the parameter clickRes have to the sam value )
+###2. Showing a dialog 
+
+
+   (if you will use OnMaterialDialogShowListener or  OnMaterialDialogDismissListener you have to add a OnMaterialDialogClick the parameter clickRes have to the sam value )
+
+
 ```java
 @OnMaterialDialogClick(clickRes = R.id.ClickYesNoParam,clickType = MaterialDialogClickTyp.positive)
     public void onYesClick(){
@@ -36,7 +41,9 @@ and add the library to your dependencies:
         Toast.makeText(this," on dismiss",Toast.LENGTH_SHORT).show();
     }
 
-```                
+```       
+
+
 ###3. Change Text Color etc.
 for example
 ```java
