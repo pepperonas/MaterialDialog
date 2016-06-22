@@ -1,5 +1,6 @@
 package de.fasibio.materialdialog.annotation.interpretation;
 
+import android.app.AlertDialog;
 import android.app.Dialog;
 import android.view.View;
 
@@ -54,13 +55,62 @@ public class MaterialDialogHelperClickListener implements View.OnClickListener{
                 }
             }
         });
+        if (holder.getShowListenerMethode() != null){
+            holder.getDialogbuilder().showListener(new MaterialDialog.ShowListener() {
+                @Override
+                public void onShow(AlertDialog dialog) {
+                    triggerShowEvent(dialog);
+                }
+            });
+        }
+        if (holder.getDismissListenerMethode() != null){
+            holder.getDialogbuilder().dismissListener(new MaterialDialog.DismissListener() {
+                @Override
+                public void onDismiss() {
+                    triggerDismissEvent();
+                }
+            });
+        }
         holder.getDialogbuilder().show();
+    }
+
+    private void triggerShowEvent(AlertDialog dialog){
+        Method m = holder.getShowListenerMethode();
+        m.setAccessible(true);
+        Type[] parameter = m.getParameterTypes();
+        if (parameter.length > 1){
+            throw new RuntimeException("Binding methode have to much parameters max allow 1 Type:AlertDialog ");
+        }
+        try{
+            switch (parameter.length){
+                case 0: m.invoke(classToBind);
+                    break;
+                case 1: m.invoke(classToBind,dialog);
+            }
+        } catch (IllegalAccessException e) {
+            e.printStackTrace();
+        } catch (InvocationTargetException e) {
+            e.printStackTrace();
+        }
+
+    }
+
+    private void triggerDismissEvent(){
+        Method m = holder.getDismissListenerMethode();
+        m.setAccessible(true);
+        try{
+            m.invoke(classToBind);
+        } catch (IllegalAccessException e) {
+            e.printStackTrace();
+        } catch (InvocationTargetException e) {
+            e.printStackTrace();
+        }
     }
 
     private void triggerClickEvent(MaterialDialog dialog,MaterialDialogClickTyp type){
         int dialogparamvalue = -1;
         int dialogclickparamvalue = -1;
-        Method m = holder.getMethod();
+        Method m = holder.getMaterialDialogClickMethode();
         m.setAccessible(true);
         Type[] parameter =  m.getParameterTypes();
         if (parameter.length > 2){

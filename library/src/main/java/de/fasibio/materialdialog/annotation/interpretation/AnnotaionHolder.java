@@ -10,21 +10,16 @@ import java.lang.reflect.Method;
 public class AnnotaionHolder {
 
     private MaterialDialog.Builder dialogbuilder;
-    private Method method;
+    private Method materialDialogClickMethode = null,showListenerMethode = null, dismissListenerMethode = null;
     private MaterialDialogClickTyp type;
-    public AnnotaionHolder(Method method, MaterialDialogClickTyp type, MaterialDialog.Builder dialogbuilder) {
+
+    public AnnotaionHolder(){}
+    public AnnotaionHolder(Method materialDialogClickMethode, MaterialDialogClickTyp type, MaterialDialog.Builder dialogbuilder) {
         setDialogbuilder(dialogbuilder);
-        setMethod(method);
+        setMaterialDialogClickMethod(materialDialogClickMethode);
         setType(type);
     }
 
-    public Method getMethod() {
-        return method;
-    }
-
-    public void setMethod(Method method) {
-        this.method = method;
-    }
 
     public MaterialDialogClickTyp getType() {
         return type;
@@ -39,6 +34,31 @@ public class AnnotaionHolder {
 
     public void setDialogbuilder(MaterialDialog.Builder dialogbuilder) {
         this.dialogbuilder = dialogbuilder;
+    }
+
+
+    public Method getMaterialDialogClickMethode() {
+        return materialDialogClickMethode;
+    }
+
+    public void setMaterialDialogClickMethod(Method materialDialogClickmethod) {
+        this.materialDialogClickMethode = materialDialogClickmethod;
+    }
+
+    public Method getShowListenerMethode() {
+        return showListenerMethode;
+    }
+
+    public void setShowListenerMethode(Method showListenerMethode) {
+        this.showListenerMethode = showListenerMethode;
+    }
+
+    public Method getDismissListenerMethode() {
+        return dismissListenerMethode;
+    }
+
+    public void setDismissListenerMethode(Method dismissListenerMethode) {
+        this.dismissListenerMethode = dismissListenerMethode;
     }
 
 }

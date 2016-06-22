@@ -8,6 +8,8 @@ import com.pepperonas.materialdialog.MaterialDialog;
 import com.pepperonas.showcase.R;
 
 import de.fasibio.materialdialog.annotation.annotation.OnMaterialDialogClick;
+import de.fasibio.materialdialog.annotation.annotation.OnMaterialDialogDismissListener;
+import de.fasibio.materialdialog.annotation.annotation.OnMaterialDialogShowListener;
 import de.fasibio.materialdialog.annotation.interpretation.MaterialDialogClickTyp;
 import de.fasibio.materialdialog.annotation.interpretation.MaterialDialogHelper;
 
@@ -44,9 +46,18 @@ public class Main2Activity extends AppCompatActivity {
 
     @OnMaterialDialogClick(clickRes = R.id.ClickAllTwoPara,clickType = MaterialDialogClickTyp.all)
     public void onAllClick(MaterialDialog materialDialog,MaterialDialogClickTyp type){
-        Toast.makeText(this,"Yes was Clicked "+type,Toast.LENGTH_SHORT).show();
+        Toast.makeText(this,type+" was Clicked ",Toast.LENGTH_SHORT).show();
 
     }
 
+    @OnMaterialDialogShowListener(clickRes = R.id.ClickYesNoParam)
+    public void showListener(){
+        Toast.makeText(this," on showlistener",Toast.LENGTH_SHORT).show();
+    }
+
+    @OnMaterialDialogDismissListener(clickRes = R.id.ClickYesNoParam)
+    public void onDismiss(){
+        Toast.makeText(this," on dismiss",Toast.LENGTH_SHORT).show();
+    }
 
 }
