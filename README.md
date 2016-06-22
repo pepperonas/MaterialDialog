@@ -18,13 +18,24 @@ and add the library to your dependencies:
 ```
 
 
-###2. Showing a dialog
+###2. Showing a dialog (if you will use OnMaterialDialogShowListener or  OnMaterialDialogDismissListener you have to add a OnMaterialDialogClick the parameter clickRes have to the sam value )
 ```java
 @OnMaterialDialogClick(clickRes = R.id.ClickYesNoParam,clickType = MaterialDialogClickTyp.positive)
     public void onYesClick(){
         Toast.makeText(this,"Yes was Clicked",Toast.LENGTH_SHORT).show();
 
     }
+    
+       @OnMaterialDialogShowListener(clickRes = R.id.ClickYesNoParam)
+    public void showListener(){
+        Toast.makeText(this," on showlistener",Toast.LENGTH_SHORT).show();
+    }
+    
+       @OnMaterialDialogDismissListener(clickRes = R.id.ClickYesNoParam)
+    public void onDismiss(){
+        Toast.makeText(this," on dismiss",Toast.LENGTH_SHORT).show();
+    }
+
 ```                
 ###3. Change Text Color etc.
 for example
