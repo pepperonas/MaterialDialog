@@ -21,7 +21,7 @@ and add the library to your dependencies:
 ###2. Showing a dialog 
 
 
-   (if you will use OnMaterialDialogShowListener or  OnMaterialDialogDismissListener you have to add a OnMaterialDialogClick the parameter clickRes have to the sam value )
+   (if you will use OnMaterialDialogShowListener or  OnMaterialDialogDismissListener you have to add a OnMaterialDialogClick the parameter clickRes have to the same value )
 
 
 ```java
