@@ -15,7 +15,7 @@ import de.fasibio.materialdialog.annotation.annotation.OnMaterialDialogClick;
 import de.fasibio.materialdialog.annotation.annotation.OnMaterialDialogShowListener;
 
 /**
- * Created by simofa on 21.06.2016.
+ * Created by fasibio on 21.06.2016.
  */
 public class MaterialDialogHelper {
     private Context con = null;

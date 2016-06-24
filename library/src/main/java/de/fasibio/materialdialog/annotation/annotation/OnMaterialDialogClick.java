@@ -8,7 +8,7 @@ import java.lang.annotation.Target;
 import de.fasibio.materialdialog.annotation.interpretation.MaterialDialogClickTyp;
 
 /**
- * Created by simofa on 21.06.2016.
+ * Created by fasibio on 21.06.2016.
  */
 @Retention(value= RetentionPolicy.RUNTIME)
 @Target(value = ElementType.METHOD)
