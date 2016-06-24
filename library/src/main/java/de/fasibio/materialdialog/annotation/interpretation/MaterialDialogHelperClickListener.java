@@ -11,13 +11,16 @@ import java.lang.reflect.Method;
 import java.lang.reflect.Type;
 
 /**
+ *
  * Created by fasibio on 21.06.2016.
+ * A Helperclass
+ * It use the holder to trigger the events
  */
 public class MaterialDialogHelperClickListener implements View.OnClickListener{
 
     private AnnotaionHolder holder;
     private Object classToBind;
-    public MaterialDialogHelperClickListener(AnnotaionHolder holder,Object classToBind){
+    protected MaterialDialogHelperClickListener(AnnotaionHolder holder,Object classToBind){
         this.holder = holder;
         this.classToBind = classToBind;
     }

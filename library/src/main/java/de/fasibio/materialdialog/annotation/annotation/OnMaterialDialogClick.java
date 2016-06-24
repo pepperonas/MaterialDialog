@@ -22,11 +22,37 @@ public @interface OnMaterialDialogClick {
      * The path to the title
      */
     int titleRes() default -1;
+
+    /**
+     * The String ressource for messages
+     */
     int messageRes()default -1;
+
+    /**
+     * The String ressource for positive Text e.g. "YES"
+     */
     int positiveTextRes()default -1;
-    int negativTextRes() default -1;
+
+    /**
+     * The String ressource for negativ Text e.g. "No"
+     */
+    int negativeTextRes() default -1;
+
+    /**
+     * The String ressource for neutral Text e.g. "Not now"
+     */
+    int neutralTextRes() default -1;
+    /**
+     * The Color ressource for positive Text
+     */
     int positivColor() default android.R.color.black;
+    /**
+     * The Color ressource for neutral Text
+     */
     int neutralColor() default android.R.color.black;
+    /**
+     * The Color ressource for negativ Text
+     */
     int negativColor() default android.R.color.black;
 
 }

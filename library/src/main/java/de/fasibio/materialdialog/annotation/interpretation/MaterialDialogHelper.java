@@ -20,16 +20,31 @@ import de.fasibio.materialdialog.annotation.annotation.OnMaterialDialogShowListe
 public class MaterialDialogHelper {
     private Context con = null;
     private HashMap<Integer,AnnotaionHolder>  annotationsCollector = new HashMap<Integer, AnnotaionHolder>();
+
+    /**
+     * Defaultvalues for the Dialog
+     * If the Value is not given by annotation it will use this standardvalue
+     */
     public static class DefaultValue{
         public static String title = "MaterialDialog",message="This is a simple MaterialDialog.", positiveText="OK", neutralText = "NOT NOW", negativeText = "CANCEL";
     }
 
     private MaterialDialogHelper(){}
 
+    /**
+     * inizialisiert the annotation of the given object...
+     * @param classToBind obj which use the annotations
+     * @param view the view where i can find the ressource
+     */
     public static void bind(Object classToBind, View view){
         new MaterialDialogHelper().ini(classToBind,view);
     }
 
+    /**
+     * inizialisiert the annotation of the given object...
+     * @param classToBind obj which use the annotations
+     * @param activity the activity where i can find the ressource
+     */
     public static void bind(Context classToBind, Activity activity){
         new MaterialDialogHelper().ini(classToBind,activity);
 
@@ -61,8 +76,8 @@ public class MaterialDialogHelper {
                 MaterialDialog.Builder dialogbu = new MaterialDialog.Builder(con);
                 dialogbu.title(getStringResOrDefault(clickannotation.titleRes(),DefaultValue.title));
                 dialogbu.positiveText(getStringResOrDefault(clickannotation.positiveTextRes(),DefaultValue.positiveText));
-                dialogbu.neutralText(getStringResOrDefault(clickannotation.negativTextRes(),DefaultValue.neutralText));
-                dialogbu.negativeText(getStringResOrDefault(clickannotation.negativTextRes(),DefaultValue.negativeText));
+                dialogbu.neutralText(getStringResOrDefault(clickannotation.neutralTextRes(),DefaultValue.neutralText));
+                dialogbu.negativeText(getStringResOrDefault(clickannotation.negativeTextRes(),DefaultValue.negativeText));
                 dialogbu.positiveColor(clickannotation.positivColor());
                 dialogbu.negativeColor(clickannotation.negativColor());
                 dialogbu.neutralColor(clickannotation.neutralColor());
