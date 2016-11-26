@@ -4,14 +4,14 @@ apply plugin: 'com.github.dcendents.android-maven'
 group = 'com.github.pepperonas'
 
 android {
-    compileSdkVersion 23
-    buildToolsVersion "23.0.3"
+    compileSdkVersion 25
+    buildToolsVersion '25.0.0'
 
     defaultConfig {
         minSdkVersion 12
-        targetSdkVersion 23
+        targetSdkVersion 25
         versionCode 1
-        versionName "0.2.8"
+        versionName "0.2.9"
     }
     lintOptions {
         abortOnError false
@@ -21,7 +21,7 @@ android {
 
 dependencies {
     compile fileTree(dir: 'libs', include: ['*.jar'])
-    compile 'com.android.support:appcompat-v7:23.4.0'
+    compile 'com.android.support:appcompat-v7:25.0.1'
 }
 
 task sourcesJar(type: Jar) {
