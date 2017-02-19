@@ -14,7 +14,7 @@ Add JitPack to your repositories:
 
 and add the library to your dependencies:
 ```
-    compile 'com.github.pepperonas:materialdialog:0.2.9'
+    compile 'com.github.pepperonas:materialdialog:0.3.0'
 ```
 
 
@@ -81,7 +81,7 @@ https://play.google.com/store/apps/details?id=com.pepperonas.materialdialog.show
 
 
 ##License
-    Copyright 2016 Martin Pfeffer
+    Copyright 2017 Martin Pfeffer
 
     Licensed under the Apache License, Version 2.0 (the "License");
     you may not use this file except in compliance with the License.
