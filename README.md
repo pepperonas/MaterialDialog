@@ -1,9 +1,9 @@
-#MaterialDialog
+# MaterialDialog
 This tiny Android library provides Material-Design dialogs.
 
 
-##How to use
-###1. Import
+## How to use
+### 1. Import
 Add JitPack to your repositories:
 ```
    repositories {
@@ -18,7 +18,7 @@ and add the library to your dependencies:
 ```
 
 
-###2. Showing a dialog
+### 2. Showing a dialog
 ```java
 new MaterialDialog.Builder(this)
                 .title("MaterialDialog")
@@ -64,23 +64,23 @@ new MaterialDialog.Builder(this)
 ```                
 
 
-##ProGuard
+## ProGuard
 ```
     -keep class com.pepperonas.materialdialog.** { *; }
     -dontwarn com.pepperonas.materialdialog.**
 ```
 
 
-##Showcase
+## Showcase
 Try the sample application. It's on Google Play :)
 https://play.google.com/store/apps/details?id=com.pepperonas.materialdialog.showcase
 
-##Developed By
+## Developed By
 
 * Martin Pfeffer - http://www.pepperonas.com - <pepperonas@gmail.com>
 
 
-##License
+## License
     Copyright 2017 Martin Pfeffer
 
     Licensed under the Apache License, Version 2.0 (the "License");
