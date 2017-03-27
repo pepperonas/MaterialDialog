@@ -77,7 +77,7 @@ https://play.google.com/store/apps/details?id=com.pepperonas.materialdialog.show
 
 ## Developed By
 
-* Martin Pfeffer - http://www.pepperonas.com - <pepperonas@gmail.com>
+* Martin Pfeffer - https://celox.io - <martin.pfeffer@celox.io>
 
 
 ## License
