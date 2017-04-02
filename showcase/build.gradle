@@ -20,7 +20,7 @@ buildscript {
         maven { url "https://jitpack.io" }
     }
     dependencies {
-        classpath 'com.android.tools.build:gradle:2.3.0-beta4'
+        classpath 'com.android.tools.build:gradle:2.4.0-alpha3'
     }
 }
 
@@ -28,7 +28,7 @@ apply plugin: 'com.android.application'
 
 def getDate() {
     def date = new Date()
-    def formattedDate = date.format('_yyyy-MM-dd-hh-mm-ss')
+    def formattedDate = date.format('_yyyy-MM-dd-hh-mm')
     return formattedDate
 }
 

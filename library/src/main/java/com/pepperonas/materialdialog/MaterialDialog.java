@@ -46,7 +46,6 @@ import android.widget.BaseAdapter;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
-
 import com.pepperonas.materialdialog.adapter.CustomArrayAdapter;
 import com.pepperonas.materialdialog.adapter.CustomMultipleSelectionArrayAdapter;
 import com.pepperonas.materialdialog.adapter.CustomSingleSelectionArrayAdapter;
@@ -57,7 +56,6 @@ import com.pepperonas.materialdialog.model.LicenseInfo;
 import com.pepperonas.materialdialog.model.ReleaseInfo;
 import com.pepperonas.materialdialog.utils.TypefaceSpan;
 import com.pepperonas.materialdialog.utils.Utils;
-
 import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
@@ -77,7 +75,8 @@ public class MaterialDialog extends AlertDialog {
      *
      * @param builder the builder
      */
-    public MaterialDialog(@NonNull final Builder builder) {
+    public MaterialDialog(@NonNull
+    final Builder builder) {
         super(builder.context);
 
         invoke(builder);
@@ -88,36 +87,39 @@ public class MaterialDialog extends AlertDialog {
      * Instantiates a new Material dialog.
      *
      * @param builder the builder
-     * @param style   the style
+     * @param style the style
      */
-    public MaterialDialog(@NonNull final Builder builder, @StyleRes int style) {
+    public MaterialDialog(@NonNull
+    final Builder builder, @StyleRes int style) {
         super(builder.context, style);
 
         invoke(builder);
     }
 
 
-    private void invoke(@NonNull final Builder builder) {
+    private void invoke(@NonNull
+    final Builder builder) {
         boolean isListDialog = false;
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.ICE_CREAM_SANDWICH) {
             if (builder.dimPercent != -1) {
                 float value = (float) builder.dimPercent / 100f;
-                if (value < 0f) value = 0f;
-                if (value > 1f) value = 1f;
+                if (value < 0f) {
+                    value = 0f;
+                }
+                if (value > 1f) {
+                    value = 1f;
+                }
                 getWindow().setDimAmount(value);
             }
         }
 
-        //        if (builder.fileChooser) {
-        //            getWindow().setWindowAnimations(R.style.DialogNoAnimation);
-        //        }
-
         if (builder.customView != null) {
             getWindow().requestFeature(Window.FEATURE_NO_TITLE);
 
-            if (builder.viewSpacingLeft == -1 && builder.viewSpacingTop == -1 && builder.viewSpacingRight == -1 && builder
-                    .viewSpacingBottom == -1) {
+            if (builder.viewSpacingLeft == -1 && builder.viewSpacingTop == -1
+                && builder.viewSpacingRight == -1 && builder
+                .viewSpacingBottom == -1) {
                 builder.viewSpacingLeft = Utils.dp2px(builder.context, 8);
                 builder.viewSpacingTop = Utils.dp2px(builder.context, 0);
                 builder.viewSpacingRight = Utils.dp2px(builder.context, 12);
@@ -125,27 +127,28 @@ public class MaterialDialog extends AlertDialog {
             }
 
             this.setView(
-                    builder.customView,
-                    builder.viewSpacingLeft, builder.viewSpacingTop,
-                    builder.viewSpacingRight, builder.viewSpacingBottom);
+                builder.customView,
+                builder.viewSpacingLeft, builder.viewSpacingTop,
+                builder.viewSpacingRight, builder.viewSpacingBottom);
         }
 
-        /**
-         * list
-         * */
-        if ((builder.items != null && builder.items.length > 0) || builder.shareAppDialog || builder.adapter != null) {
+        // list
+        if ((builder.items != null && builder.items.length > 0) || builder.shareAppDialog
+            || builder.adapter != null) {
             isListDialog = true;
 
             if (builder.customView != null) {
                 Log.w(TAG, "ListView will override the custom view.");
             }
 
-            LayoutInflater layoutInflater = (LayoutInflater) builder.context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-            LinearLayout llListDialog = (LinearLayout) layoutInflater.inflate(R.layout.dialog_list, null);
+            LayoutInflater layoutInflater = (LayoutInflater) builder.context
+                .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+            LinearLayout llListDialog = (LinearLayout) layoutInflater
+                .inflate(R.layout.dialog_list, null);
             this.setView(
-                    llListDialog,
-                    builder.viewSpacingLeft, builder.viewSpacingTop,
-                    builder.viewSpacingRight, builder.viewSpacingBottom);
+                llListDialog,
+                builder.viewSpacingLeft, builder.viewSpacingTop,
+                builder.viewSpacingRight, builder.viewSpacingBottom);
 
             final ListView lv = (ListView) llListDialog.findViewById(R.id.list_dialog_listview);
             final TextView tv = (TextView) llListDialog.findViewById(R.id.list_dialog_tv_message);
@@ -158,32 +161,36 @@ public class MaterialDialog extends AlertDialog {
                 lv.setPadding(0, Utils.dp2px(builder.context, 16), 0, 0);
             }
             if (builder.title == null) {
-                lv.setPadding(0, Utils.dp2px(builder.context, 8), 0, Utils.dp2px(builder.context, 8));
+                lv.setPadding(0, Utils.dp2px(builder.context, 8), 0,
+                    Utils.dp2px(builder.context, 8));
             }
 
-
-            if (!builder.multiChoice && !builder.blankListing && !builder.shareAppDialog && builder.adapter == null) {
+            if (!builder.multiChoice && !builder.blankListing && !builder.shareAppDialog
+                && builder.adapter == null) {
                 // single selection (RadioButton)
                 int preselectedIndex = 0;
                 if (builder.preSelectedIndices.length > 0) {
                     preselectedIndex = builder.preSelectedIndices[0];
                     if (preselectedIndex >= builder.items.length) {
-                        Log.w(TAG, "Selected item greater than item count. Will select first item.");
+                        Log.w(TAG,
+                            "Selected item greater than item count. Will select first item.");
                         preselectedIndex = 0;
                     }
                 }
                 if (builder.preSelectedIndices.length != 1) {
-                    Log.w(TAG, "Can't select multiple items in single selection. Will only select \"" +
-                            builder.items[builder.preSelectedIndices[builder.preSelectedIndices.length - 1]] + "\".");
+                    Log.w(TAG,
+                        "Can't select multiple items in single selection. Will only select \"" +
+                            builder.items[builder.preSelectedIndices[
+                                builder.preSelectedIndices.length - 1]] + "\".");
                 }
 
                 final CustomSingleSelectionArrayAdapter cssaa = new CustomSingleSelectionArrayAdapter(
-                        builder.context,
-                        builder.items,
-                        preselectedIndex,
-                        builder.itemClickListener,
-                        builder.itemLongClickListener,
-                        builder.typeface);
+                    builder.context,
+                    builder.items,
+                    preselectedIndex,
+                    builder.itemClickListener,
+                    builder.itemLongClickListener,
+                    builder.typeface);
 
                 lv.setDivider(null);
                 lv.setAdapter(cssaa);
@@ -192,13 +199,13 @@ public class MaterialDialog extends AlertDialog {
             else if (!builder.multiChoice && builder.adapter == null && !builder.shareAppDialog) {
                 // single selection (blank)
                 final CustomArrayAdapter caa = new CustomArrayAdapter(
-                        this,
-                        builder.context,
-                        builder.items,
-                        builder.itemClickListener,
-                        builder.itemLongClickListener,
-                        builder.dismissOnSelection,
-                        builder.typeface);
+                    this,
+                    builder.context,
+                    builder.items,
+                    builder.itemClickListener,
+                    builder.itemLongClickListener,
+                    builder.dismissOnSelection,
+                    builder.typeface);
 
                 lv.setDivider(null);
                 lv.setAdapter(caa);
@@ -208,12 +215,12 @@ public class MaterialDialog extends AlertDialog {
             else if (builder.adapter == null && !builder.shareAppDialog) {
                 // multi-choice (CheckBox)
                 final CustomMultipleSelectionArrayAdapter cmsaa = new CustomMultipleSelectionArrayAdapter(
-                        builder.context,
-                        builder.items,
-                        builder.preSelectedIndices,
-                        builder.itemClickListener,
-                        builder.itemLongClickListener,
-                        builder.typeface);
+                    builder.context,
+                    builder.items,
+                    builder.preSelectedIndices,
+                    builder.itemClickListener,
+                    builder.itemLongClickListener,
+                    builder.typeface);
 
                 lv.setChoiceMode(AbsListView.CHOICE_MODE_MULTIPLE);
                 lv.setDivider(null);
@@ -236,15 +243,18 @@ public class MaterialDialog extends AlertDialog {
                 lv.setAdapter(sa);
                 lv.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                     @Override
-                    public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                    public void onItemClick(AdapterView<?> parent, View view, int position,
+                        long id) {
                         ResolveInfo info = (ResolveInfo) lv.getAdapter().getItem(position);
                         Intent intent = new Intent(android.content.Intent.ACTION_SEND);
                         intent.setClassName(info.activityInfo.packageName, info.activityInfo.name);
                         intent.setType("text/plain");
                         intent.putExtra(Intent.EXTRA_SUBJECT, "");
                         intent.putExtra(Intent.EXTRA_TEXT,
-                                (builder.shareAppMessage != null ? builder.shareAppMessage : "") + "\n" +
-                                        "https://play.google.com/store/apps/details?id=" + builder.context.getPackageName());
+                            (builder.shareAppMessage != null ? builder.shareAppMessage : "") + "\n"
+                                +
+                                "https://play.google.com/store/apps/details?id=" + builder.context
+                                .getPackageName());
                         builder.context.startActivity(intent);
                     }
                 });
@@ -252,82 +262,102 @@ public class MaterialDialog extends AlertDialog {
 
         } // end list
 
-
-        /**
-         * license dialog
-         * */
+        // license dialog
         if (builder.licenseDialog) {
             if (builder.libNames.length == builder.libDevelopers.length
-                    && builder.libDevelopers.length == builder.libLicenses.length
-                    && builder.libNames.length != 0) {
+                && builder.libDevelopers.length == builder.libLicenses.length
+                && builder.libNames.length != 0) {
 
-                LinearLayout llLibContainer = (LinearLayout) builder.customView.findViewById(R.id.ll_dialog_license_container);
+                LinearLayout llLibContainer = (LinearLayout) builder.customView
+                    .findViewById(R.id.ll_dialog_license_container);
 
                 for (int i = 0; i < builder.libNames.length; i++) {
                     LayoutInflater inflater = LayoutInflater.from(builder.context);
-                    LinearLayout llLicenseInfo = (LinearLayout) inflater.inflate(R.layout.item_license, null);
+                    LinearLayout llLicenseInfo = (LinearLayout) inflater
+                        .inflate(R.layout.item_license, null);
 
-                    ((TextView) llLicenseInfo.findViewById(R.id.tv_lib_name)).setText(builder.libNames[i]);
-                    ((TextView) llLicenseInfo.findViewById(R.id.tv_lib_developer)).setText(builder.libDevelopers[i]);
-                    ((TextView) llLicenseInfo.findViewById(R.id.tv_lib_licence)).setText(builder.libLicenses[i]);
+                    ((TextView) llLicenseInfo.findViewById(R.id.tv_lib_name))
+                        .setText(builder.libNames[i]);
+                    ((TextView) llLicenseInfo.findViewById(R.id.tv_lib_developer))
+                        .setText(builder.libDevelopers[i]);
+                    ((TextView) llLicenseInfo.findViewById(R.id.tv_lib_licence))
+                        .setText(builder.libLicenses[i]);
                     if (builder.typeface != null) {
-                        ((TextView) llLicenseInfo.findViewById(R.id.tv_lib_name)).setTypeface(builder.typeface);
-                        ((TextView) llLicenseInfo.findViewById(R.id.tv_lib_developer)).setTypeface(builder.typeface);
-                        ((TextView) llLicenseInfo.findViewById(R.id.tv_lib_licence)).setTypeface(builder.typeface);
+                        ((TextView) llLicenseInfo.findViewById(R.id.tv_lib_name))
+                            .setTypeface(builder.typeface);
+                        ((TextView) llLicenseInfo.findViewById(R.id.tv_lib_developer))
+                            .setTypeface(builder.typeface);
+                        ((TextView) llLicenseInfo.findViewById(R.id.tv_lib_licence))
+                            .setTypeface(builder.typeface);
                     }
 
                     llLibContainer.addView(llLicenseInfo);
                 }
 
-            } else Log.e(TAG, "Invalid license information. Check the size of the arrays.");
+            } else {
+                Log.e(TAG, "Invalid license information. Check the size of the arrays.");
+            }
 
         } // end license dialog
 
 
-        /**
-         * changelog dialog
-         * */
+        // changelog dialog
         if (builder.changelogDialog) {
             if (builder.clVersionNames.length == builder.clDates.length
-                    && builder.clDates.length == builder.clReleaseInfos.length
-                    && builder.clVersionNames.length != 0) {
+                && builder.clDates.length == builder.clReleaseInfos.length
+                && builder.clVersionNames.length != 0) {
 
-                LinearLayout llClContainer = (LinearLayout) builder.customView.findViewById(R.id.ll_dialog_changelog_container);
+                LinearLayout llClContainer = (LinearLayout) builder.customView
+                    .findViewById(R.id.ll_dialog_changelog_container);
 
                 for (int i = 0; i < builder.clVersionNames.length; i++) {
                     LayoutInflater inflater = LayoutInflater.from(builder.context);
-                    LinearLayout llChangelog = (LinearLayout) inflater.inflate(R.layout.item_changelog, null);
+                    LinearLayout llChangelog = (LinearLayout) inflater
+                        .inflate(R.layout.item_changelog, null);
 
-                    ((TextView) llChangelog.findViewById(R.id.tv_cl_version)).setText(builder.clVersionNames[i]);
-                    ((TextView) llChangelog.findViewById(R.id.tv_cl_date)).setText(builder.clDates[i]);
+                    ((TextView) llChangelog.findViewById(R.id.tv_cl_version))
+                        .setText(builder.clVersionNames[i]);
+                    ((TextView) llChangelog.findViewById(R.id.tv_cl_date))
+                        .setText(builder.clDates[i]);
 
                     if (builder.typeface != null) {
-                        ((TextView) llChangelog.findViewById(R.id.tv_cl_version)).setTypeface(builder.typeface);
-                        ((TextView) llChangelog.findViewById(R.id.tv_cl_date)).setTypeface(builder.typeface);
+                        ((TextView) llChangelog.findViewById(R.id.tv_cl_version))
+                            .setTypeface(builder.typeface);
+                        ((TextView) llChangelog.findViewById(R.id.tv_cl_date))
+                            .setTypeface(builder.typeface);
                     }
 
                     ReleaseInfo ri = builder.clReleaseInfos[i];
                     for (int j = 0; j < ri.getReleaseInfo().size(); j++) {
                         LayoutInflater _inflater = LayoutInflater.from(builder.context);
-                        LinearLayout llReleaseInfo = (LinearLayout) _inflater.inflate(R.layout.item_changelog_release_info, null);
-                        ((TextView) llReleaseInfo.findViewById(R.id.tv_release_info)).setText(ri.getReleaseInfo().get(j));
+                        LinearLayout llReleaseInfo = (LinearLayout) _inflater
+                            .inflate(R.layout.item_changelog_release_info, null);
+                        ((TextView) llReleaseInfo.findViewById(R.id.tv_release_info))
+                            .setText(ri.getReleaseInfo().get(j));
                         if (builder.typeface != null) {
-                            ((TextView) llReleaseInfo.findViewById(R.id.tv_release_info)).setTypeface(builder.typeface);
+                            ((TextView) llReleaseInfo.findViewById(R.id.tv_release_info))
+                                .setTypeface(builder.typeface);
                         }
 
                         if (builder.clBullet != null) {
                             // ensure to set custom bullet
-                            ((TextView) llReleaseInfo.findViewById(R.id.tv_release_info_bullet)).setText(builder.clBullet);
-                        } else
-                            llReleaseInfo.findViewById(R.id.tv_release_info_bullet).setVisibility(View.GONE);
+                            ((TextView) llReleaseInfo.findViewById(R.id.tv_release_info_bullet))
+                                .setText(builder.clBullet);
+                        } else {
+                            llReleaseInfo.findViewById(R.id.tv_release_info_bullet)
+                                .setVisibility(View.GONE);
+                        }
 
-                        ((LinearLayout) llChangelog.findViewById(R.id.ll_dialog_changelog_release_info_container)).addView
-                                (llReleaseInfo);
+                        ((LinearLayout) llChangelog
+                            .findViewById(R.id.ll_dialog_changelog_release_info_container)).addView
+                            (llReleaseInfo);
                     }
 
                     llClContainer.addView(llChangelog);
                 }
-            } else Log.e(TAG, "Invalid changelog information. Check the size of the arrays.");
+            } else {
+                Log.e(TAG, "Invalid changelog information. Check the size of the arrays.");
+            }
         } // end changelog dialog
 
         if (builder.title != null) {
@@ -343,15 +373,13 @@ public class MaterialDialog extends AlertDialog {
         if (builder.icon != -1) {
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
                 this.setIcon(builder.context.getDrawable(builder.icon));
-            } else this.setIcon(builder.context.getResources().getDrawable(builder.icon));
+            } else {
+                this.setIcon(builder.context.getResources().getDrawable(builder.icon));
+            }
         }
         if (builder.drawable != null) {
             this.setIcon(builder.drawable);
         }
-
-
-        this.setCancelable(builder.cancelable);
-        this.setCanceledOnTouchOutside(builder.canceledOnTouchOutside);
 
         if (builder.positiveText != null) {
             this.setButton(BUTTON_POSITIVE, builder.positiveText, new OnClickListener() {
@@ -411,30 +439,41 @@ public class MaterialDialog extends AlertDialog {
                 // button color
                 if (builder.positiveText != null && builder.positiveColor != -1) {
                     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-                        dialog.getButton(BUTTON_POSITIVE).setTextColor(builder.context.getColor(builder.positiveColor));
-                    } else
-                        dialog.getButton(BUTTON_POSITIVE).setTextColor(builder.context.getResources().getColor(builder
+                        dialog.getButton(BUTTON_POSITIVE)
+                            .setTextColor(builder.context.getColor(builder.positiveColor));
+                    } else {
+                        dialog.getButton(BUTTON_POSITIVE)
+                            .setTextColor(builder.context.getResources().getColor(builder
                                 .positiveColor));
+                    }
 
                     if (builder.positiveDelayed && builder.finishedText != null) {
-                        DialogButtonCountDown countDown = new DialogButtonCountDown(builder.millisInFuture, builder
-                                .countDownInterval, builder.finishedText, dialog.getButton(BUTTON_POSITIVE));
+                        DialogButtonCountDown countDown = new DialogButtonCountDown(
+                            builder.millisInFuture, builder
+                            .countDownInterval, builder.finishedText,
+                            dialog.getButton(BUTTON_POSITIVE));
                         countDown.start();
                     }
                 }
                 if (builder.neutralText != null && builder.neutralColor != -1) {
                     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-                        dialog.getButton(BUTTON_NEUTRAL).setTextColor(builder.context.getColor(builder.neutralColor));
-                    } else
-                        dialog.getButton(BUTTON_NEUTRAL).setTextColor(builder.context.getResources().getColor(builder
+                        dialog.getButton(BUTTON_NEUTRAL)
+                            .setTextColor(builder.context.getColor(builder.neutralColor));
+                    } else {
+                        dialog.getButton(BUTTON_NEUTRAL)
+                            .setTextColor(builder.context.getResources().getColor(builder
                                 .neutralColor));
+                    }
                 }
                 if (builder.negativeText != null && builder.negativeColor != -1) {
                     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-                        dialog.getButton(BUTTON_NEGATIVE).setTextColor(builder.context.getColor(builder.negativeColor));
-                    } else
-                        dialog.getButton(BUTTON_NEGATIVE).setTextColor(builder.context.getResources().getColor(builder
+                        dialog.getButton(BUTTON_NEGATIVE)
+                            .setTextColor(builder.context.getColor(builder.negativeColor));
+                    } else {
+                        dialog.getButton(BUTTON_NEGATIVE)
+                            .setTextColor(builder.context.getResources().getColor(builder
                                 .negativeColor));
+                    }
                 }
 
                 // dialog height
@@ -448,20 +487,22 @@ public class MaterialDialog extends AlertDialog {
                     Window window = getWindow();
                     window.getDecorView().getWindowVisibleDisplayFrame(displayRectangle);
                     dialog.getWindow().setLayout(
-                            (int) (displayRectangle.width() * fScaleX),
-                            (int) (displayRectangle.height() * fScaleY));
+                        (int) (displayRectangle.width() * fScaleX),
+                        (int) (displayRectangle.height() * fScaleY));
                 }
             }
         });
 
         if (builder.fileChooser) {
-            LayoutInflater layoutInflater = (LayoutInflater) builder.context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-            LinearLayout llFileChooserDialog = (LinearLayout) layoutInflater.inflate(R.layout.dialog_file_chooser, null);
+            LayoutInflater layoutInflater = (LayoutInflater) builder.context
+                .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+            LinearLayout llFileChooserDialog = (LinearLayout) layoutInflater
+                .inflate(R.layout.dialog_file_chooser, null);
 
             this.setView(
-                    llFileChooserDialog,
-                    builder.viewSpacingLeft, builder.viewSpacingTop,
-                    builder.viewSpacingRight, builder.viewSpacingBottom);
+                llFileChooserDialog,
+                builder.viewSpacingLeft, builder.viewSpacingTop,
+                builder.viewSpacingRight, builder.viewSpacingBottom);
 
             // null message makes list fit in dialog
             this.setMessage(null);
@@ -474,19 +515,20 @@ public class MaterialDialog extends AlertDialog {
                 this.setTitle(getSpannable(builder, builder.title));
             }
 
-            final ListView lv = (ListView) llFileChooserDialog.findViewById(R.id.file_chooser_dialog_listview);
+            final ListView lv = (ListView) llFileChooserDialog
+                .findViewById(R.id.file_chooser_dialog_listview);
 
             List<File> chooserItems = new ArrayList<>();
             Log.i(TAG, "invoke: startpath=" + builder.startPath.getPath());
             Log.i(TAG, "invoke: ext__path=" + Environment.getExternalStorageDirectory().getPath());
-
 
             if (builder.startPath.getPath().contains("/..")) {
                 builder.startPath = new File(builder.startPath.getPath().replace("/..", ""));
             }
 
             try {
-                if (builder.startPath.getPath().equals(Environment.getExternalStorageDirectory().getPath())) {
+                if (builder.startPath.getPath()
+                    .equals(Environment.getExternalStorageDirectory().getPath())) {
                     Log.i(TAG, "FS: in home");
                 } else {
                     Log.i(TAG, "FS: not in home");
@@ -504,48 +546,52 @@ public class MaterialDialog extends AlertDialog {
             builder.files = Utils.sortFiles(chooserItems);
 
             FileChooserArrayAdapter fcaa = new FileChooserArrayAdapter(
-                    this,
-                    builder.context,
-                    builder.files,
-                    builder.startPath,
-                    new ItemClickListener() {
-                        @Override
-                        public void onClick(View v, int position, long id) {
-                            super.onClick(v, position, id);
-                            File f = new File(builder.files.get(position).getPath());
-                            if (!f.isDirectory()) {
-                                if (builder.fileChooserListener != null) {
-                                    builder.fileChooserListener.onChoosen(MaterialDialog.this, v, position, id, f);
-                                }
-                                Log.d(TAG, "onClick: " + f.getName() + " is a file.");
-                            } else {
-
-                                if (f.getPath().endsWith("/..")) {
-                                    Log.i(TAG, "onClick: UP");
-                                    builder.fileChooserDialog(builder.allowDirectorySelection, builder.startPath.getParent(),
-                                            builder.fileChooserListener);
-                                } else {
-                                    Log.d(TAG, "onClick: DOWN");
-                                    builder.fileChooserDialog(builder.allowDirectorySelection, builder.startPath + "/" + builder
-                                            .files.get(position).getName(), builder.fileChooserListener);
-
-                                }
-
-                                builder.show();
-                                final Handler handler = new Handler();
-                                handler.postDelayed(new Runnable() {
-                                    @Override
-                                    public void run() {
-                                        cancel();
-                                        dismiss();
-                                    }
-                                }, 100);
+                this,
+                builder.context,
+                builder.files,
+                builder.startPath,
+                new ItemClickListener() {
+                    @Override
+                    public void onClick(View v, int position, long id) {
+                        super.onClick(v, position, id);
+                        File f = new File(builder.files.get(position).getPath());
+                        if (!f.isDirectory()) {
+                            if (builder.fileChooserListener != null) {
+                                builder.fileChooserListener
+                                    .onChoosen(MaterialDialog.this, v, position, id, f);
                             }
+                            Log.d(TAG, "onClick: " + f.getName() + " is a file.");
+                        } else {
+
+                            if (f.getPath().endsWith("/..")) {
+                                Log.i(TAG, "onClick: UP");
+                                builder.fileChooserDialog(builder.allowDirectorySelection,
+                                    builder.startPath.getParent(),
+                                    builder.fileChooserListener);
+                            } else {
+                                Log.d(TAG, "onClick: DOWN");
+                                builder.fileChooserDialog(builder.allowDirectorySelection,
+                                    builder.startPath + "/" + builder
+                                        .files.get(position).getName(),
+                                    builder.fileChooserListener);
+
+                            }
+
+                            builder.show();
+                            final Handler handler = new Handler();
+                            handler.postDelayed(new Runnable() {
+                                @Override
+                                public void run() {
+                                    cancel();
+                                    dismiss();
+                                }
+                            }, 100);
                         }
-                    },
-                    builder.itemLongClickListener,
-                    builder.dismissOnSelection,
-                    builder.typeface);
+                    }
+                },
+                builder.itemLongClickListener,
+                builder.dismissOnSelection,
+                builder.typeface);
 
             lv.setDivider(null);
             lv.setAdapter(fcaa);
@@ -559,6 +605,9 @@ public class MaterialDialog extends AlertDialog {
                 }
             }
         });
+
+        this.setCancelable(builder.cancelable);
+        this.setCanceledOnTouchOutside(builder.canceledOnTouchOutside);
     }
 
 
@@ -566,7 +615,7 @@ public class MaterialDialog extends AlertDialog {
         if (builder.typeface != null) {
             SpannableString s = new SpannableString(charSequence);
             s.setSpan(new TypefaceSpan(builder.typeface), 0, s.length(),
-                    Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+                Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
             return s;
         }
         return SpannableString.valueOf(charSequence);
@@ -711,7 +760,7 @@ public class MaterialDialog extends AlertDialog {
          * Instantiates a new Builder.
          *
          * @param context the context
-         * @param style   the style
+         * @param style the style
          */
         public Builder(@NonNull Context context, @StyleRes int style) {
             this.context = context;
@@ -1019,14 +1068,15 @@ public class MaterialDialog extends AlertDialog {
         /**
          * View spacing dp builder.
          *
-         * @param viewSpacingLeftDp   the view spacing left dp
-         * @param viewSpacingTopDp    the view spacing top dp
-         * @param viewSpacingRightDp  the view spacing right dp
+         * @param viewSpacingLeftDp the view spacing left dp
+         * @param viewSpacingTopDp the view spacing top dp
+         * @param viewSpacingRightDp the view spacing right dp
          * @param viewSpacingBottomDp the view spacing bottom dp
          * @return the builder
          */
-        public Builder viewSpacingDp(int viewSpacingLeftDp, int viewSpacingTopDp, int viewSpacingRightDp, int
-                viewSpacingBottomDp) {
+        public Builder viewSpacingDp(int viewSpacingLeftDp, int viewSpacingTopDp,
+            int viewSpacingRightDp, int
+            viewSpacingBottomDp) {
             this.viewSpacingLeft = Utils.dp2px(context, viewSpacingLeftDp);
             this.viewSpacingTop = Utils.dp2px(context, viewSpacingTopDp);
             this.viewSpacingRight = Utils.dp2px(context, viewSpacingRightDp);
@@ -1038,13 +1088,14 @@ public class MaterialDialog extends AlertDialog {
         /**
          * List items builder.
          *
-         * @param dismissOnSelection       the dismiss on selection
-         * @param adapter                  the adapter
+         * @param dismissOnSelection the dismiss on selection
+         * @param adapter the adapter
          * @param adapterItemClickListener the adapter item click listener
          * @return the builder
          */
         // list
-        public Builder adapter(boolean dismissOnSelection, @NonNull BaseAdapter adapter, @Nullable AdapterView.OnItemClickListener
+        public Builder adapter(boolean dismissOnSelection, @NonNull BaseAdapter adapter,
+            @Nullable AdapterView.OnItemClickListener
                 adapterItemClickListener) {
             this.blankListing = true;
             this.dismissOnSelection = dismissOnSelection;
@@ -1058,7 +1109,7 @@ public class MaterialDialog extends AlertDialog {
          * List items builder.
          *
          * @param dismissOnSelection the dismiss on selection
-         * @param items              the items
+         * @param items the items
          * @return the builder
          */
         // list
@@ -1075,10 +1126,11 @@ public class MaterialDialog extends AlertDialog {
          * List items single selection builder.
          *
          * @param dismissOnSelection the dismiss on selection
-         * @param items              the items
+         * @param items the items
          * @return the builder
          */
-        public Builder listItemsSingleSelection(boolean dismissOnSelection, @NonNull String... items) {
+        public Builder listItemsSingleSelection(boolean dismissOnSelection,
+            @NonNull String... items) {
             this.blankListing = false;
             this.dismissOnSelection = dismissOnSelection;
             this.multiChoice = false;
@@ -1165,12 +1217,13 @@ public class MaterialDialog extends AlertDialog {
         /**
          * Positive delayed builder.
          *
-         * @param millisInFuture    the millis in future
+         * @param millisInFuture the millis in future
          * @param countDownInterval the count down interval
-         * @param finishedText      the finished text
+         * @param finishedText the finished text
          * @return the builder
          */
-        public Builder positiveDelayed(long millisInFuture, long countDownInterval, @NonNull String finishedText) {
+        public Builder positiveDelayed(long millisInFuture, long countDownInterval,
+            @NonNull String finishedText) {
             this.positiveDelayed = true;
             this.millisInFuture = millisInFuture;
             this.countDownInterval = countDownInterval;
@@ -1183,16 +1236,19 @@ public class MaterialDialog extends AlertDialog {
          * File chooser dialog builder.
          *
          * @param directorySelection the directory selection
-         * @param startPath          the start path
+         * @param startPath the start path
          * @return the builder
          */
-        public Builder fileChooserDialog(boolean directorySelection, @Nullable String startPath, @Nullable FileChooserListener
+        public Builder fileChooserDialog(boolean directorySelection, @Nullable String startPath,
+            @Nullable FileChooserListener
                 fileChooserListener) {
             this.fileChooser = true;
             this.allowDirectorySelection = directorySelection;
             if (startPath == null) {
                 this.startPath = Environment.getExternalStorageDirectory();
-            } else this.startPath = new File(startPath);
+            } else {
+                this.startPath = new File(startPath);
+            }
             this.fileChooserListener = fileChooserListener;
 
             return this;
@@ -1202,7 +1258,7 @@ public class MaterialDialog extends AlertDialog {
         /**
          * Share app dialog builder.
          *
-         * @param shareAppDialog  the share app dialog
+         * @param shareAppDialog the share app dialog
          * @param shareAppMessage the share app message
          * @return the builder
          */
@@ -1218,13 +1274,14 @@ public class MaterialDialog extends AlertDialog {
         /**
          * License dialog builder.
          *
-         * @param libraryNames      the library names
+         * @param libraryNames the library names
          * @param libraryDevelopers the library developers
-         * @param libraryLicenses   the library licenses
+         * @param libraryLicenses the library licenses
          * @return the builder
          */
-        public Builder licenseDialog(@NonNull String[] libraryNames, @NonNull String[] libraryDevelopers, @NonNull String[]
-                libraryLicenses) {
+        public Builder licenseDialog(@NonNull String[] libraryNames,
+            @NonNull String[] libraryDevelopers, @NonNull String[]
+            libraryLicenses) {
             LayoutInflater inflater = LayoutInflater.from(context);
             customView = inflater.inflate(R.layout.dialog_license, null);
             this.licenseDialog = true;
@@ -1274,11 +1331,12 @@ public class MaterialDialog extends AlertDialog {
          * Changelog dialog builder.
          *
          * @param versionNames the version names
-         * @param dates        the dates
+         * @param dates the dates
          * @param releaseInfos the release infos
          * @return the builder
          */
-        public Builder changelogDialog(@NonNull String[] versionNames, @NonNull String[] dates, @NonNull ReleaseInfo[]
+        public Builder changelogDialog(@NonNull String[] versionNames, @NonNull String[] dates,
+            @NonNull ReleaseInfo[]
                 releaseInfos) {
             return changelogDialog(versionNames, dates, releaseInfos, "");
         }
@@ -1288,12 +1346,13 @@ public class MaterialDialog extends AlertDialog {
          * Changelog dialog builder.
          *
          * @param versionNames the version names
-         * @param dates        the dates
+         * @param dates the dates
          * @param releaseInfos the release infos
-         * @param bullet       the bullet
+         * @param bullet the bullet
          * @return the builder
          */
-        public Builder changelogDialog(@NonNull String[] versionNames, @NonNull String[] dates, @NonNull ReleaseInfo[]
+        public Builder changelogDialog(@NonNull String[] versionNames, @NonNull String[] dates,
+            @NonNull ReleaseInfo[]
                 releaseInfos, @Nullable String bullet) {
             LayoutInflater inflater = LayoutInflater.from(context);
             customView = inflater.inflate(R.layout.dialog_changelog, null);
@@ -1329,10 +1388,11 @@ public class MaterialDialog extends AlertDialog {
          * Changelog dialog builder.
          *
          * @param changelogs the changelogs
-         * @param bullet     the bullet
+         * @param bullet the bullet
          * @return the builder
          */
-        public Builder changelogDialog(@NonNull List<Changelog> changelogs, @Nullable String bullet) {
+        public Builder changelogDialog(@NonNull List<Changelog> changelogs,
+            @Nullable String bullet) {
             LayoutInflater inflater = LayoutInflater.from(context);
             customView = inflater.inflate(R.layout.dialog_changelog, null);
             this.changelogDialog = true;
@@ -1366,8 +1426,11 @@ public class MaterialDialog extends AlertDialog {
          * @return the material dialog
          */
         public MaterialDialog build() {
-            if (style == -1) return new MaterialDialog(this);
-            else return new MaterialDialog(this, style);
+            if (style == -1) {
+                return new MaterialDialog(this);
+            } else {
+                return new MaterialDialog(this, style);
+            }
         }
 
 
@@ -1575,9 +1638,9 @@ public class MaterialDialog extends AlertDialog {
         /**
          * On click.
          *
-         * @param v        the v
+         * @param v the v
          * @param position the position
-         * @param id       the id
+         * @param id the id
          */
         public void onClick(View v, int position, long id) {
             Log.d(TAG, "onClick " + position);
@@ -1625,9 +1688,9 @@ public class MaterialDialog extends AlertDialog {
         /**
          * On long click.
          *
-         * @param view     the view
+         * @param view the view
          * @param position the position
-         * @param id       the id
+         * @param id the id
          */
         public void onLongClick(View view, int position, long id) {
             Log.d(TAG, "onLongClick " + position);
@@ -1675,9 +1738,9 @@ public class MaterialDialog extends AlertDialog {
         /**
          * On selected.
          *
-         * @param view     the view
+         * @param view the view
          * @param position the position
-         * @param id       the id
+         * @param id the id
          */
         public void onSelected(View view, int position, long id) {
             Log.d(TAG, "onSelected " + position);
@@ -1735,9 +1798,9 @@ public class MaterialDialog extends AlertDialog {
         /**
          * On selected.
          *
-         * @param view     the view
+         * @param view the view
          * @param position the position
-         * @param id       the id
+         * @param id the id
          */
         public void onChoosen(MaterialDialog dialog, View view, int position, long id, File file) {
             Log.d(TAG, "onSelected " + position);
@@ -1813,18 +1876,18 @@ public class MaterialDialog extends AlertDialog {
          */
         public static String getLicense() {
             return "Copyright (c) 2016 Martin Pfeffer\n" +
-                    " \n" +
-                    "Licensed under the Apache License, Version 2.0 (the \"License\");\n" +
-                    "you may not use this file except in compliance with the License.\n" +
-                    "You may obtain a copy of the License at\n" +
-                    " \n" +
-                    "     http://www.apache.org/licenses/LICENSE-2.0\n" +
-                    " \n" +
-                    "Unless required by applicable law or agreed to in writing, software\n" +
-                    "distributed under the License is distributed on an \"AS IS\" BASIS,\n" +
-                    "WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.\n" +
-                    "See the License for the specific language governing permissions and\n" +
-                    "limitations under the License.";
+                " \n" +
+                "Licensed under the Apache License, Version 2.0 (the \"License\");\n" +
+                "you may not use this file except in compliance with the License.\n" +
+                "You may obtain a copy of the License at\n" +
+                " \n" +
+                "     http://www.apache.org/licenses/LICENSE-2.0\n" +
+                " \n" +
+                "Unless required by applicable law or agreed to in writing, software\n" +
+                "distributed under the License is distributed on an \"AS IS\" BASIS,\n" +
+                "WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.\n" +
+                "See the License for the specific language governing permissions and\n" +
+                "limitations under the License.";
         }
 
     }

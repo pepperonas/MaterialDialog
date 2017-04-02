@@ -14,7 +14,7 @@ Add JitPack to your repositories:
 
 and add the library to your dependencies:
 ```
-    compile 'com.github.pepperonas:materialdialog:0.3.0'
+    compile 'com.github.pepperonas:materialdialog:0.3.1'
 ```
 
 
@@ -75,7 +75,8 @@ new MaterialDialog.Builder(this)
 Try the sample application. It's on Google Play :)
 https://play.google.com/store/apps/details?id=com.pepperonas.materialdialog.showcase
 
-## Developed By
+
+## Contact
 
 * Martin Pfeffer - https://celox.io - <martin.pfeffer@celox.io>
 
