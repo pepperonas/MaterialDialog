@@ -137,7 +137,6 @@ public class MainActivity extends AppCompatActivity {
                 @Override
                 public void onDismiss() {
                     super.onDismiss();
-                    showToast("onDismiss");
                 }
             })
             .buttonCallback(new MaterialDialog.ButtonCallback() {
@@ -271,6 +270,35 @@ public class MainActivity extends AppCompatActivity {
     private void showFileChooserDialog() {
         new Builder(this)
             .fileChooserDialog(this, true, null, new FileChooserListener() {
+                @Override
+                public void onFileSelected(MaterialDialog dialog, View view, int position, long id,
+                    File file) {
+                    super.onFileSelected(dialog, view, position, id, file);
+                    showToast("onFileSelected (" + file.getPath() + ")");
+                    dialog.dismiss();
+                }
+
+                @Override
+                public void onFileSet(MaterialDialog dialog, File file) {
+                    super.onFileSet(dialog, file);
+                    showToast("onFileSet (" + file.getPath() + ")");
+                }
+            })
+            .buttonCallback(new ButtonCallback() {
+                @Override
+                public void onPositive(MaterialDialog dialog) {
+                    super.onPositive(dialog);
+                }
+            })
+            .positiveText("OK")
+            .show();
+    }
+
+
+    private void showDirectoryChooserDialog() {
+        new Builder(this)
+            .negativeText("CANCEL")
+            .fileChooserDialog(this, false, null, new FileChooserListener() {
                 @Override
                 public void onFileSelected(MaterialDialog dialog, View view, int position, long id,
                     File file) {
@@ -601,6 +629,13 @@ public class MainActivity extends AppCompatActivity {
             return;
         }
         showFileChooserDialog();
+    }
+
+    public void onDialogDirectoryChooser(View view) {
+        if (!checkPermission()) {
+            return;
+        }
+        showDirectoryChooserDialog();
     }
 
 

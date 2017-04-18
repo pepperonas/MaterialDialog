@@ -136,6 +136,17 @@ public class MaterialDialog extends AlertDialog {
                 builder.viewSpacingRight, builder.viewSpacingBottom);
         }
 
+
+        setOnShowListener(new OnShowListener() {
+            @Override
+            public void onShow(DialogInterface dialog) {
+                if (builder.fullscreen) {
+                    getWindow().setLayout(LayoutParams.MATCH_PARENT,
+                        LayoutParams.MATCH_PARENT);
+                }
+            }
+        });
+
         // list
         if ((builder.items != null && builder.items.length > 0) || builder.shareAppDialog
             || builder.adapter != null) {
@@ -625,17 +636,6 @@ public class MaterialDialog extends AlertDialog {
             public void onDismiss(DialogInterface dialog) {
                 if (builder.dismissListener != null) {
                     builder.dismissListener.onDismiss();
-                }
-            }
-        });
-
-
-        setOnShowListener(new OnShowListener() {
-            @Override
-            public void onShow(DialogInterface dialog) {
-                if (builder.fullscreen) {
-                    getWindow().setLayout(LayoutParams.MATCH_PARENT,
-                        LayoutParams.MATCH_PARENT);
                 }
             }
         });
