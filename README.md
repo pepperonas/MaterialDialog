@@ -71,6 +71,40 @@ new MaterialDialog.Builder(this)
 ```
 
 
+## Screenshots
+
+##### Overview
+![SC011](screenshots/sc_tbl001.png?raw=true "Dialog Set Marker")
+##### Simple Dialog
+![SC012](screenshots/sc_tbl002.png?raw=true "Dialog Set Marker")
+##### List Dialog
+![SC001](screenshots/sc_phn001.png?raw=true "Dialog Set Marker")
+##### List Dialog - Single Selection
+![SC010](screenshots/sc_phn010.png?raw=true "Dialog Set Marker")
+##### List Dialog - Multiple Selection
+![SC002](screenshots/sc_phn002.png?raw=true "Dialog Set Marker")
+##### Licence Dialog
+![SC003](screenshots/sc_phn003.png?raw=true "Dialog Set Marker")
+##### Changelog Dialog
+![SC015](screenshots/sc_tbl005.png?raw=true "Dialog Set Marker")
+##### Directory Chooser Dialog
+![SC013](screenshots/sc_tbl003.png?raw=true "Dialog Set Marker")
+##### File Chooser Dialog
+![SC016](screenshots/sc_tbl006.png?raw=true "Dialog Set Marker")
+##### Fullscreen Dialog
+![SC005](screenshots/sc_phn005.png?raw=true "Dialog Set Marker")
+##### Dimmed Dialog
+![SC006](screenshots/sc_phn006.png?raw=true "Dialog Set Marker")
+##### Custom Font Dialog
+![SC007](screenshots/sc_phn007.png?raw=true "Dialog Set Marker")
+##### Custom View Dialog
+![SC008](screenshots/sc_phn008.png?raw=true "Dialog Set Marker")
+##### Scaled Dialog
+![SC004](screenshots/sc_phn004.png?raw=true "Dialog Set Marker")
+##### Delayed Button Dialog
+![SC009](screenshots/sc_phn009.png?raw=true "Dialog Set Marker")
+
+
 ## Showcase
 Try the sample application. It's on Google Play :)
 https://play.google.com/store/apps/details?id=com.pepperonas.materialdialog.showcase

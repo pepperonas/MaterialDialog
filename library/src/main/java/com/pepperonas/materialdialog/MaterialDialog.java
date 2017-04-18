@@ -136,17 +136,6 @@ public class MaterialDialog extends AlertDialog {
                 builder.viewSpacingRight, builder.viewSpacingBottom);
         }
 
-
-        setOnShowListener(new OnShowListener() {
-            @Override
-            public void onShow(DialogInterface dialog) {
-                if (builder.fullscreen) {
-                    getWindow().setLayout(LayoutParams.MATCH_PARENT,
-                        LayoutParams.MATCH_PARENT);
-                }
-            }
-        });
-
         // list
         if ((builder.items != null && builder.items.length > 0) || builder.shareAppDialog
             || builder.adapter != null) {
@@ -435,6 +424,11 @@ public class MaterialDialog extends AlertDialog {
             @Override
             public void onShow(DialogInterface d) {
                 AlertDialog dialog = (AlertDialog) d;
+
+                if (builder.fullscreen) {
+                    getWindow().setLayout(LayoutParams.MATCH_PARENT,
+                        LayoutParams.MATCH_PARENT);
+                }
 
                 if (builder.showListener != null) {
                     builder.showListener.onShow(dialog);
