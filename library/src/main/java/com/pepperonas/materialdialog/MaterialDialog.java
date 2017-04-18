@@ -16,15 +16,20 @@
 
 package com.pepperonas.materialdialog;
 
+import android.Manifest.permission;
+import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.content.pm.ResolveInfo;
 import android.graphics.Rect;
 import android.graphics.Typeface;
 import android.graphics.drawable.Drawable;
 import android.os.Build;
+import android.os.Build.VERSION;
+import android.os.Build.VERSION_CODES;
 import android.os.Environment;
 import android.os.Handler;
 import android.support.annotation.ColorRes;
@@ -40,12 +45,14 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.Window;
+import android.view.WindowManager.LayoutParams;
 import android.widget.AbsListView;
 import android.widget.AdapterView;
 import android.widget.BaseAdapter;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 import com.pepperonas.materialdialog.adapter.CustomArrayAdapter;
 import com.pepperonas.materialdialog.adapter.CustomMultipleSelectionArrayAdapter;
 import com.pepperonas.materialdialog.adapter.CustomSingleSelectionArrayAdapter;
@@ -75,8 +82,7 @@ public class MaterialDialog extends AlertDialog {
      *
      * @param builder the builder
      */
-    public MaterialDialog(@NonNull
-    final Builder builder) {
+    public MaterialDialog(@NonNull final Builder builder) {
         super(builder.context);
 
         invoke(builder);
@@ -89,16 +95,14 @@ public class MaterialDialog extends AlertDialog {
      * @param builder the builder
      * @param style the style
      */
-    public MaterialDialog(@NonNull
-    final Builder builder, @StyleRes int style) {
+    public MaterialDialog(@NonNull final Builder builder, @StyleRes int style) {
         super(builder.context, style);
 
         invoke(builder);
     }
 
 
-    private void invoke(@NonNull
-    final Builder builder) {
+    private void invoke(@NonNull final Builder builder) {
         boolean isListDialog = false;
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.ICE_CREAM_SANDWICH) {
@@ -299,7 +303,6 @@ public class MaterialDialog extends AlertDialog {
             }
 
         } // end license dialog
-
 
         // changelog dialog
         if (builder.changelogDialog) {
@@ -511,9 +514,8 @@ public class MaterialDialog extends AlertDialog {
             if (builder.message != null) {
                 this.setTitle(getSpannable(builder, builder.message));
             }
-            if (builder.title != null) {
-                this.setTitle(getSpannable(builder, builder.title));
-            }
+
+            this.setTitle(getSpannable(builder, builder.startPath.getAbsolutePath()));
 
             final ListView lv = (ListView) llFileChooserDialog
                 .findViewById(R.id.file_chooser_dialog_listview);
@@ -535,14 +537,12 @@ public class MaterialDialog extends AlertDialog {
                     chooserItems.add(new File("/.."));
                 }
                 for (String s : builder.startPath.list()) {
-                    // TODO: 6/6/16 12:21 exclude empty
-                    //                    if (new File(builder.startPath + "/" + s).listFiles().length > 0) {
                     chooserItems.add(new File(builder.startPath + "/" + s));
-                    //                    }else Log.i(TAG, "invoke: NO CHILDS @ " + s);
                 }
             } catch (Exception e) {
                 Log.e(TAG, "Error while reading FS");
             }
+
             builder.files = Utils.sortFiles(chooserItems);
 
             FileChooserArrayAdapter fcaa = new FileChooserArrayAdapter(
@@ -558,19 +558,23 @@ public class MaterialDialog extends AlertDialog {
                         if (!f.isDirectory()) {
                             if (builder.fileChooserListener != null) {
                                 builder.fileChooserListener
-                                    .onChoosen(MaterialDialog.this, v, position, id, f);
+                                    .onFileSelected(MaterialDialog.this, v, position, id, f);
                             }
                             Log.d(TAG, "onClick: " + f.getName() + " is a file.");
                         } else {
 
                             if (f.getPath().endsWith("/..")) {
                                 Log.i(TAG, "onClick: UP");
-                                builder.fileChooserDialog(builder.allowDirectorySelection,
+                                builder.fileChooserDialog(builder.activity, builder
+                                        .requestCode, builder
+                                        .allowDirectorySelection,
                                     builder.startPath.getParent(),
                                     builder.fileChooserListener);
                             } else {
                                 Log.d(TAG, "onClick: DOWN");
-                                builder.fileChooserDialog(builder.allowDirectorySelection,
+                                builder.fileChooserDialog(builder.activity, builder
+                                        .requestCode, builder
+                                        .allowDirectorySelection,
                                     builder.startPath + "/" + builder
                                         .files.get(position).getName(),
                                     builder.fileChooserListener);
@@ -578,6 +582,7 @@ public class MaterialDialog extends AlertDialog {
                             }
 
                             builder.show();
+
                             final Handler handler = new Handler();
                             handler.postDelayed(new Runnable() {
                                 @Override
@@ -595,6 +600,24 @@ public class MaterialDialog extends AlertDialog {
 
             lv.setDivider(null);
             lv.setAdapter(fcaa);
+
+            if (!builder.allowDirectorySelection && builder.startPath.isDirectory()) {
+                builder.showListener(new ShowListener() {
+                    @Override
+                    public void onShow(AlertDialog dialog) {
+                        super.onShow(dialog);
+                        dialog.getButton(BUTTON_POSITIVE).setEnabled(false);
+                    }
+                });
+            }
+            builder.buttonCallback(new ButtonCallback() {
+                @Override
+                public void onPositive(MaterialDialog dialog) {
+                    super.onPositive(dialog);
+                    builder.fileChooserListener
+                        .onFileSet(MaterialDialog.this, builder.startPath);
+                }
+            });
         } // end file chooser dialog
 
         setOnDismissListener(new OnDismissListener() {
@@ -606,8 +629,17 @@ public class MaterialDialog extends AlertDialog {
             }
         });
 
-        this.setCancelable(builder.cancelable);
-        this.setCanceledOnTouchOutside(builder.canceledOnTouchOutside);
+
+        setOnShowListener(new OnShowListener() {
+            @Override
+            public void onShow(DialogInterface dialog) {
+                if (builder.fullscreen) {
+                    getWindow().setLayout(LayoutParams.MATCH_PARENT,
+                        LayoutParams.MATCH_PARENT);
+                }
+            }
+        });
+
     }
 
 
@@ -622,6 +654,9 @@ public class MaterialDialog extends AlertDialog {
     }
 
 
+    /**
+     * The type Thread demo.
+     */
     class ThreadDemo extends Thread {
 
         private Thread t;
@@ -629,6 +664,12 @@ public class MaterialDialog extends AlertDialog {
         private String threadName;
 
 
+        /**
+         * Instantiates a new Thread demo.
+         *
+         * @param lv the lv
+         * @param threadName the thread name
+         */
         ThreadDemo(ListView lv, String threadName) {
             this.lv = lv;
             this.threadName = threadName;
@@ -691,6 +732,8 @@ public class MaterialDialog extends AlertDialog {
         private int scaleX = -1;
         private int scaleY = -1;
 
+        private boolean fullscreen = false;
+
         /**
          * List
          */
@@ -739,6 +782,8 @@ public class MaterialDialog extends AlertDialog {
         /**
          * File-Chooser
          */
+        private Activity activity;
+        private int requestCode;
         private List<File> files;
         private boolean fileChooser = false;
         private boolean allowDirectorySelection = false;
@@ -816,6 +861,12 @@ public class MaterialDialog extends AlertDialog {
         }
 
 
+        /**
+         * Font builder.
+         *
+         * @param typeface the typeface
+         * @return the builder
+         */
         public Builder font(Typeface typeface) {
             this.typeface = typeface;
             return this;
@@ -844,6 +895,18 @@ public class MaterialDialog extends AlertDialog {
         public Builder scale(int percentX, int percentY) {
             this.scaleX = percentX;
             this.scaleY = percentY;
+            return this;
+        }
+
+
+        /**
+         * Fullscreen builder.
+         *
+         * @param fullscreen the fullscreen
+         * @return the builder
+         */
+        public Builder fullscreen(boolean fullscreen) {
+            this.fullscreen = fullscreen;
             return this;
         }
 
@@ -1235,13 +1298,57 @@ public class MaterialDialog extends AlertDialog {
         /**
          * File chooser dialog builder.
          *
+         * @param activity the activity
+         * @param requestCode the request code
          * @param directorySelection the directory selection
          * @param startPath the start path
+         * @param fileChooserListener the file chooser listener
          * @return the builder
          */
-        public Builder fileChooserDialog(boolean directorySelection, @Nullable String startPath,
-            @Nullable FileChooserListener
-                fileChooserListener) {
+        public Builder fileChooserDialog(Activity activity, int requestCode,
+            boolean directorySelection, @Nullable String startPath,
+            @Nullable FileChooserListener fileChooserListener) {
+
+            this.activity = activity;
+            this.requestCode = requestCode;
+
+            if (VERSION.SDK_INT >= VERSION_CODES.M) {
+                if (context.checkSelfPermission(permission.READ_EXTERNAL_STORAGE)
+                    != PackageManager.PERMISSION_GRANTED) {
+                    activity.requestPermissions(new String[]{
+                        permission.READ_EXTERNAL_STORAGE}, requestCode);
+                    Toast.makeText(activity, R.string.missing_permission_read_file,
+                        Toast.LENGTH_SHORT).show();
+                }
+            }
+
+            this.fileChooser = true;
+            this.allowDirectorySelection = directorySelection;
+            if (startPath == null) {
+                this.startPath = Environment.getExternalStorageDirectory();
+            } else {
+                this.startPath = new File(startPath);
+            }
+            this.fileChooserListener = fileChooserListener;
+
+            return this;
+        }
+
+        /**
+         * File chooser dialog builder.
+         *
+         * @param activity the activity
+         * @param directorySelection the directory selection
+         * @param startPath the start path
+         * @param fileChooserListener the file chooser listener
+         * @return the builder
+         */
+        public Builder fileChooserDialog(Activity activity,
+            boolean directorySelection, @Nullable String startPath,
+            @Nullable FileChooserListener fileChooserListener) {
+
+            this.activity = activity;
+
             this.fileChooser = true;
             this.allowDirectorySelection = directorySelection;
             if (startPath == null) {
@@ -1796,14 +1903,28 @@ public class MaterialDialog extends AlertDialog {
 
 
         /**
-         * On selected.
+         * On file selected.
          *
+         * @param dialog the dialog
          * @param view the view
          * @param position the position
          * @param id the id
+         * @param file the file
          */
-        public void onChoosen(MaterialDialog dialog, View view, int position, long id, File file) {
+        public void onFileSelected(MaterialDialog dialog, View view, int position, long id,
+            File file) {
             Log.d(TAG, "onSelected " + position);
+        }
+
+
+        /**
+         * On file set.
+         *
+         * @param dialog the dialog
+         * @param file the file
+         */
+        public void onFileSet(MaterialDialog dialog, File file) {
+            Log.d(TAG, "onFileSet: " + file.getAbsolutePath());
         }
 
 

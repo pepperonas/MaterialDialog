@@ -47,6 +47,14 @@
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="@dimen/button_margin_bottom"
                 android:layout_marginTop="@dimen/button_margin_top"
+                android:onClick="onDialogIgnoredButtonCallback"
+                android:text="Simple Dialog Ignored Button" />
+
+            <Button
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="@dimen/button_margin_bottom"
+                android:layout_marginTop="@dimen/button_margin_top"
                 android:onClick="onDialogDelayedButton"
                 android:text="Simple Dialog (Delayed-button)" />
 
@@ -153,6 +161,14 @@
                 android:layout_marginTop="@dimen/button_margin_top"
                 android:onClick="onDialogThemed"
                 android:text="Themed Dialog" />
+
+            <Button
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="@dimen/button_margin_bottom"
+                android:layout_marginTop="@dimen/button_margin_top"
+                android:onClick="onDialogFullscreen"
+                android:text="Fullscreen Dialog" />
 
             <Button
                 android:layout_width="match_parent"

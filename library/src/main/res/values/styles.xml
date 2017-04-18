@@ -16,12 +16,13 @@
 
 <resources>
 
-    <style name="text_list_item">
-        <item name="android:textSize">16sp</item>
-    </style>
+  <style name="text_list_item">
+    <item name="android:textSize">16sp</item>
+  </style>
 
-    <style name="DialogNoAnimation">
-        <item name="android:windowEnterAnimation">@anim/enter</item>
-        <item name="android:windowExitAnimation">@anim/exit</item>
-    </style>
+  <style name="DialogNoAnimation">
+    <item name="android:windowEnterAnimation">@anim/enter</item>
+    <item name="android:windowExitAnimation">@anim/exit</item>
+  </style>
+
 </resources>
