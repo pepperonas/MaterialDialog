@@ -20,7 +20,7 @@ buildscript {
         maven { url "https://jitpack.io" }
     }
     dependencies {
-        classpath 'com.android.tools.build:gradle:2.4.0-alpha6'
+        classpath 'com.android.tools.build:gradle:3.0.0-alpha9'
     }
 }
 
@@ -55,16 +55,16 @@ android {
             minifyEnabled true
             shrinkResources true
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
-            applicationVariants.all { variant ->
-                variant.outputs.each { output ->
-                    def outputFile = output.outputFile
-                    if (outputFile != null && outputFile.name.endsWith('.apk')) {
-                        def fileName = outputFile.name.replace(".apk", ".apk");
-                        fileName = fileName.replace("release", "release" + "-" + defaultConfig.versionName + getDate());
-                        output.outputFile = new File(outputFile.parent, fileName)
-                    }
-                }
-            }
+//            applicationVariants.all { variant ->
+//                variant.outputs.each { output ->
+//                    def outputFile = output.outputFile
+//                    if (outputFile != null && outputFile.name.endsWith('.apk')) {
+//                        def fileName = outputFile.name.replace(".apk", ".apk");
+//                        fileName = fileName.replace("release", "release" + "-" + defaultConfig.versionName + getDate());
+//                        output.outputFile = new File(outputFile.parent, fileName)
+//                    }
+//                }
+//            }
         }
     }
 }
